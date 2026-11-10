@@ -351,8 +351,12 @@ section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
   filter:drop-shadow(0 8px 16px rgba(74, 42, 58, 0.15));
   will-change:transform;
 }
+.card-photo{
+  position:absolute;inset:0;z-index:1;
+  width:100%;height:100%;object-fit:cover;
+}
 .card-badge{
-  position:absolute;top:16px;left:16px;
+  position:absolute;top:16px;left:16px;z-index:2;
   background:var(--white);color:var(--rose-ink);font-size:10px;font-weight:700;
   padding:6px 14px;border-radius:999px;letter-spacing:1px;
   text-transform:uppercase;box-shadow:var(--shadow-sm);
@@ -827,7 +831,7 @@ function renderProduk(){
       <article class="card" data-kategori="${p.kategori}">
         <div class="card-img">
           ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
-          <span class="card-emoji">${p.emoji}</span>
+          ${p.foto ? `<img class="card-photo" src="${p.foto}" alt="${p.nama}" loading="lazy">` : `<span class="card-emoji">${p.emoji}</span>`}
         </div>
         <div class="card-body">
           <span class="card-cat">${p.kategori}</span>
@@ -910,8 +914,8 @@ ScrollTrigger.batch(".card", {
 });
 
 document.querySelectorAll(".card").forEach(card => {
-  const emoji = card.querySelector(".card-emoji");
-  card.addEventListener("mouseenter", () => {
+  const emoji = card.querySelector(".card-emoji, .card-photo");
+  if (!emoji) return;  card.addEventListener("mouseenter", () => {
     gsap.to(emoji, { scale: 1.1, y: -5, duration: 0.4, ease: "power2.out" });
   });
   card.addEventListener("mouseleave", () => {

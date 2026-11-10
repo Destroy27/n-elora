@@ -849,6 +849,23 @@ renderProduk();
 /* ============================================================
    ANIMASI GSAP
    ============================================================ */
+const GSAP_OK = !!(window.gsap && window.ScrollTrigger);
+if (!GSAP_OK) document.documentElement.classList.remove("js");
+
+if (!GSAP_OK){
+  /* Cadangan bila CDN GSAP gagal dimuat: konten tetap tampil dan filter tetap jalan */
+  const saring = (k) => document.querySelectorAll(".card").forEach(c => {
+    c.style.display = (k === "semua" || c.dataset.kategori === k) ? "flex" : "none";
+  });
+  document.querySelectorAll(".filter-btn").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    saring(b.dataset.filter);
+  }));
+  document.querySelectorAll(".cat-card").forEach(c => c.addEventListener("click", () => saring(c.dataset.filter)));
+}
+
+if (GSAP_OK) {
 gsap.registerPlugin(ScrollTrigger);
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -947,6 +964,7 @@ ScrollTrigger.create({
     document.getElementById("nav").classList.toggle("scrolled", self.scroll() > 20);
   }
 });
+}
 
 const burger = document.getElementById("burger");
 const mobileMenu = document.getElementById("mobileMenu");
@@ -966,7 +984,7 @@ mobileMenu.querySelectorAll("a").forEach(a => {
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();
-window.addEventListener("load", () => ScrollTrigger.refresh());
+if (GSAP_OK) window.addEventListener("load", () => ScrollTrigger.refresh());
 </script>
 </body>
 </html>

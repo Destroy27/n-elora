@@ -3,121 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>N.Elora - Bunga Kawat Bulu Handmade</title>
-<meta name="description" content="N.Elora - Buket & bunga kawat bulu handmade, dibuat penuh cinta. Custom nama, warna, dan bentuk sesuai keinginanmu.">
+<title>N.Elora - Handmade Pipe Cleaner Bouquets</title>
+<meta name="description" content="N.Elora - Buket bunga kawat bulu handmade yang elegan dan lucu. Spesialis Bunga Garbera custom.">
 <link rel="icon" href="logo-nelora.png" type="image/png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script>document.documentElement.classList.add('js');</script>
 
 <style>
 /* ============================================================
-   1. VARIABEL & RESET (Disesuaikan dengan Logo)
+   1. VARIABEL & RESET
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  /* Palet warna dari logo N.Elora */
   --blush: #FFF0F5;
   --soft-pink: #F4A3C0;
   --rose-ink: #4A2A3A;
   --mint-leaf: #8FD1B5;
   --butter: #FFD98A;
   
-  /* Variabel turunan untuk UI */
-  --pink-50: #FFF7FA;
-  --pink-100: #FFEBF2;
-  --pink-200: #FFD8E6;
-  --pink-300: var(--soft-pink);
-  --pink-400: #F48BB2;
-  --pink-500: #E86D9A;
-  --rose: #D85A87;
-  --rose-dark: var(--rose-ink);
-  --plum: var(--rose-ink);
-  --muted: #8A6A7A;
-  --white:#FFFFFF;
+  --bg-color: #FFFAFC;
+  --white: #FFFFFF;
+  --text-muted: #8A6A7A;
+  
+  --shadow-sm: 0 4px 12px rgba(74, 42, 58, 0.04);
+  --shadow-md: 0 12px 32px rgba(74, 42, 58, 0.08);
+  --shadow-lg: 0 24px 48px rgba(74, 42, 58, 0.12);
 
-  --shadow-sm:0 6px 18px rgba(74,42,58,.08);
-  --shadow-md:0 16px 40px rgba(74,42,58,.12);
-  --shadow-lg:0 26px 60px rgba(74,42,58,.16);
-
-  --radius:24px;
-  --nav-h:74px;
+  --radius-sm: 16px;
+  --radius-md: 24px;
+  --radius-lg: 32px;
+  --nav-h: 80px;
 }
 
-html{scroll-behavior:smooth;scroll-padding-top:96px}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
 
 body{
-  font-family:'Quicksand',system-ui,-apple-system,sans-serif;
-  background:var(--pink-50);
-  color:var(--plum);
-  line-height:1.65;
+  font-family:'Quicksand', sans-serif;
+  background-color:var(--bg-color);
+  color:var(--rose-ink);
+  line-height:1.7;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
-}
-
-/* Latar belakang blob lembut */
-body::before{
-  content:'';
-  position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:
-    radial-gradient(620px 620px at 8% -5%, var(--blush) 0%, transparent 62%),
-    radial-gradient(760px 760px at 95% 15%, #FFEAF3 0%, transparent 62%),
-    radial-gradient(680px 680px at 45% 105%, #FFF0F6 0%, transparent 62%);
 }
 
 img{max-width:100%;display:block}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
-::selection{background:var(--soft-pink);color:#fff}
+::selection{background:var(--soft-pink);color:var(--white)}
 
 /* ============================================================
-   2. LAYOUT UMUM
+   2. LAYOUT & TIPOGRAFI
    ============================================================ */
-.container{width:min(1140px,92%);margin-inline:auto}
-section{padding:clamp(56px,8vw,104px) 0;position:relative}
+.container{width:min(1140px, 90%);margin-inline:auto}
+section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
 
-.sec-head{text-align:center;max-width:620px;margin:0 auto clamp(32px,5vw,52px)}
+.sec-head{text-align:center;max-width:600px;margin:0 auto clamp(40px, 6vw, 64px)}
 .eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:#fff;border:1.5px solid var(--pink-200);
-  color:var(--rose);font-size:12.5px;font-weight:700;
-  letter-spacing:1.2px;text-transform:uppercase;
-  padding:7px 16px;border-radius:999px;margin-bottom:16px;
-  box-shadow:var(--shadow-sm);
+  display:inline-block;
+  color:var(--soft-pink);font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;
 }
 .sec-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.7rem,4vw,2.7rem);
-  line-height:1.2;font-weight:700;letter-spacing:-.3px;
+  font-family:'Playfair Display', serif;
+  font-size:clamp(2rem, 4vw, 3rem);
+  line-height:1.2;font-weight:500;color:var(--rose-ink);
 }
-.sec-title em{font-style:italic;color:var(--rose)}
-.sec-sub{margin-top:12px;color:var(--muted);font-size:clamp(14px,1.6vw,15.5px)}
+.sec-title em{font-style:italic;color:var(--soft-pink)}
+.sec-sub{margin-top:16px;color:var(--text-muted);font-size:clamp(14px, 1.6vw, 16px)}
 
 /* ============================================================
    3. TOMBOL
    ============================================================ */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:14px 28px;border-radius:999px;
-  font-weight:700;font-size:15px;line-height:1;
-  transition:box-shadow .28s ease, background .28s ease, border-color .28s ease;
+  font-weight:600;font-size:14px;line-height:1;
+  transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change:transform;
 }
 .btn-primary{
-  background:linear-gradient(135deg,var(--soft-pink),var(--rose));
-  color:#fff;box-shadow:0 10px 24px rgba(232,92,142,.34);
+  background:var(--rose-ink);color:var(--white);
+  box-shadow:0 8px 24px rgba(74, 42, 58, 0.2);
 }
-.btn-primary:hover{box-shadow:0 16px 34px rgba(232,92,142,.45)}
-.btn-ghost{
-  background:#fff;color:var(--rose-dark);
-  border:2px solid var(--pink-200);box-shadow:var(--shadow-sm);
+.btn-primary:hover{
+  background:var(--soft-pink);
+  box-shadow:0 12px 32px rgba(244, 163, 192, 0.4);
 }
-.btn-ghost:hover{border-color:var(--soft-pink);background:#FFF8FB}
-.btn-sm{padding:10px 20px;font-size:13.5px}
+.btn-outline{
+  background:transparent;color:var(--rose-ink);
+  border:1.5px solid var(--soft-pink);
+}
+.btn-outline:hover{background:var(--blush)}
+.btn-sm{padding:10px 20px;font-size:13px}
 
 /* ============================================================
    4. NAVBAR
@@ -125,55 +107,46 @@ section{padding:clamp(56px,8vw,104px) 0;position:relative}
 .nav{
   position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(16px,4vw,40px);
-  background:rgba(255,255,255,.82);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--pink-100);
-  transition:box-shadow .3s ease;
+  padding:0 clamp(20px, 5vw, 48px);
+  background:rgba(255, 250, 252, 0.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  transition:box-shadow 0.3s ease;
 }
-.nav.scrolled{box-shadow:0 8px 30px rgba(232,92,142,.10)}
+.nav.scrolled{box-shadow:var(--shadow-sm)}
 
-.brand{display:flex;align-items:center;gap:11px}
-
-/* --- LOGO --- */
+.brand{display:flex;align-items:center;gap:12px}
 .logo-box{
-  width:44px;height:44px;flex-shrink:0;
-  display:grid;place-items:center;overflow:hidden;
-  border-radius:50%;
+  width:40px;height:40px;flex-shrink:0;
+  display:grid;place-items:center;
+  border-radius:50%;overflow:hidden;
 }
 .logo-box img{width:100%;height:100%;object-fit:contain}
-.logo-fallback{
-  display:none;color:var(--rose-ink);font-family:'Playfair Display',serif;
-  font-size:23px;font-weight:700;line-height:1;
-}
 .brand-name{
-  font-family:'Playfair Display',serif;font-size:20px;
-  font-weight:700;letter-spacing:.4px;color:var(--rose-dark);
+  font-family:'Playfair Display', serif;font-size:22px;
+  font-weight:600;letter-spacing:0.5px;color:var(--rose-ink);
 }
 
-.nav-links{display:flex;align-items:center;gap:clamp(14px,2.2vw,32px)}
+.nav-links{display:flex;align-items:center;gap:clamp(20px, 3vw, 36px)}
 .nav-links a{
-  font-size:14.5px;font-weight:600;color:var(--muted);
-  position:relative;padding:6px 2px;transition:color .25s;
+  font-size:14px;font-weight:600;color:var(--text-muted);
+  position:relative;padding:6px 0;transition:color 0.3s;
 }
 .nav-links a::after{
   content:'';position:absolute;left:0;bottom:0;height:2px;width:0;
-  background:var(--rose);border-radius:2px;transition:width .3s ease;
+  background:var(--soft-pink);border-radius:2px;transition:width 0.3s ease;
 }
-.nav-links a:hover{color:var(--rose)}
+.nav-links a:hover{color:var(--rose-ink)}
 .nav-links a:hover::after{width:100%}
 
-.nav-right{display:flex;align-items:center;gap:10px}
+.nav-right{display:flex;align-items:center;gap:12px}
 
 .burger{
-  display:none;width:44px;height:44px;border-radius:14px;
-  background:#fff;border:1.5px solid var(--pink-200);
+  display:none;width:40px;height:40px;border-radius:12px;
   place-items:center;gap:5px;flex-direction:column;
-  box-shadow:var(--shadow-sm);
 }
 .burger span{
-  display:block;width:18px;height:2px;border-radius:2px;
-  background:var(--rose-dark);transition:.3s;
+  display:block;width:20px;height:2px;border-radius:2px;
+  background:var(--rose-ink);transition:0.3s;
 }
 .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .burger.open span:nth-child(2){opacity:0}
@@ -181,106 +154,131 @@ section{padding:clamp(56px,8vw,104px) 0;position:relative}
 
 .mobile-menu{
   position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;
-  background:rgba(255,255,255,.97);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--pink-100);
-  padding:14px clamp(16px,4vw,40px) 22px;
-  display:none;flex-direction:column;gap:4px;
+  background:var(--bg-color);
+  padding:20px clamp(20px, 5vw, 48px) 30px;
+  display:none;flex-direction:column;gap:8px;
+  box-shadow:var(--shadow-md);
 }
 .mobile-menu.show{display:flex}
 .mobile-menu a{
-  padding:13px 10px;border-radius:12px;font-weight:600;
-  color:var(--plum);transition:background .2s;
+  padding:12px 16px;border-radius:12px;font-weight:600;
+  color:var(--rose-ink);transition:background 0.2s;
 }
-.mobile-menu a:hover{background:var(--pink-100);color:var(--rose-dark)}
+.mobile-menu a:hover{background:var(--blush)}
 
 /* ============================================================
-   5. HERO
+   5. HERO (Fokus Utama Animasi Bunga)
    ============================================================ */
-.hero{padding:calc(var(--nav-h) + clamp(38px,6vw,72px)) 0 clamp(40px,6vw,80px)}
+.hero{
+  padding:calc(var(--nav-h) + clamp(40px, 8vw, 80px)) 0 clamp(40px, 8vw, 80px);
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
 .hero-grid{
-  display:grid;grid-template-columns:1.05fr .95fr;
-  gap:clamp(32px,5vw,72px);align-items:center;
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(32px, 6vw, 80px);align-items:center;
+  text-align: center;
 }
 
-.hero-title{
-  font-size:clamp(2.15rem,5.4vw,4rem);
-  line-height:1.1;font-weight:700;letter-spacing:-1px;margin:18px 0 0;
-}
-.hero-title em{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-weight:600;color:var(--rose);
-}
-.hero-title .w{display:inline-block}
-
-.hero-sub{
-  margin-top:20px;color:var(--muted);
-  font-size:clamp(14.5px,1.8vw,16.5px);max-width:46ch;
+.hero-title-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
 }
 
-.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(4rem, 12vw, 8.5rem);
+  font-weight: 700;
+  color: var(--rose-ink);
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  letter-spacing: -2px;
+}
 
-.hero-stats{
-  display:flex;flex-wrap:wrap;gap:clamp(18px,4vw,44px);
-  margin-top:38px;padding-top:26px;border-top:1.5px dashed var(--pink-200);
+.letter {
+  display: inline-block;
+  will-change: transform;
+  text-shadow: 0 8px 24px rgba(244, 163, 192, 0.3);
 }
-.stat b{
-  display:block;font-family:'Playfair Display',serif;
-  font-size:clamp(1.3rem,2.6vw,1.7rem);color:var(--rose-dark);line-height:1.1;
-}
-.stat span{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.3px}
 
-/* Visual hero */
-.hero-visual{position:relative;display:grid;place-items:center;min-height:clamp(300px,42vw,400px)}
-.hero-blob{
-  width:min(100%,380px);aspect-ratio:1/1;
-  background:linear-gradient(155deg, var(--blush) 0%, #FFC7DC 55%, var(--soft-pink) 100%);
-  border-radius:44% 56% 58% 42% / 48% 42% 58% 52%;
-  display:grid;place-items:center;
-  font-size:clamp(84px,15vw,132px);
-  box-shadow:var(--shadow-lg);
-  position:relative;
-  filter:drop-shadow(0 20px 40px rgba(74,42,58,.12));
+.letter-dot {
+  color: var(--soft-pink);
+  font-size: clamp(3rem, 10vw, 7rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+  transform-origin: bottom center;
 }
-.hero-blob::after{
-  content:'';position:absolute;inset:12%;
-  border-radius:inherit;
-  background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.9), transparent 58%);
-  pointer-events:none;
-}
-.hero-blob .hero-logo{position:relative;z-index:1;width:62%;height:auto;object-fit:contain;border-radius:50%;filter:drop-shadow(0 12px 18px rgba(74,42,58,.18))}
 
-.float-chip{
-  position:absolute;background:#fff;border-radius:999px;
-  padding:9px 16px;font-size:13px;font-weight:700;color:var(--rose-dark);
-  box-shadow:var(--shadow-md);display:flex;align-items:center;gap:7px;
-  white-space:nowrap;z-index:2;
+.floating-flower {
+  position: absolute;
+  font-size: clamp(24px, 4vw, 40px);
+  pointer-events: none;
+  z-index: -1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
-.chip-1{top:6%;left:-2%}
-.chip-2{bottom:14%;right:-4%}
-.chip-3{bottom:-2%;left:12%;font-size:12px}
 
-.float-dot{
-  position:absolute;border-radius:50%;
-  opacity:.65;pointer-events:none;
+.ff-1 { top: -20px; left: 10%; }
+.ff-2 { top: 20%; right: -10px; }
+.ff-3 { bottom: -30px; left: 30%; }
+.ff-4 { bottom: 10%; right: 15%; }
+
+.hero-sub {
+  margin: 0 auto 32px;
+  color: var(--text-muted);
+  font-size: clamp(16px, 2vw, 20px);
+  max-width: 50ch;
+  line-height: 1.6;
 }
-.dot-1{width:18px;height:18px;top:22%;right:6%;background:var(--soft-pink)}
-.dot-2{width:11px;height:11px;bottom:28%;left:2%;background:var(--mint-leaf)}
-.dot-3{width:26px;height:26px;top:8%;left:24%;background:var(--butter);opacity:.8}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.hero-features {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.feature-chip {
+  background: var(--white);
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rose-ink);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--blush);
+}
 
 /* ============================================================
    6. MARQUEE
    ============================================================ */
 .marquee{
-  overflow:hidden;padding:15px 0;
-  background:linear-gradient(90deg,var(--pink-200),var(--blush),var(--pink-200));
-  border-block:1px solid var(--pink-200);
+  overflow:hidden;padding:16px 0;
+  background:var(--blush);
+  border-block:1px solid rgba(244, 163, 192, 0.2);
 }
 .marquee-track{
-  display:flex;gap:34px;width:max-content;white-space:nowrap;
-  font-weight:700;font-size:13.5px;letter-spacing:1.6px;
-  text-transform:uppercase;color:var(--rose-dark);
-  animation:marquee 28s linear infinite;
+  display:flex;gap:40px;width:max-content;white-space:nowrap;
+  font-weight:600;font-size:13px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text-muted);
+  animation:marquee 30s linear infinite;
 }
 .marquee-track span:nth-child(even){color:var(--soft-pink)}
 @keyframes marquee{to{transform:translateX(-50%)}}
@@ -289,283 +287,243 @@ section{padding:clamp(56px,8vw,104px) 0;position:relative}
    7. JENIS / KATEGORI
    ============================================================ */
 .cat-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:clamp(16px,2.4vw,24px);
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:clamp(20px, 3vw, 32px);
 }
 .cat-card{
-  background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);
-  padding:28px 22px;text-align:center;cursor:pointer;
-  box-shadow:var(--shadow-sm);transition:box-shadow .3s ease,border-color .3s ease;
-  position:relative;overflow:hidden;
+  background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);
+  border-radius:var(--radius-md);
+  padding:32px 24px;text-align:center;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:all 0.4s ease;
 }
-.cat-card::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 0%, rgba(244,163,192,.35), transparent 65%);
-  opacity:0;transition:opacity .35s ease;
+.cat-card:hover{
+  border-color:var(--soft-pink);
+  box-shadow:var(--shadow-md);
+  transform:translateY(-4px);
 }
-.cat-card:hover{border-color:var(--soft-pink);box-shadow:var(--shadow-md)}
-.cat-card:hover::before{opacity:1}
 .cat-icon{
-  width:66px;height:66px;margin:0 auto 16px;border-radius:22px;
-  background:linear-gradient(135deg,var(--blush),var(--pink-200));
-  display:grid;place-items:center;font-size:31px;position:relative;z-index:1;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8);
+  width:64px;height:64px;margin:0 auto 20px;border-radius:20px;
+  background:var(--blush);
+  display:grid;place-items:center;font-size:28px;
 }
-.cat-card h3{font-size:16.5px;font-weight:700;margin-bottom:6px;position:relative;z-index:1}
-.cat-card p{font-size:13px;color:var(--muted);line-height:1.5;position:relative;z-index:1}
+.cat-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.cat-card p{font-size:13.5px;color:var(--text-muted);line-height:1.6}
 
 /* ============================================================
    8. ETALASE / PRODUK
    ============================================================ */
 .filters{
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
-  margin-bottom:clamp(28px,4vw,42px);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+  margin-bottom:clamp(32px, 5vw, 48px);
 }
 .filter-btn{
-  padding:10px 22px;border-radius:999px;background:#fff;
-  border:2px solid var(--pink-200);font-weight:700;font-size:13.5px;
-  color:var(--muted);transition:.25s ease;
+  padding:10px 24px;border-radius:999px;background:transparent;
+  border:1.5px solid rgba(244, 163, 192, 0.3);font-weight:600;font-size:13.5px;
+  color:var(--text-muted);transition:all 0.3s ease;
 }
-.filter-btn:hover{border-color:var(--soft-pink);color:var(--rose)}
+.filter-btn:hover{border-color:var(--soft-pink);color:var(--rose-ink)}
 .filter-btn.active{
-  background:linear-gradient(135deg,var(--soft-pink),var(--rose));
-  border-color:transparent;color:#fff;
-  box-shadow:0 8px 20px rgba(232,92,142,.30);
+  background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);
+  box-shadow:0 4px 12px rgba(244, 163, 192, 0.3);
 }
 
 .grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));
-  gap:clamp(16px,2.4vw,26px);
+  display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+  gap:clamp(20px, 3vw, 32px);
 }
 
 .card{
-  background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);
-  overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:var(--shadow-sm);transition:box-shadow .3s ease,border-color .3s ease;
+  background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);
+  border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:var(--shadow-sm);transition:all 0.4s ease;
 }
-.card:hover{box-shadow:var(--shadow-md);border-color:var(--pink-200)}
+.card:hover{
+  box-shadow:var(--shadow-md);
+  transform:translateY(-4px);
+}
 
 .card-img{
-  position:relative;aspect-ratio:4/3.4;display:grid;place-items:center;
-  background:linear-gradient(150deg,var(--blush),var(--pink-100));
-  overflow:hidden;
-}
-.card-img::after{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(circle at 28% 18%, rgba(255,255,255,.9), transparent 55%);
+  position:relative;aspect-ratio:4/3.5;display:grid;place-items:center;
+  background:var(--blush);overflow:hidden;
 }
 .card-emoji{
-  position:relative;z-index:1;font-size:clamp(48px,7vw,62px);
-  filter:drop-shadow(0 10px 14px rgba(74,42,58,.15));
+  font-size:clamp(48px, 6vw, 64px);
+  filter:drop-shadow(0 8px 16px rgba(74, 42, 58, 0.15));
   will-change:transform;
 }
 .card-badge{
-  position:absolute;top:12px;left:12px;z-index:2;
-  background:#fff;color:var(--rose);font-size:10.5px;font-weight:700;
-  padding:5px 12px;border-radius:999px;letter-spacing:.6px;
+  position:absolute;top:16px;left:16px;
+  background:var(--white);color:var(--rose-ink);font-size:10px;font-weight:700;
+  padding:6px 14px;border-radius:999px;letter-spacing:1px;
   text-transform:uppercase;box-shadow:var(--shadow-sm);
 }
 
-.card-body{padding:17px 17px 19px;display:flex;flex-direction:column;gap:5px;flex:1}
+.card-body{padding:24px;display:flex;flex-direction:column;gap:8px;flex:1}
 .card-cat{
   font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1.1px;color:var(--soft-pink);
+  letter-spacing:1.5px;color:var(--soft-pink);
 }
-.card-title{font-size:15.5px;font-weight:700;line-height:1.35}
-.card-desc{font-size:12.8px;color:var(--muted);line-height:1.55}
+.card-title{font-size:16px;font-weight:700;line-height:1.4}
+.card-desc{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:8px}
 .card-foot{
-  margin-top:auto;padding-top:14px;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:auto;padding-top:16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
-.price{font-weight:700;color:var(--rose-dark);font-size:15.5px;white-space:nowrap}
-.price small{font-size:11px;color:var(--muted);font-weight:600}
+.price{font-weight:700;color:var(--rose-ink);font-size:16px}
+.price small{font-size:11px;color:var(--text-muted);font-weight:600}
 
 .btn-buy{
   display:inline-flex;align-items:center;gap:6px;
-  padding:10px 16px;border-radius:999px;
-  background:linear-gradient(135deg,var(--soft-pink),var(--rose));
-  color:#fff;font-size:12.5px;font-weight:700;
-  box-shadow:0 8px 18px rgba(232,92,142,.32);
-  transition:box-shadow .25s ease;
-  white-space:nowrap;
+  padding:10px 18px;border-radius:999px;
+  background:var(--blush);color:var(--rose-ink);
+  font-size:13px;font-weight:700;transition:all 0.3s ease;
 }
-.btn-buy:hover{box-shadow:0 12px 24px rgba(232,92,142,.45)}
-.btn-buy svg{width:14px;height:14px;flex-shrink:0}
+.btn-buy:hover{background:var(--soft-pink);color:var(--white)}
+.btn-buy svg{width:14px;height:14px}
 
 .etalase-note{
-  text-align:center;margin-top:clamp(30px,4vw,44px);
-  font-size:13.5px;color:var(--muted);
+  text-align:center;margin-top:clamp(32px, 5vw, 48px);
+  font-size:14px;color:var(--text-muted);
 }
-.etalase-note a{color:var(--rose);font-weight:700;border-bottom:2px solid var(--pink-300)}
+.etalase-note a{color:var(--soft-pink);font-weight:700;border-bottom:1.5px solid var(--soft-pink)}
 
 /* ============================================================
    9. CARA PESAN
    ============================================================ */
 .steps{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:clamp(16px,2.4vw,24px);counter-reset:step;
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:clamp(20px, 3vw, 32px);
 }
 .step{
-  background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);
-  padding:30px 24px;box-shadow:var(--shadow-sm);position:relative;
-  transition:box-shadow .3s ease;
+  background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);
+  border-radius:var(--radius-md);
+  padding:32px 28px;box-shadow:var(--shadow-sm);
 }
-.step:hover{box-shadow:var(--shadow-md)}
 .step-num{
-  width:46px;height:46px;border-radius:16px;
-  background:linear-gradient(135deg,var(--soft-pink),var(--rose));
-  color:#fff;display:grid;place-items:center;
-  font-family:'Playfair Display',serif;font-size:20px;font-weight:700;
-  margin-bottom:16px;box-shadow:0 8px 18px rgba(232,92,142,.28);
+  width:48px;height:48px;border-radius:50%;
+  background:var(--blush);color:var(--soft-pink);
+  display:grid;place-items:center;
+  font-family:'Playfair Display', serif;font-size:20px;font-weight:600;
+  margin-bottom:20px;
 }
-.step h3{font-size:16px;font-weight:700;margin-bottom:7px}
-.step p{font-size:13.3px;color:var(--muted);line-height:1.6}
+.step h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.step p{font-size:13.5px;color:var(--text-muted);line-height:1.6}
 
 /* ============================================================
    10. CTA BANNER
    ============================================================ */
 .cta{
-  background:linear-gradient(140deg,var(--blush) 0%,var(--pink-200) 50%,var(--soft-pink) 100%);
-  border-radius:clamp(28px,4vw,40px);
-  padding:clamp(38px,6vw,64px) clamp(24px,5vw,56px);
+  background:var(--blush);
+  border-radius:var(--radius-lg);
+  padding:clamp(40px, 8vw, 72px) clamp(24px, 6vw, 64px);
   text-align:center;position:relative;overflow:hidden;
-  box-shadow:var(--shadow-lg);
 }
-.cta::before,.cta::after{
-  content:'🌸';position:absolute;font-size:clamp(60px,10vw,120px);
-  opacity:.25;pointer-events:none;
+.cta::before{
+  content:'🌸';position:absolute;font-size:120px;
+  opacity:0.1;top:-20px;left:-20px;transform:rotate(-15deg);pointer-events:none;
 }
-.cta::before{top:-16px;left:-10px;transform:rotate(-18deg)}
-.cta::after{bottom:-30px;right:-6px;transform:rotate(16deg)}
 .cta h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.5rem,3.6vw,2.4rem);line-height:1.22;
-  color:var(--rose-ink);margin-bottom:12px;position:relative;z-index:1;
+  font-family:'Playfair Display', serif;
+  font-size:clamp(1.8rem, 4vw, 2.6rem);line-height:1.2;
+  color:var(--rose-ink);margin-bottom:16px;position:relative;z-index:1;
 }
 .cta p{
-  color:var(--muted);font-size:clamp(13.5px,1.8vw,15.5px);
-  max-width:52ch;margin:0 auto 26px;position:relative;z-index:1;
+  color:var(--text-muted);font-size:clamp(14px, 1.8vw, 16px);
+  max-width:50ch;margin:0 auto 32px;position:relative;z-index:1;
 }
 .cta .btn{position:relative;z-index:1}
-.cta .btn-primary{background:#fff;color:var(--rose-dark);box-shadow:0 12px 28px rgba(74,42,58,.15)}
-.cta .btn-primary:hover{box-shadow:0 18px 36px rgba(74,42,58,.25)}
 
 /* ============================================================
    11. FOOTER
    ============================================================ */
 footer{
-  padding:clamp(46px,6vw,70px) 0 34px;
-  border-top:1px solid var(--pink-200);
-  background:linear-gradient(180deg,transparent,var(--blush));
+  padding:clamp(48px, 6vw, 72px) 0 32px;
+  border-top:1px solid rgba(244, 163, 192, 0.2);
 }
 .foot-grid{
-  display:grid;grid-template-columns:1.4fr 1fr 1fr;
-  gap:clamp(26px,4vw,50px);margin-bottom:36px;
+  display:grid;grid-template-columns:1.5fr 1fr 1fr;
+  gap:clamp(32px, 5vw, 64px);margin-bottom:40px;
 }
-.foot-brand p{font-size:13.5px;color:var(--muted);margin-top:14px;max-width:34ch;line-height:1.7}
+.foot-brand p{font-size:14px;color:var(--text-muted);margin-top:16px;max-width:36ch;line-height:1.7}
 .foot-col h4{
-  font-size:12.5px;font-weight:700;letter-spacing:1.4px;
-  text-transform:uppercase;color:var(--rose-dark);margin-bottom:14px;
+  font-size:12px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--rose-ink);margin-bottom:20px;
 }
 .foot-col a,.foot-col span{
-  display:block;font-size:13.5px;color:var(--muted);
-  margin-bottom:10px;transition:color .2s;
+  display:block;font-size:14px;color:var(--text-muted);
+  margin-bottom:12px;transition:color 0.2s;
 }
-.foot-col a:hover{color:var(--rose)}
+.foot-col a:hover{color:var(--soft-pink)}
 .foot-bottom{
-  border-top:1.5px dashed var(--pink-200);padding-top:22px;
-  display:flex;flex-wrap:wrap;gap:10px;
+  border-top:1px solid rgba(244, 163, 192, 0.2);padding-top:24px;
+  display:flex;flex-wrap:wrap;gap:12px;
   align-items:center;justify-content:space-between;
-  font-size:12.5px;color:var(--muted);
+  font-size:13px;color:var(--text-muted);
 }
-.foot-bottom b{color:var(--rose-dark)}
 
 /* ============================================================
    12. TOMBOL WHATSAPP MELAYANG
    ============================================================ */
 .fab{
-  position:fixed;right:clamp(14px,3vw,26px);bottom:clamp(14px,3vw,26px);
+  position:fixed;right:clamp(20px, 4vw, 32px);bottom:clamp(20px, 4vw, 32px);
   z-index:95;width:60px;height:60px;border-radius:50%;
-  background:linear-gradient(135deg,#4BD07A,#25A85C);
+  background:var(--mint-leaf);
   display:grid;place-items:center;
-  box-shadow:0 14px 30px rgba(37,168,92,.42);
-  transition:box-shadow .25s ease;
+  box-shadow:0 12px 24px rgba(143, 209, 181, 0.4);
+  transition:all 0.3s ease;
 }
-.fab svg{width:29px;height:29px;fill:#fff}
-.fab::before{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  border:2px solid #4BD07A;opacity:.65;
-  animation:ripple 2.4s ease-out infinite;
-}
-@keyframes ripple{
-  0%{transform:scale(1);opacity:.6}
-  100%{transform:scale(1.75);opacity:0}
+.fab svg{width:28px;height:28px;fill:var(--white)}
+.fab:hover{
+  transform:scale(1.05);
+  box-shadow:0 16px 32px rgba(143, 209, 181, 0.6);
 }
 .fab-label{
-  position:absolute;right:72px;top:50%;transform:translateY(-50%);
-  background:#fff;color:var(--plum);font-size:12.5px;font-weight:700;
-  padding:8px 14px;border-radius:999px;white-space:nowrap;
+  position:absolute;right:76px;top:50%;transform:translateY(-50%);
+  background:var(--white);color:var(--rose-ink);font-size:12px;font-weight:700;
+  padding:8px 16px;border-radius:999px;white-space:nowrap;
   box-shadow:var(--shadow-md);opacity:0;pointer-events:none;
-  transition:opacity .25s;
+  transition:opacity 0.3s;
 }
 .fab:hover .fab-label{opacity:1}
 
 /* ============================================================
-   13. KELOPAK BUNGA JATUH
-   ============================================================ */
-.petal{
-  position:fixed;top:0;z-index:1;pointer-events:none;
-  opacity:0;user-select:none;will-change:transform;
-}
-
-/* ============================================================
-   14. ANIMASI REVEAL (dipakai GSAP)
+   13. ANIMASI REVEAL
    ============================================================ */
 .js .reveal{opacity:0;transform:translateY(30px)}
-.js .card{opacity:0;transform:translateY(28px)}
+.js .card{opacity:0;transform:translateY(30px)}
 
 /* ============================================================
-   15. RESPONSIVE
+   14. RESPONSIVE
    ============================================================ */
-@media (max-width:920px){
-  .hero-grid{grid-template-columns:1fr;text-align:center}
-  .hero-sub{margin-inline:auto}
-  .hero-actions{justify-content:center}
-  .hero-stats{justify-content:center}
-  .hero-visual{order:-1;min-height:300px}
+@media (max-width:900px){
+  .hero-title { flex-wrap: nowrap; }
   .foot-grid{grid-template-columns:1fr 1fr}
   .foot-brand{grid-column:1 / -1}
 }
 
-@media (max-width:760px){
+@media (max-width:768px){
   .nav-links{display:none}
   .burger{display:flex}
   .nav-right .btn{display:none}
-  .float-chip{font-size:11.5px;padding:7px 13px}
-  .chip-1{left:-4%}
-  .chip-2{right:-4%}
+  .hero-title { letter-spacing: -1px; }
 }
 
 @media (max-width:560px){
-  :root{--nav-h:66px;--radius:20px}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
-  .card-img{aspect-ratio:1/1}
-  .card-emoji{font-size:44px}
-  .card-body{padding:14px 13px 16px}
+  :root{--nav-h:70px}
+  .grid{grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));gap:16px}
+  .card-body{padding:16px}
   .card-title{font-size:14px}
   .card-desc{display:none}
-  .card-foot{flex-direction:column;align-items:stretch;gap:9px}
-  .btn-buy{justify-content:center;padding:11px 14px}
+  .card-foot{flex-direction:column;align-items:stretch;gap:10px}
+  .btn-buy{justify-content:center;padding:12px}
   .foot-grid{grid-template-columns:1fr}
-  .hero-stats{gap:20px}
-  .stat{flex:1 1 40%}
-  .fab{width:54px;height:54px}
-  .fab svg{width:26px;height:26px}
+  .fab{width:56px;height:56px}
+  .fab svg{width:24px;height:24px}
   .fab-label{display:none}
 }
 
 @media (prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
   html{scroll-behavior:auto}
   .js .reveal,.js .card{opacity:1;transform:none}
 }
@@ -577,15 +535,14 @@ footer{
 <header class="nav" id="nav">
   <a href="#home" class="brand" aria-label="N.Elora beranda">
     <div class="logo-box">
-      <img src="logo-nelora.png" alt="Logo N.Elora" id="logoImg"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
-      <span class="logo-fallback" style="font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 26px; color: var(--rose-ink);">N.</span>
+      <img src="logo-nelora.png" alt="Logo N.Elora" width="40" height="40" fetchpriority="high"
+           onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>🌸</text></svg>'">
     </div>
     <span class="brand-name">N.Elora</span>
   </a>
 
   <nav class="nav-links" aria-label="Navigasi utama">
-    <a href="#jenis">Jenis</a>
+    <a href="#jenis">Kategori</a>
     <a href="#etalase">Etalase</a>
     <a href="#cara">Cara Pesan</a>
     <a href="#kontak">Kontak</a>
@@ -594,7 +551,7 @@ footer{
   <div class="nav-right">
     <a href="#" class="btn btn-primary btn-sm js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya soal bunga kawat bulunya dulu ya.">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
-      Chat
+      Chat Admin
     </a>
     <button class="burger" id="burger" aria-label="Buka menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -603,61 +560,57 @@ footer{
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#jenis">Jenis</a>
+  <a href="#jenis">Kategori</a>
   <a href="#etalase">Etalase</a>
   <a href="#cara">Cara Pesan</a>
   <a href="#kontak">Kontak</a>
 </div>
 
-<!-- ==================== HERO ==================== -->
+<!-- ==================== HERO (ANIMASI BUNGA) ==================== -->
 <main>
 <section class="hero" id="home">
   <div class="container">
     <div class="hero-grid">
+      
+      <div class="hero-content">
+        <!-- Judul Utama dengan Animasi GSAP -->
+        <div class="hero-title-wrapper">
+          <!-- Hiasan bunga di sekitar teks -->
+          <span class="floating-flower ff-1">🌸</span>
+          <span class="floating-flower ff-2">🌷</span>
+          <span class="floating-flower ff-3">🌺</span>
+          <span class="floating-flower ff-4">🌸</span>
 
-      <div class="hero-text">
-        <span class="eyebrow" id="heroEyebrow">🌸 Handmade with love</span>
-
-        <h1 class="hero-title" id="heroTitle">
-          <span class="w">Bunga</span> <span class="w">Kawat</span> <span class="w">Bulu</span><br>
-          <em class="w">Handmade</em> <span class="w">Penuh</span> <span class="w">Cinta</span>
-        </h1>
+          <h1 class="hero-title" id="flowerTitle">
+            <span class="letter">N</span>
+            <span class="letter letter-dot">🌸</span>
+            <span class="letter">E</span>
+            <span class="letter">l</span>
+            <span class="letter">o</span>
+            <span class="letter">r</span>
+            <span class="letter">a</span>
+          </h1>
+        </div>
 
         <p class="hero-sub">
-          Setiap kelopak dirangkai satu per satu dengan tangan. Tahan lama,
-          nggak pernah layu, dan bisa custom warna, nama, sampai bentuk sesuai
-          keinginanmu. 🌷
+          Spesialis buket bunga kawat bulu (terutama Garbera!) yang dirangkai dengan penuh cinta. Elegan, tahan lama, dan bisa custom sesuai keinginanmu.
         </p>
 
         <div class="hero-actions">
-          <a href="#etalase" class="btn btn-primary" id="heroCta1">
-            Lihat Etalase
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a href="#etalase" class="btn btn-primary">
+            Lihat Koleksi
           </a>
-          <a href="#" class="btn btn-ghost js-wa" data-pesan="Halo N.Elora 🌸, saya mau custom bunga kawat bulu. Boleh tanya-tanya dulu?">
-            Custom Sekarang
+          <a href="#" class="btn btn-outline js-wa" data-pesan="Halo N.Elora 🌸, saya mau custom bunga kawat bulu (terutama Garbera). Boleh tanya-tanya dulu?">
+            Custom Pesanan
           </a>
         </div>
 
-        <div class="hero-stats">
-          <div class="stat"><b>500+</b><span>Bunga Terjual</span></div>
-          <div class="stat"><b>100%</b><span>Handmade</span></div>
-          <div class="stat"><b>4.9★</b><span>Rating Pembeli</span></div>
-        </div>
-      </div>
-
-      <div class="hero-visual">
-        <div class="hero-blob" id="heroBlob">
-          <img src="logo-nelora.png" alt="Logo N.Elora" class="hero-logo" width="240" height="240" fetchpriority="high">
+        <div class="hero-features">
+          <div class="feature-chip">🌺 Bunga Garbera</div>
+          <div class="feature-chip">✨ Custom Nama</div>
+          <div class="feature-chip">🎁 Siap Hadiah</div>
         </div>
 
-        <div class="float-chip chip-1" id="chip1">🌷 Tahan Lama</div>
-        <div class="float-chip chip-2" id="chip2">✨ Bisa Custom</div>
-        <div class="float-chip chip-3" id="chip3">🎁 Cocok Buat Hadiah</div>
-
-        <span class="float-dot dot-1" id="dot1"></span>
-        <span class="float-dot dot-2" id="dot2"></span>
-        <span class="float-dot dot-3" id="dot3"></span>
       </div>
 
     </div>
@@ -668,15 +621,15 @@ footer{
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
     <span>Handmade with love</span><span>✿</span>
-    <span>Bunga Kawat Bulu</span><span>✿</span>
-    <span>Bisa Custom Nama</span><span>✿</span>
-    <span>Tidak Mudah Layu</span><span>✿</span>
-    <span>Gratis Kartu Ucapan</span><span>✿</span>
+    <span>Bunga Garbera Kawat Bulu</span><span>✿</span>
+    <span>Custom Name</span><span>✿</span>
+    <span>Elegant & Cute</span><span>✿</span>
+    <span>Free Gift Card</span><span>✿</span>
     <span>Handmade with love</span><span>✿</span>
-    <span>Bunga Kawat Bulu</span><span>✿</span>
-    <span>Bisa Custom Nama</span><span>✿</span>
-    <span>Tidak Mudah Layu</span><span>✿</span>
-    <span>Gratis Kartu Ucapan</span><span>✿</span>
+    <span>Bunga Garbera Kawat Bulu</span><span>✿</span>
+    <span>Custom Name</span><span>✿</span>
+    <span>Elegant & Cute</span><span>✿</span>
+    <span>Free Gift Card</span><span>✿</span>
   </div>
 </div>
 
@@ -684,30 +637,27 @@ footer{
 <section id="jenis">
   <div class="container">
     <div class="sec-head reveal">
-      <span class="eyebrow">Jenis Bunga</span>
-      <h2 class="sec-title">Pilih <em>Sesuai Momenmu</em></h2>
-      <p class="sec-sub">Dari buket besar sampai gantungan kunci mungil - semuanya dirangkai handmade.</p>
+      <span class="eyebrow">Kategori</span>
+      <h2 class="sec-title">Pilih <em>Sesuai Momen</em></h2>
     </div>
 
     <div class="cat-grid">
       <article class="cat-card reveal" data-filter="buket">
-        <div class="cat-icon">💐</div>
-        <h3>Buket Bunga</h3>
-        <p>Buket kawat bulu siap hadiah, sudah termasuk wrapping & kartu ucapan.</p>
+        <div class="cat-icon">🌸</div>
+        <h3>Buket Garbera</h3>
+        <p>Rangkaian bunga Garbera kawat bulu premium warna pastel, cocok untuk hadiah ulang tahun atau anniversary.</p>
       </article>
 
       <article class="cat-card reveal" data-filter="tunggal">
         <div class="cat-icon">🌷</div>
         <h3>Bunga Tunggal</h3>
-        <p>Satu tangkai cantik untuk hiasan meja, vas kecil, atau pelengkap kado.</p>
+        <p>Satu tangkai manis (Garbera/Tulip) untuk hiasan meja, vas kecil, atau pelengkap kado.</p>
       </article>
-
-      <!-- Kategori Dekorasi Dihapus -->
 
       <article class="cat-card reveal" data-filter="custom">
         <div class="cat-icon">✨</div>
-        <h3>Custom</h3>
-        <p>Bebas pilih warna, bunga, nama, dan tema - kami buat khusus untukmu.</p>
+        <h3>Custom Design</h3>
+        <p>Bebas pilih warna, jenis bunga (termasuk Garbera), dan tambahan nama sesuai keinginanmu.</p>
       </article>
     </div>
   </div>
@@ -719,21 +669,19 @@ footer{
     <div class="sec-head reveal">
       <span class="eyebrow">Etalase</span>
       <h2 class="sec-title">Koleksi <em>N.Elora</em></h2>
-      <p class="sec-sub">Klik “Beli” untuk langsung chat ke WhatsApp kami. Bisa request warna & nama, lho!</p>
     </div>
 
     <div class="filters reveal" id="filters">
       <button class="filter-btn active" data-filter="semua">Semua</button>
       <button class="filter-btn" data-filter="buket">Buket</button>
       <button class="filter-btn" data-filter="tunggal">Bunga Tunggal</button>
-      <!-- Filter Dekorasi Dihapus -->
       <button class="filter-btn" data-filter="custom">Custom</button>
     </div>
 
     <div class="grid" id="productGrid"></div>
 
     <p class="etalase-note reveal">
-      Nggak nemu yang cocok? <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya & request custom bunga kawat bulu.">Chat kami untuk custom</a> 🌸
+      Mau request warna Garbera tertentu? <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya & request custom bunga kawat bulu.">Chat kami di sini</a>.
     </p>
   </div>
 </section>
@@ -743,27 +691,26 @@ footer{
   <div class="container">
     <div class="sec-head reveal">
       <span class="eyebrow">Cara Pesan</span>
-      <h2 class="sec-title">Gampang, <em>Cuma 3 Langkah</em></h2>
-      <p class="sec-sub">Tanpa ribet, tanpa daftar akun. Langsung ngobrol sama pembuatnya.</p>
+      <h2 class="sec-title">Sangat <em>Mudah</em></h2>
     </div>
 
     <div class="steps">
       <article class="step reveal">
         <div class="step-num">1</div>
         <h3>Pilih Bunga</h3>
-        <p>Lihat-lihat etalase atau jenis bunga di atas, tentukan yang paling kamu suka.</p>
+        <p>Jelajahi etalase kami dan temukan bunga Garbera atau jenis lain yang paling kamu suka.</p>
       </article>
 
       <article class="step reveal">
         <div class="step-num">2</div>
         <h3>Chat WhatsApp</h3>
-        <p>Klik tombol “Beli”, kamu langsung terhubung ke WhatsApp kami dengan pesan otomatis.</p>
+        <p>Klik tombol beli, kamu akan langsung terhubung dengan admin kami.</p>
       </article>
 
       <article class="step reveal">
         <div class="step-num">3</div>
-        <h3>Dibuat & Dikirim</h3>
-        <p>Bunga dirangkai handmade setelah pembayaran, lalu dikirim dengan packaging aman.</p>
+        <h3>Proses & Kirim</h3>
+        <p>Bunga dibuat dengan teliti setelah pembayaran, lalu dikirim dengan aman.</p>
       </article>
     </div>
   </div>
@@ -773,10 +720,9 @@ footer{
 <section>
   <div class="container">
     <div class="cta reveal">
-      <h2>Siap bikin orang tersayang senyum hari ini?</h2>
-      <p>Bunga kawat bulu N.Elora nggak akan pernah layu - sama seperti rasa sayangmu. 💗</p>
+      <h2>Buat Hari Spesialnya Lebih Berkesan</h2>
+      <p>Bunga kawat bulu N.Elora (terutama Garbera!) adalah hadiah sempurna yang tak akan pernah layu.</p>
       <a href="#" class="btn btn-primary js-wa" data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu. Boleh info katalog & harganya?">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
         Pesan Sekarang
       </a>
     </div>
@@ -791,18 +737,17 @@ footer{
       <div class="foot-brand">
         <div class="brand">
           <div class="logo-box">
-            <img src="logo-nelora.png" alt="Logo N.Elora"
-                 onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
-            <span class="logo-fallback" style="font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 26px; color: var(--rose-ink);">N.</span>
+            <img src="logo-nelora.png" alt="Logo N.Elora" width="40" height="40"
+                 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>🌸</text></svg>'">
           </div>
           <span class="brand-name">N.Elora</span>
         </div>
-        <p>Bunga kawat bulu handmade yang dirangkai satu per satu dengan sabar dan cinta. Karena hadiah terbaik itu yang dibuat dengan tangan. 🌸</p>
+        <p>Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket Garbera elegan yang dibuat khusus untukmu.</p>
       </div>
 
       <div class="foot-col">
         <h4>Navigasi</h4>
-        <a href="#jenis">Jenis Bunga</a>
+        <a href="#jenis">Kategori</a>
         <a href="#etalase">Etalase</a>
         <a href="#cara">Cara Pesan</a>
       </div>
@@ -810,15 +755,14 @@ footer{
       <div class="foot-col">
         <h4>Hubungi Kami</h4>
         <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya.">+62 821-4607-1595</a>
-        <span>Senin – Sabtu</span>
-        <span>09.00 – 20.00 WIB</span>
-        <span>Pre-order 2–5 hari</span>
+        <span>Senin - Sabtu</span>
+        <span>09.00 - 20.00 WIB</span>
       </div>
     </div>
 
     <div class="foot-bottom">
-      <span>© <span id="year"></span> <b>N.Elora</b>. Dibuat dengan 💗</span>
-      <span>Handmade in Indonesia 🇮🇩 · <a href="admin.html" style="color:var(--muted)">Admin</a></span>
+      <span>© <span id="year"></span> N.Elora. Dibuat dengan 💗</span>
+      <span>Handmade in Indonesia 🇮🇩 · <a href="admin.html" style="color:var(--text-muted)">Admin</a></span>
     </div>
   </div>
 </footer>
@@ -826,7 +770,7 @@ footer{
 <!-- ==================== FAB WHATSAPP ==================== -->
 <a href="#" class="fab js-wa" id="fab" aria-label="Chat WhatsApp"
    data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu.">
-  <span class="fab-label">Chat N.Elora 🌸</span>
+  <span class="fab-label">Chat Admin</span>
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
 </a>
 
@@ -836,17 +780,17 @@ footer{
 
 <script>
 /* ============================================================
-   KONFIGURASI UTAMA
+   KONFIGURASI UTAMA (Produk Garbera)
    ============================================================ */
-const WA_NUMBER = "6282146071595"; // Nomor WhatsApp tujuan
+const WA_NUMBER = "6282146071595"; 
 
 const DEFAULT_PRODUK = [
-  { nama:"Buket Mawar Kawat Bulu",  harga:"45.000", kategori:"buket",    emoji:"🌹", desc:"12 tangkai mawar gradasi pink, wrapping korean style.", badge:"Best Seller", cost:"25.000", sold:0 },
-  { nama:"Buket Tulip Pastel",      harga:"55.000", kategori:"buket",    emoji:"🌷", desc:"Tulip lembut warna pastel, cocok untuk anniversary.", badge:"Favorit", cost:"30.000", sold:0 },
-  { nama:"Buket Graduation",        harga:"65.000", kategori:"buket",    emoji:"💐", desc:"Bunga + boneka mini + kartu ucapan wisuda.", badge:"", cost:"35.000", sold:0 },
-  { nama:"Bunga Tunggal Matahari",  harga:"15.000", kategori:"tunggal",  emoji:"🌻", desc:"Satu tangkai besar, pas untuk hiasan meja kerja.", badge:"", cost:"7.000", sold:0 },
-  { nama:"Bunga Tunggal Sakura",    harga:"12.000", kategori:"tunggal",  emoji:"🌸", desc:"Mungil dan manis, bisa jadi pelengkap kado.", badge:"Hemat", cost:"5.000", sold:0 },
-  { nama:"Custom Name Flower",      harga:"75.000", kategori:"custom",   emoji:"✨", desc:"Bunga + nama/quote sesuai request, bebas warna.", badge:"Custom", cost:"40.000", sold:0 },
+  { nama:"Buket Garbera Pink",   harga:"55.000", kategori:"buket",    emoji:"🌺", desc:"Buket Garbera kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0 },
+  { nama:"Buket Garbera Pelangi",harga:"65.000", kategori:"buket",    emoji:"💐", desc:"Gerbera warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0 },
+  { nama:"Buket Garbera Putih",  harga:"50.000", kategori:"buket",    emoji:"💮", desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0 },
+  { nama:"Garbera Tunggal Mini", harga:"15.000", kategori:"tunggal",  emoji:"🌸", desc:"Satu tangkai Gerbera mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0 },
+  { nama:"Tulip Pastel",         harga:"15.000", kategori:"tunggal",  emoji:"🌷", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0 },
+  { nama:"Custom Garbera + Nama",harga:"85.000", kategori:"custom",   emoji:"✨", desc:"Bunga Garbera + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0 },
 ];
 
 function loadProduk(){
@@ -861,9 +805,6 @@ function loadProduk(){
 }
 let PRODUK = loadProduk();
 
-/* ============================================================
-   UTIL WHATSAPP
-   ============================================================ */
 function waLink(pesan){
   return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pesan);
 }
@@ -875,9 +816,6 @@ document.querySelectorAll(".js-wa").forEach(el => {
   el.setAttribute("rel", "noopener noreferrer");
 });
 
-/* ============================================================
-   RENDER PRODUK
-   ============================================================ */
 const grid = document.getElementById("productGrid");
 
 function renderProduk(){
@@ -896,7 +834,7 @@ function renderProduk(){
           <h3 class="card-title">${p.nama}</h3>
           <p class="card-desc">${p.desc}</p>
           <div class="card-foot">
-            <span class="price">Rp ${p.harga} <small>/pcs</small></span>
+            <span class="price">Rp ${p.harga}</span>
             <a class="btn-buy" href="${link}" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
               Beli
@@ -909,101 +847,58 @@ function renderProduk(){
 renderProduk();
 
 /* ============================================================
-   GSAP ANIMATIONS
+   ANIMASI GSAP
    ============================================================ */
 gsap.registerPlugin(ScrollTrigger);
-
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-gsap.from("#nav", { y: -90, opacity: 0, duration: 1, ease: "power3.out" });
+gsap.from("#nav", { y: -40, opacity: 0, duration: 1, ease: "power3.out" });
 
 if (!reduceMotion){
   const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-  tl.from("#heroEyebrow", { y: 20, opacity: 0, duration: .7 })
-    .from("#heroTitle .w", {
-      y: 46, opacity: 0, rotate: 6,
-      duration: .85, stagger: .075
-    }, "-=.35")
-    .from(".hero-sub", { y: 24, opacity: 0, duration: .7 }, "-=.55")
-    .from(".hero-actions .btn", {
-      y: 22, opacity: 0, scale: .94,
-      duration: .6, stagger: .1
-    }, "-=.45")
-    .from(".stat", { y: 20, opacity: 0, duration: .55, stagger: .09 }, "-=.4")
-    .from("#heroBlob", {
-      scale: .55, opacity: 0, rotate: -18,
-      duration: 1.1, ease: "elastic.out(1, .65)"
-    }, "-=1.05")
-    .from(".float-chip", {
-      scale: 0, opacity: 0,
-      duration: .6, stagger: .12, ease: "back.out(2.2)"
-    }, "-=.6")
-    .from(".float-dot", {
-      scale: 0, opacity: 0,
-      duration: .5, stagger: .08, ease: "back.out(3)"
-    }, "-=.5");
+  tl.from(".letter", { 
+    y: -100, opacity: 0, rotation: -20, scale: 0.5,
+    duration: 1.2, stagger: 0.1, ease: "elastic.out(1, 0.5)" 
+  })
+  .from(".hero-sub", { y: 20, opacity: 0, duration: 0.8 }, "-=0.6")
+  .from(".hero-actions .btn", { y: 20, opacity: 0, duration: 0.8, stagger: 0.1 }, "-=0.6")
+  .from(".feature-chip", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "back.out(2)" }, "-=0.4")
+  .from(".floating-flower", { scale: 0, opacity: 0, duration: 0.8, stagger: 0.15, ease: "back.out(2)" }, "-=1");
 
-  gsap.to("#heroBlob", {
-    borderRadius: "58% 42% 40% 60% / 55% 58% 42% 45%",
-    duration: 5, repeat: -1, yoyo: true, ease: "sine.inOut"
+  gsap.to(".letter", {
+    y: -8, rotation: (i) => i % 2 === 0 ? 4 : -4,
+    duration: 1.8, repeat: -1, yoyo: true, ease: "sine.inOut",
+    stagger: 0.1, delay: 2
   });
 
-  gsap.to("#heroBlob .hero-logo", {
-    y: -16, rotation: 5,
-    duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut"
-  });
-
-  const floaters = [
-    { el: "#chip1", y: -12, r: -3, d: 2.8 },
-    { el: "#chip2", y: 14,  r: 3,  d: 3.4 },
-    { el: "#chip3", y: -9,  r: 2,  d: 3.1 },
-    { el: "#dot1",  y: -18, r: 0,  d: 2.2 },
-    { el: "#dot2",  y: 16,  r: 0,  d: 2.9 },
-    { el: "#dot3",  y: -14, r: 0,  d: 3.7 },
-  ];
-  floaters.forEach(f => {
-    gsap.to(f.el, {
-      y: f.y, rotation: f.r,
-      duration: f.d, repeat: -1, yoyo: true, ease: "sine.inOut",
-      delay: Math.random() * 1.2
-    });
-  });
+  gsap.to(".ff-1", { y: -20, rotation: 360, duration: 8, repeat: -1, ease: "none" });
+  gsap.to(".ff-2", { y: 15, rotation: -360, duration: 10, repeat: -1, ease: "none" });
+  gsap.to(".ff-3", { y: -15, rotation: 180, duration: 6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.to(".ff-4", { y: 20, rotation: -180, duration: 7, repeat: -1, yoyo: true, ease: "sine.inOut" });
 }
 
 gsap.utils.toArray(".reveal").forEach(el => {
   gsap.to(el, {
-    opacity: 1, y: 0, duration: .9, ease: "power3.out",
-    scrollTrigger: { trigger: el, start: "top 88%", once: true }
+    opacity: 1, y: 0, duration: 1, ease: "power3.out",
+    scrollTrigger: { trigger: el, start: "top 85%", once: true }
   });
 });
 
 ScrollTrigger.batch(".card", {
-  start: "top 92%",
-  once: true,
+  start: "top 90%", once: true,
   onEnter: batch => gsap.to(batch, {
-    opacity: 1, y: 0, scale: 1,
-    duration: .7, stagger: .07, ease: "power2.out", overwrite: true
+    opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out", overwrite: true
   })
 });
 
 document.querySelectorAll(".card").forEach(card => {
   const emoji = card.querySelector(".card-emoji");
-  const tl = gsap.timeline({ paused: true })
-    .to(emoji, { scale: 1.22, rotate: 8, y: -6, duration: .35, ease: "back.out(2)" })
-    .to(emoji, { rotate: -5, duration: .22, ease: "sine.inOut" })
-    .to(emoji, { rotate: 0, duration: .35, ease: "elastic.out(1,.5)" });
-
-  card.addEventListener("mouseenter", () => tl.play());
-  card.addEventListener("mouseleave", () => tl.reverse());
-});
-
-document.querySelectorAll(".btn, .btn-buy, .filter-btn").forEach(btn => {
-  btn.addEventListener("mouseenter", () => {
-    gsap.to(btn, { scale: 1.06, duration: .28, ease: "back.out(2.5)" });
+  card.addEventListener("mouseenter", () => {
+    gsap.to(emoji, { scale: 1.1, y: -5, duration: 0.4, ease: "power2.out" });
   });
-  btn.addEventListener("mouseleave", () => {
-    gsap.to(btn, { scale: 1, duration: .35, ease: "elastic.out(1,.5)" });
+  card.addEventListener("mouseleave", () => {
+    gsap.to(emoji, { scale: 1, y: 0, duration: 0.4, ease: "power2.out" });
   });
 });
 
@@ -1020,12 +915,12 @@ function filterProduk(kategori, btn){
     if (cocok){
       card.style.display = "flex";
       gsap.fromTo(card,
-        { opacity: 0, scale: .9, y: 18 },
-        { opacity: 1, scale: 1, y: 0, duration: .45, ease: "power2.out" }
+        { opacity: 0, scale: 0.95, y: 15 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "power2.out" }
       );
     } else {
       gsap.to(card, {
-        opacity: 0, scale: .88, duration: .25, ease: "power1.in",
+        opacity: 0, scale: 0.95, duration: 0.3, ease: "power1.in",
         onComplete: () => { card.style.display = "none"; }
       });
     }
@@ -1046,59 +941,12 @@ document.querySelectorAll(".cat-card").forEach(cat => {
   });
 });
 
-const track = document.querySelector(".marquee-track");
-if (track){
-  track.addEventListener("mouseenter", () => track.style.animationPlayState = "paused");
-  track.addEventListener("mouseleave", () => track.style.animationPlayState = "running");
-}
-
 ScrollTrigger.create({
   start: "top -20",
   onUpdate: self => {
     document.getElementById("nav").classList.toggle("scrolled", self.scroll() > 20);
   }
 });
-
-if (!reduceMotion){
-  const emojis = ["🌸", "🌷", "💮", "🌸", "🤍"];
-  const jumlah = window.innerWidth < 768 ? 7 : 14;
-
-  for (let i = 0; i < jumlah; i++){
-    const p = document.createElement("span");
-    p.className = "petal";
-    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.fontSize = (12 + Math.random() * 16) + "px";
-    document.body.appendChild(p);
-
-    gsap.to(p, {
-      x: gsap.utils.random(-70, 70),
-      duration: gsap.utils.random(3.5, 6.5),
-      repeat: -1, yoyo: true, ease: "sine.inOut"
-    });
-
-    gsap.fromTo(p,
-      { y: -80, opacity: 0 },
-      {
-        keyframes: [
-          { opacity: .75, duration: 1.5 },
-          { y: window.innerHeight + 120, duration: gsap.utils.random(14, 26), ease: "none" },
-          { opacity: 0, duration: 1.5 }
-        ],
-        repeat: -1,
-        delay: gsap.utils.random(0, 16),
-        rotation: gsap.utils.random(-360, 360)
-      }
-    );
-  }
-}
-
-if (!reduceMotion){
-  gsap.to("#fab", {
-    scale: 1.08, rotation: 6,
-    duration: 1.1, repeat: -1, yoyo: true, ease: "sine.inOut"
-  });
-}
 
 const burger = document.getElementById("burger");
 const mobileMenu = document.getElementById("mobileMenu");
@@ -1107,13 +955,6 @@ burger.addEventListener("click", () => {
   const open = mobileMenu.classList.toggle("show");
   burger.classList.toggle("open", open);
   burger.setAttribute("aria-expanded", open);
-
-  if (open){
-    gsap.fromTo(mobileMenu.children,
-      { opacity: 0, x: -18 },
-      { opacity: 1, x: 0, duration: .35, stagger: .06, ease: "power2.out" }
-    );
-  }
 });
 
 mobileMenu.querySelectorAll("a").forEach(a => {
@@ -1125,7 +966,6 @@ mobileMenu.querySelectorAll("a").forEach(a => {
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();
-
 window.addEventListener("load", () => ScrollTrigger.refresh());
 </script>
 </body>

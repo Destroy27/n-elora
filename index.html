@@ -781,12 +781,16 @@ footer{
 <!-- ==================== GSAP ==================== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="firebase-config.js"></script>
 
 <script>
 /* ============================================================
    KONFIGURASI UTAMA (Produk Garbera)
    ============================================================ */
 const WA_NUMBER = "6282146071595"; 
+
+const CFG = window.NELORA_FIREBASE_CONFIG || null;
+const MODE = (CFG && CFG.apiKey && CFG.projectId) ? "cloud" : "lokal";
 
 const DEFAULT_PRODUK = [
   { nama:"Buket Garbera Pink",   harga:"55.000", kategori:"buket",    emoji:"🌺", desc:"Buket Garbera kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0 },
@@ -808,6 +812,56 @@ function loadProduk(){
   return DEFAULT_PRODUK.map(p => ({...p}));
 }
 let PRODUK = loadProduk();
+
+/* ============================================================
+   DATA CLOUD (FIREBASE FIRESTORE)
+   ============================================================ */
+function fmtNum(n){ return (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
+
+function rapikan(list){
+  return list.map(p=>({
+    ...p,
+    harga: typeof p.harga === "number" ? fmtNum(p.harga) : String(p.harga || "0"),
+    cost: typeof p.cost === "number" ? fmtNum(p.cost) : String(p.cost || "0"),
+    sold: parseInt(p.sold,10) || 0,
+    foto: p.foto || ""
+  }));
+}
+
+function muatSkrip(src){
+  return new Promise((ok, gagal)=>{
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = ok;
+    s.onerror = ()=>gagal(new Error("Gagal memuat " + src));
+    document.head.appendChild(s);
+  });
+}
+
+async function ambilCloud(){
+  const dasar = "https://www.gstatic.com/firebasejs/10.12.2/";
+  if (!window.firebase) await muatSkrip(dasar + "firebase-app-compat.js");
+  if (!window.firebase.firestore) await muatSkrip(dasar + "firebase-firestore-compat.js");
+  if (!firebase.apps.length) firebase.initializeApp(CFG);
+  const snap = await firebase.firestore().collection("produk").orderBy("urutan").get();
+  return snap.docs.map(d=>d.data());
+}
+
+async function mulai(){
+  if (MODE === "cloud"){
+    try{
+      const data = rapikan(await ambilCloud());
+      if (data.length){
+        PRODUK = data;
+        renderProduk();
+        try{ localStorage.setItem("nelora_products", JSON.stringify(data)); }catch(e){}
+      }
+    }catch(e){
+      console.warn("Data server gagal dimuat, memakai data tersimpan:", e.message);
+    }
+  }
+  initAnimasi();
+}
 
 function waLink(pesan){
   return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pesan);
@@ -849,10 +903,12 @@ function renderProduk(){
   }).join("");
 }
 renderProduk();
+mulai();
 
 /* ============================================================
    ANIMASI GSAP
    ============================================================ */
+function initAnimasi(){
 const GSAP_OK = !!(window.gsap && window.ScrollTrigger);
 if (!GSAP_OK) document.documentElement.classList.remove("js");
 
@@ -989,6 +1045,7 @@ mobileMenu.querySelectorAll("a").forEach(a => {
 
 document.getElementById("year").textContent = new Date().getFullYear();
 if (GSAP_OK) window.addEventListener("load", () => ScrollTrigger.refresh());
+}
 </script>
 </body>
 </html>

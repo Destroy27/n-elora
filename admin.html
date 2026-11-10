@@ -111,8 +111,12 @@ td input.num{text-align:right}
     <div class="login-box">
       <div class="logo-box" style="margin:0 auto 12px;width:56px;height:56px;border-radius:50%;overflow:hidden"><img src="logo-nelora.png" alt="Logo N.Elora"></div>
       <h1>Admin N.Elora</h1>
-      <p class="sub">Masuk untuk mengatur harga, modal, dan keuntungan.</p>
+      <p class="sub" id="loginSub">Masuk untuk mengatur harga, modal, dan keuntungan.</p>
       <form id="loginForm">
+        <div class="field" id="emailField" style="display:none">
+          <label for="email">Email Admin</label>
+          <input type="email" id="email" autocomplete="username" placeholder="email@contoh.com">
+        </div>
         <div class="field">
           <label for="pwd">Kata Sandi</label>
           <input type="password" id="pwd" autocomplete="current-password" required>
@@ -120,14 +124,15 @@ td input.num{text-align:right}
         <button class="btn btn-primary" type="submit" style="width:100%">Masuk</button>
         <p class="err" id="loginErr">Kata sandi salah. Coba lagi.</p>
       </form>
-      <p style="font-size:11.5px;color:var(--muted);margin-top:14px">Default: <b>findi</b> (ubah di kode jika perlu)</p>
+      <p id="akunInfo" style="font-size:11.5px;color:var(--muted);margin-top:14px">Sinkronisasi server belum aktif. Isi firebase-config.js untuk mengaktifkannya.</p>
+      <p id="hintLokal" style="font-size:11.5px;color:var(--muted);margin-top:6px">Default: <b>findi</b> (ubah di kode jika perlu)</p>
     </div>
   </div>
 
   <!-- Dashboard -->
   <div id="dashView" style="display:none">
     <h1>Dashboard</h1>
-    <p class="sub">Atur harga jual, harga modal, dan jumlah terjual. Data tersimpan di browser ini dan langsung dipakai halaman utama.</p>
+    <p class="sub" id="dashSub">Atur harga jual, harga modal, dan jumlah terjual. Data tersimpan di browser ini dan langsung dipakai halaman utama.</p>
 
     <div class="stats" id="stats"></div>
 
@@ -223,12 +228,17 @@ td input.num{text-align:right}
 
 <div class="toast" id="toast">Tersimpan</div>
 
+<script src="firebase-config.js"></script>
 <script>
 /* ============================================================
    KONFIGURASI
    ============================================================ */
-const ADMIN_PASSWORD = "findi"; // kata sandi admin (ubah jika perlu)
+const ADMIN_PASSWORD = "findi"; // dipakai hanya pada mode lokal
 const STORAGE_KEY = "nelora_products";
+
+const CFG = window.NELORA_FIREBASE_CONFIG || null;
+const MODE_AWAL = (CFG && CFG.apiKey && CFG.projectId) ? "cloud" : "lokal";
+let modeAktif = MODE_AWAL;
 
 const DEFAULT_PRODUK = [
   { nama:"Buket Garbera Pink",   harga:"55.000", kategori:"buket",    emoji:"🌺", desc:"Buket Garbera kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0 },
@@ -244,15 +254,33 @@ const DEFAULT_PRODUK = [
    ============================================================ */
 function parseNum(str){ return parseInt(String(str||"").replace(/\./g,"").replace(/[^\d]/g,""),10) || 0; }
 function fmtNum(n){ return (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg || "Tersimpan";
   t.classList.add("show");
   clearTimeout(toast._t);
-  toast._t = setTimeout(()=>t.classList.remove("show"),1600);
+  toast._t = setTimeout(()=>t.classList.remove("show"),2200);
+}
+function muatSkrip(src){
+  return new Promise((ok, gagal)=>{
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = ok;
+    s.onerror = ()=>gagal(new Error("Gagal memuat " + src));
+    document.head.appendChild(s);
+  });
 }
 
-function loadProduk(){
+/* ============================================================
+   PENYIMPANAN
+   ============================================================ */
+let produk = [];
+let editingIndex = -1;
+let fotoTemp = "";
+let auth = null, db = null, storage = null, unsub = null;
+
+function bacaLokal(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw){
@@ -262,19 +290,95 @@ function loadProduk(){
   }catch(e){}
   return DEFAULT_PRODUK.map(p=>({...p}));
 }
-function saveProduk(list){
+function simpanLokal(list){
   try{
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
     return true;
   }catch(e){
-    alert("Penyimpanan browser penuh. Hapus atau perkecil beberapa foto produk, lalu simpan lagi.");
     return false;
   }
 }
 
-let produk = loadProduk();
-let editingIndex = -1; // -1 = new
-let fotoTemp = "";
+/* ============================================================
+   FIREBASE
+   ============================================================ */
+async function siapkanCloud(){
+  const dasar = "https://www.gstatic.com/firebasejs/10.12.2/";
+  await muatSkrip(dasar + "firebase-app-compat.js");
+  await muatSkrip(dasar + "firebase-auth-compat.js");
+  await muatSkrip(dasar + "firebase-firestore-compat.js");
+  await muatSkrip(dasar + "firebase-storage-compat.js");
+  if (!firebase.apps.length) firebase.initializeApp(CFG);
+  auth = firebase.auth();
+  db = firebase.firestore();
+  storage = firebase.storage();
+  auth.onAuthStateChanged(user=>{
+    if (user){ showDash(); pantau(); }
+    else { showLogin(); }
+  });
+}
+
+function pantau(){
+  if (unsub) unsub();
+  unsub = db.collection("produk").orderBy("urutan").onSnapshot(snap=>{
+    produk = snap.docs.map(d=>{
+      const v = d.data();
+      return {
+        _id: d.id,
+        nama: v.nama || "",
+        kategori: v.kategori || "buket",
+        emoji: v.emoji || "",
+        desc: v.desc || "",
+        badge: v.badge || "",
+        harga: fmtNum(v.harga),
+        cost: fmtNum(v.cost),
+        sold: parseInt(v.sold,10) || 0,
+        foto: v.foto || ""
+      };
+    });
+    simpanLokal(produk);
+    render();
+  }, err=>{
+    toast("Gagal memuat data: " + err.message);
+  });
+}
+
+async function unggahFoto(dataUrl){
+  const nama = "foto-produk/" + Date.now() + "-" + Math.random().toString(36).slice(2,8) + ".jpg";
+  const ref = storage.ref(nama);
+  await ref.putString(dataUrl, "data_url", { contentType:"image/jpeg" });
+  return await ref.getDownloadURL();
+}
+
+async function simpanSatu(i){
+  if (modeAktif === "lokal"){ simpanLokal(produk); return; }
+  const p = produk[i];
+  if (!p || !p._id) return;
+  try{
+    await db.collection("produk").doc(p._id).update({
+      harga: parseNum(p.harga),
+      cost: parseNum(p.cost),
+      sold: parseInt(p.sold,10) || 0
+    });
+  }catch(e){ toast("Gagal menyimpan: " + e.message); }
+}
+
+async function hapusSatu(i){
+  const p = produk[i];
+  if (!p) return;
+  if (!confirm("Hapus produk \"" + p.nama + "\"?")) return;
+  if (modeAktif === "lokal"){
+    produk.splice(i,1);
+    simpanLokal(produk);
+    render();
+    toast("Produk dihapus");
+    return;
+  }
+  try{
+    await db.collection("produk").doc(p._id).delete();
+    toast("Produk dihapus");
+  }catch(e){ toast("Gagal menghapus: " + e.message); }
+}
 
 /* ============================================================
    AUTH
@@ -282,6 +386,7 @@ let fotoTemp = "";
 const loginView = document.getElementById("loginView");
 const dashView = document.getElementById("dashView");
 const topbar = document.getElementById("topbar");
+const loginErr = document.getElementById("loginErr");
 
 function showDash(){
   loginView.style.display = "none";
@@ -297,17 +402,45 @@ function showLogin(){
 
 document.getElementById("loginForm").addEventListener("submit", e=>{
   e.preventDefault();
-  const v = document.getElementById("pwd").value;
-  if (v === ADMIN_PASSWORD){
-    sessionStorage.setItem("nelora_admin","1");
-    document.getElementById("loginErr").classList.remove("show");
-    showDash();
-  } else {
-    document.getElementById("loginErr").classList.add("show");
+  const pwd = document.getElementById("pwd").value;
+  loginErr.classList.remove("show");
+
+  if (modeAktif === "lokal"){
+    if (pwd === ADMIN_PASSWORD){
+      sessionStorage.setItem("nelora_admin","1");
+      showDash();
+    } else {
+      loginErr.textContent = "Kata sandi salah. Coba lagi.";
+      loginErr.classList.add("show");
+    }
+    return;
   }
+
+  const email = document.getElementById("email").value.trim();
+  if (!email){
+    loginErr.textContent = "Email admin belum diisi.";
+    loginErr.classList.add("show");
+    return;
+  }
+  auth.signInWithEmailAndPassword(email, pwd).catch(err=>{
+    const kode = (err && err.code) || "";
+    if (kode.indexOf("user-not-found") >= 0 || kode.indexOf("wrong-password") >= 0 || kode.indexOf("invalid-credential") >= 0){
+      loginErr.textContent = "Email atau kata sandi salah.";
+    } else if (kode.indexOf("invalid-email") >= 0){
+      loginErr.textContent = "Format email belum benar.";
+    } else if (kode.indexOf("too-many-requests") >= 0){
+      loginErr.textContent = "Terlalu banyak percobaan. Coba lagi nanti.";
+    } else if (kode.indexOf("network") >= 0){
+      loginErr.textContent = "Jaringan bermasalah. Periksa koneksi internet.";
+    } else {
+      loginErr.textContent = "Gagal masuk: " + (err.message || "kesalahan tidak dikenal");
+    }
+    loginErr.classList.add("show");
+  });
 });
 
 document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  if (modeAktif === "cloud" && auth){ auth.signOut(); return; }
   sessionStorage.removeItem("nelora_admin");
   showLogin();
 });
@@ -345,7 +478,6 @@ function render(){
     tbody.appendChild(tr);
   });
 
-  // stats
   let totalSold = 0, omzet = 0, profit = 0;
   produk.forEach(p=>{
     const sell = parseNum(p.harga), cost = parseNum(p.cost), sold = parseInt(p.sold,10)||0;
@@ -356,14 +488,12 @@ function render(){
   document.getElementById("stats").innerHTML = `
     <div class="stat"><div class="label">Jumlah Produk</div><div class="value">${produk.length}</div><div class="hint">varian aktif</div></div>
     <div class="stat"><div class="label">Total Terjual</div><div class="value">${fmtNum(totalSold)}</div><div class="hint">pcs</div></div>
-    <div class="stat"><div class="label">Total Omzet</div><div class="value">Rp ${fmtNum(omzet)}</div><div class="hint">harga jual × terjual</div></div>
-    <div class="stat"><div class="label">Total Keuntungan</div><div class="value" style="color:${profit>=0?'#2E8B57':'#B33A5A'}">Rp ${fmtNum(profit)}</div><div class="hint">omzet − modal</div></div>
+    <div class="stat"><div class="label">Total Omzet</div><div class="value">Rp ${fmtNum(omzet)}</div><div class="hint">harga jual x terjual</div></div>
+    <div class="stat"><div class="label">Total Keuntungan</div><div class="value" style="color:${profit>=0?'#2E8B57':'#B33A5A'}">Rp ${fmtNum(profit)}</div><div class="hint">omzet dikurangi modal</div></div>
   `;
 }
 
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
-
-/* inline edit handlers */
+/* inline edit */
 document.getElementById("tbody").addEventListener("change", e=>{
   const el = e.target;
   if (!el.dataset || !el.dataset.field) return;
@@ -374,7 +504,7 @@ document.getElementById("tbody").addEventListener("change", e=>{
   } else {
     produk[i][field] = fmtNum(parseNum(el.value));
   }
-  saveProduk(produk);
+  simpanSatu(i);
   render();
   toast("Tersimpan");
 });
@@ -384,13 +514,7 @@ document.getElementById("tbody").addEventListener("click", e=>{
   if (editBtn){
     openModal(parseInt(editBtn.dataset.edit,10));
   } else if (delBtn){
-    const i = parseInt(delBtn.dataset.del,10);
-    if (confirm("Hapus produk \""+produk[i].nama+"\"?")){
-      produk.splice(i,1);
-      saveProduk(produk);
-      render();
-      toast("Produk dihapus");
-    }
+    hapusSatu(parseInt(delBtn.dataset.del,10));
   }
 });
 
@@ -398,7 +522,7 @@ document.getElementById("tbody").addEventListener("click", e=>{
 const modalBack = document.getElementById("modalBack");
 function openModal(i){
   editingIndex = i;
-  const p = (i>=0) ? produk[i] : { nama:"", kategori:"buket", emoji:"", desc:"", badge:"", harga:"", cost:"", sold:0 };
+  const p = (i>=0) ? produk[i] : { nama:"", kategori:"buket", emoji:"", desc:"", badge:"", harga:"", cost:"", sold:0, foto:"" };
   document.getElementById("modalTitle").textContent = (i>=0) ? "Edit Produk" : "Tambah Produk";
   document.getElementById("fNama").value = p.nama||"";
   document.getElementById("fKat").value = p.kategori||"buket";
@@ -409,6 +533,7 @@ function openModal(i){
   document.getElementById("fCost").value = fmtNum(parseNum(p.cost));
   document.getElementById("fSold").value = parseInt(p.sold,10)||0;
   fotoTemp = p.foto || "";
+  document.getElementById("fFoto").value = "";
   setPreview();
   modalBack.classList.add("show");
 }
@@ -438,7 +563,7 @@ document.getElementById("fotoHapus").addEventListener("click", ()=>{
 fotoInput.addEventListener("change", ()=>{
   const f = fotoInput.files && fotoInput.files[0];
   if (!f) return;
-  if (!f.type.startsWith("image/")){ toast("File harus berupa gambar"); return; }
+  if (!f.type || f.type.indexOf("image/") !== 0){ toast("File harus berupa gambar"); return; }
   const rd = new FileReader();
   rd.onload = ()=>{
     const img = new Image();
@@ -462,42 +587,118 @@ fotoInput.addEventListener("change", ()=>{
   rd.onerror = ()=>toast("Gagal membaca file");
   rd.readAsDataURL(f);
 });
-document.getElementById("cancelBtn").addEventListener("click", closeModal);
-modalBack.addEventListener("click", e=>{ if (e.target===modalBack) closeModal(); });
 
-document.getElementById("prodForm").addEventListener("submit", e=>{
+/* simpan form */
+document.getElementById("prodForm").addEventListener("submit", async e=>{
   e.preventDefault();
-  const obj = {
+  const tombol = e.target.querySelector('button[type="submit"]');
+  const data = {
     nama: document.getElementById("fNama").value.trim(),
     kategori: document.getElementById("fKat").value,
     emoji: document.getElementById("fEmoji").value.trim(),
     desc: document.getElementById("fDesc").value.trim(),
     badge: document.getElementById("fBadge").value.trim(),
-    harga: fmtNum(parseNum(document.getElementById("fHarga").value)),
-    cost: fmtNum(parseNum(document.getElementById("fCost").value)),
+    harga: parseNum(document.getElementById("fHarga").value),
+    cost: parseNum(document.getElementById("fCost").value),
     sold: Math.max(0, parseInt(document.getElementById("fSold").value,10)||0),
-    foto: fotoTemp || "",
+    foto: fotoTemp || ""
   };
-  if (editingIndex >= 0) produk[editingIndex] = obj;
-  else produk.push(obj);
-  saveProduk(produk);
-  closeModal();
-  render();
-  toast("Produk disimpan");
-});
 
-document.getElementById("addBtn").addEventListener("click", ()=>openModal(-1));
-document.getElementById("resetBtn").addEventListener("click", ()=>{
-  if (confirm("Reset semua produk ke default? Perubahan harga & keuntungan akan hilang.")){
-    produk = DEFAULT_PRODUK.map(p=>({...p}));
-    saveProduk(produk);
-    render();
-    toast("Reset ke default");
+  if (tombol){ tombol.disabled = true; tombol.textContent = "Menyimpan..."; }
+  try{
+    if (modeAktif === "lokal"){
+      const obj = {
+        nama: data.nama, kategori: data.kategori, emoji: data.emoji,
+        desc: data.desc, badge: data.badge,
+        harga: fmtNum(data.harga), cost: fmtNum(data.cost),
+        sold: data.sold, foto: data.foto
+      };
+      if (editingIndex >= 0) produk[editingIndex] = obj;
+      else produk.push(obj);
+      simpanLokal(produk);
+      closeModal();
+      render();
+      toast("Produk disimpan");
+    } else {
+      const isi = {
+        nama: data.nama, kategori: data.kategori, emoji: data.emoji,
+        desc: data.desc, badge: data.badge,
+        harga: data.harga, cost: data.cost, sold: data.sold
+      };
+      if (data.foto && data.foto.indexOf("data:") === 0){
+        toast("Mengunggah foto...");
+        isi.foto = await unggahFoto(data.foto);
+      } else {
+        isi.foto = data.foto;
+      }
+      if (editingIndex >= 0){
+        await db.collection("produk").doc(produk[editingIndex]._id).update(isi);
+      } else {
+        isi.urutan = Date.now();
+        await db.collection("produk").add(isi);
+      }
+      closeModal();
+      toast("Produk disimpan");
+    }
+  }catch(err){
+    toast("Gagal menyimpan: " + (err.message || "kesalahan tidak dikenal"));
+  }finally{
+    if (tombol){ tombol.disabled = false; tombol.textContent = "Simpan"; }
   }
 });
 
+document.getElementById("addBtn").addEventListener("click", ()=>openModal(-1));
+
+document.getElementById("resetBtn").addEventListener("click", async ()=>{
+  if (!confirm("Reset semua produk ke default? Perubahan harga dan keuntungan akan hilang.")) return;
+  if (modeAktif === "lokal"){
+    produk = DEFAULT_PRODUK.map(p=>({...p}));
+    simpanLokal(produk);
+    render();
+    toast("Reset ke default");
+    return;
+  }
+  try{
+    const batch = db.batch();
+    produk.forEach(p=>{ if (p._id) batch.delete(db.collection("produk").doc(p._id)); });
+    DEFAULT_PRODUK.forEach((p,i)=>{
+      batch.set(db.collection("produk").doc(), {
+        nama: p.nama, kategori: p.kategori, emoji: p.emoji, desc: p.desc,
+        badge: p.badge, harga: parseNum(p.harga), cost: parseNum(p.cost),
+        sold: p.sold || 0, foto: "", urutan: Date.now() + i
+      });
+    });
+    await batch.commit();
+    toast("Reset ke default");
+  }catch(e){ toast("Gagal reset: " + e.message); }
+});
+
 /* init */
-if (sessionStorage.getItem("nelora_admin")==="1") showDash(); else showLogin();
+document.getElementById("dashSub").textContent = (modeAktif === "cloud")
+  ? "Data tersimpan di server Firebase, jadi perubahan langsung dipakai halaman utama di semua perangkat."
+  : "Data tersimpan di browser ini. Isi firebase-config.js untuk mengaktifkan sinkronisasi server.";
+
+if (modeAktif === "cloud"){
+  document.getElementById("emailField").style.display = "block";
+  document.getElementById("email").required = true;
+  document.getElementById("akunInfo").textContent = "Masuk memakai email dan kata sandi admin yang dibuat di Firebase Authentication.";
+  document.getElementById("hintLokal").style.display = "none";
+  document.getElementById("loginSub").textContent = "Masuk untuk mengatur harga, modal, keuntungan, dan foto produk.";
+  siapkanCloud().catch(err=>{
+    modeAktif = "lokal";
+    document.getElementById("emailField").style.display = "none";
+    document.getElementById("email").required = false;
+    document.getElementById("akunInfo").textContent = "Firebase tidak dapat dimuat. Sementara memakai mode lokal.";
+    document.getElementById("hintLokal").style.display = "block";
+    document.getElementById("dashSub").textContent = "Data tersimpan di browser ini (mode lokal).";
+    produk = bacaLokal();
+    if (sessionStorage.getItem("nelora_admin")==="1") showDash(); else showLogin();
+    toast("Gagal memuat Firebase: " + err.message);
+  });
+} else {
+  produk = bacaLokal();
+  if (sessionStorage.getItem("nelora_admin")==="1") showDash(); else showLogin();
+}
 </script>
 </body>
 </html>

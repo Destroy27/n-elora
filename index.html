@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -14,9 +14,6 @@
 <script>document.documentElement.classList.add('js');</script>
 
 <style>
-/* ============================================================
-   1. VARIABEL & RESET
-   ============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
@@ -25,11 +22,11 @@
   --rose-ink: #4A2A3A;
   --mint-leaf: #8FD1B5;
   --butter: #FFD98A;
-  
+
   --bg-color: #FFFAFC;
   --white: #FFFFFF;
   --text-muted: #8A6A7A;
-  
+
   --shadow-sm: 0 4px 12px rgba(74, 42, 58, 0.04);
   --shadow-md: 0 12px 32px rgba(74, 42, 58, 0.08);
   --shadow-lg: 0 24px 48px rgba(74, 42, 58, 0.12);
@@ -45,6 +42,12 @@ html{scroll-behavior:smooth;scroll-padding-top:100px}
 body{
   font-family:'Quicksand', sans-serif;
   background-color:var(--bg-color);
+  background-image:
+    linear-gradient(rgba(255, 250, 252, 0.9), rgba(255, 250, 252, 0.9)),
+    url('https://cdn.budgetpixel.com/image-library/blank-watercolor-paper-texture-e34bd4f5.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-blend-mode: soft-light;
   color:var(--rose-ink);
   line-height:1.7;
   overflow-x:hidden;
@@ -56,54 +59,22 @@ a{text-decoration:none;color:inherit}
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
 ::selection{background:var(--soft-pink);color:var(--white)}
 
-/* ============================================================
-   2. LAYOUT & TIPOGRAFI
-   ============================================================ */
 .container{width:min(1140px, 90%);margin-inline:auto}
 section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
 
 .sec-head{text-align:center;max-width:600px;margin:0 auto clamp(40px, 6vw, 64px)}
-.eyebrow{
-  display:inline-block;
-  color:var(--soft-pink);font-size:12px;font-weight:700;
-  letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;
-}
-.sec-title{
-  font-family:'Playfair Display', serif;
-  font-size:clamp(2rem, 4vw, 3rem);
-  line-height:1.2;font-weight:500;color:var(--rose-ink);
-}
+.eyebrow{display:inline-block;color:var(--soft-pink);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;}
+.sec-title{font-family:'Playfair Display', serif;font-size:clamp(2rem, 4vw, 3rem);line-height:1.2;font-weight:500;color:var(--rose-ink);}
 .sec-title em{font-style:italic;color:var(--soft-pink)}
 .sec-sub{margin-top:16px;color:var(--text-muted);font-size:clamp(14px, 1.6vw, 16px)}
 
-/* ============================================================
-   3. TOMBOL
-   ============================================================ */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:14px 28px;border-radius:999px;
-  font-weight:600;font-size:14px;line-height:1;
-  transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change:transform;
-}
-.btn-primary{
-  background:var(--rose-ink);color:var(--white);
-  box-shadow:0 8px 24px rgba(74, 42, 58, 0.2);
-}
-.btn-primary:hover{
-  background:var(--soft-pink);
-  box-shadow:0 12px 32px rgba(244, 163, 192, 0.4);
-}
-.btn-outline{
-  background:transparent;color:var(--rose-ink);
-  border:1.5px solid var(--soft-pink);
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:600;font-size:14px;line-height:1;transition:background 0.3s, color 0.3s, box-shadow 0.3s;will-change:transform;}
+.btn-primary{background:var(--rose-ink);color:var(--white);box-shadow:0 8px 24px rgba(74, 42, 58, 0.2);}
+.btn-primary:hover{background:var(--soft-pink);box-shadow:0 12px 32px rgba(244, 163, 192, 0.4);}
+.btn-outline{background:transparent;color:var(--rose-ink);border:1.5px solid var(--soft-pink);}
 .btn-outline:hover{background:var(--blush)}
 .btn-sm{padding:10px 20px;font-size:13px}
 
-/* ============================================================
-   4. NAVBAR
-   ============================================================ */
 .nav{
   position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;
   display:flex;align-items:center;justify-content:space-between;
@@ -113,73 +84,41 @@ section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
   transition:box-shadow 0.3s ease;
 }
 .nav.scrolled{box-shadow:var(--shadow-sm)}
-
 .brand{display:flex;align-items:center;gap:12px}
-.logo-box{
-  width:40px;height:40px;flex-shrink:0;
-  display:grid;place-items:center;
-  border-radius:50%;overflow:hidden;
-}
+.logo-box{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;overflow:hidden;}
 .logo-box img{width:100%;height:100%;object-fit:contain}
-.brand-name{
-  font-family:'Playfair Display', serif;font-size:22px;
-  font-weight:600;letter-spacing:0.5px;color:var(--rose-ink);
-}
-
+.brand-name{font-family:'Playfair Display', serif;font-size:22px;font-weight:600;letter-spacing:0.5px;color:var(--rose-ink);}
 .nav-links{display:flex;align-items:center;gap:clamp(20px, 3vw, 36px)}
-.nav-links a{
-  font-size:14px;font-weight:600;color:var(--text-muted);
-  position:relative;padding:6px 0;transition:color 0.3s;
-}
-.nav-links a::after{
-  content:'';position:absolute;left:0;bottom:0;height:2px;width:0;
-  background:var(--soft-pink);border-radius:2px;transition:width 0.3s ease;
-}
+.nav-links a{font-size:14px;font-weight:600;color:var(--text-muted);position:relative;padding:6px 0;transition:color 0.3s;}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--soft-pink);border-radius:2px;transition:width 0.3s ease;}
 .nav-links a:hover{color:var(--rose-ink)}
 .nav-links a:hover::after{width:100%}
-
 .nav-right{display:flex;align-items:center;gap:12px}
-
-.burger{
-  display:none;width:40px;height:40px;border-radius:12px;
-  place-items:center;gap:5px;flex-direction:column;
-}
-.burger span{
-  display:block;width:20px;height:2px;border-radius:2px;
-  background:var(--rose-ink);transition:0.3s;
-}
+.burger{display:none;width:40px;height:40px;border-radius:12px;place-items:center;gap:5px;flex-direction:column;}
+.burger span{display:block;width:20px;height:2px;border-radius:2px;background:var(--rose-ink);transition:0.3s;}
 .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .burger.open span:nth-child(2){opacity:0}
 .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-.mobile-menu{
-  position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;
-  background:var(--bg-color);
-  padding:20px clamp(20px, 5vw, 48px) 30px;
-  display:none;flex-direction:column;gap:8px;
-  box-shadow:var(--shadow-md);
-}
+.mobile-menu{position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;background:var(--bg-color);padding:20px clamp(20px, 5vw, 48px) 30px;display:none;flex-direction:column;gap:8px;box-shadow:var(--shadow-md);}
 .mobile-menu.show{display:flex}
-.mobile-menu a{
-  padding:12px 16px;border-radius:12px;font-weight:600;
-  color:var(--rose-ink);transition:background 0.2s;
-}
+.mobile-menu a{padding:12px 16px;border-radius:12px;font-weight:600;color:var(--rose-ink);transition:background 0.2s;}
 .mobile-menu a:hover{background:var(--blush)}
 
-/* ============================================================
-   5. HERO (Fokus Utama Animasi Bunga)
-   ============================================================ */
+/* ==================== HERO ==================== */
 .hero{
   padding:calc(var(--nav-h) + clamp(40px, 8vw, 80px)) 0 clamp(40px, 8vw, 80px);
-  min-height: 90vh;
+  min-height: 92vh;
   display: flex;
   align-items: center;
   position: relative;
+  overflow: hidden;
 }
 .hero-grid{
   display:grid;grid-template-columns:1fr;
   gap:clamp(32px, 6vw, 80px);align-items:center;
   text-align: center;
+  position: relative;
+  z-index: 5;
 }
 
 .hero-title-wrapper {
@@ -196,6 +135,7 @@ section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
   line-height: 1;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   letter-spacing: -2px;
 }
@@ -207,27 +147,69 @@ section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
 }
 
 .letter-dot {
-  color: var(--soft-pink);
-  font-size: clamp(3rem, 10vw, 7rem);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 4px;
-  transform-origin: bottom center;
+  margin: 0 6px;
+  transform-origin: center;
+  width: clamp(2.6rem, 7vw, 5.2rem);
+  height: clamp(2.6rem, 7vw, 5.2rem);
+}
+.title-flower-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 8px 16px rgba(244, 163, 192, 0.5));
+  will-change: transform;
 }
 
-.floating-flower {
+/* ==================== 3D BLOOM FLOWERS ==================== */
+.bloom-slot {
   position: absolute;
-  font-size: clamp(24px, 4vw, 40px);
   pointer-events: none;
-  z-index: -1;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  z-index: 1;
+  perspective: 900px;
+  will-change: transform;
+}
+.bloom-slot .bloom-flower {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 12px 22px rgba(74, 42, 58, 0.14));
+  will-change: transform;
+}
+.bloom-slot .bloom-petal {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  transform: scale(0.15);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.bloom-slot .bloom-center {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  transform: scale(0.4);
+  will-change: transform;
 }
 
-.ff-1 { top: -20px; left: 10%; }
-.ff-2 { top: 20%; right: -10px; }
-.ff-3 { bottom: -30px; left: 30%; }
-.ff-4 { bottom: 10%; right: 15%; }
+.bloom-1 { top: 6%; right: 2%;  width: clamp(140px, 18vw, 200px); }
+.bloom-2 { bottom: 4%; left: 0%; width: clamp(160px, 20vw, 230px); }
+.bloom-3 { top: 52%; right: 16%; width: clamp(90px, 11vw, 130px); }
+
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+.blob-1 { width: 320px; height: 320px; background: var(--soft-pink); top: 8%; left: -120px; }
+.blob-2 { width: 420px; height: 420px; background: var(--butter); bottom: -80px; right: -160px; }
+.blob-3 { width: 260px; height: 260px; background: var(--mint-leaf); top: 45%; left: 45%; opacity: 0.35; }
 
 .hero-sub {
   margin: 0 auto 32px;
@@ -264,245 +246,111 @@ section{padding:clamp(60px, 10vw, 120px) 0;position:relative}
   align-items: center;
   gap: 8px;
   border: 1px solid var(--blush);
+  will-change: transform;
 }
 
-/* ============================================================
-   6. MARQUEE
-   ============================================================ */
-.marquee{
-  overflow:hidden;padding:16px 0;
-  background:var(--blush);
-  border-block:1px solid rgba(244, 163, 192, 0.2);
-}
-.marquee-track{
-  display:flex;gap:40px;width:max-content;white-space:nowrap;
-  font-weight:600;font-size:13px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--text-muted);
-  animation:marquee 30s linear infinite;
-}
+/* MARQUEE */
+.marquee{overflow:hidden;padding:16px 0;background:var(--blush);border-block:1px solid rgba(244, 163, 192, 0.2);}
+.marquee-track{display:flex;gap:40px;width:max-content;white-space:nowrap;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);animation:marquee 30s linear infinite;will-change: transform;}
 .marquee-track span:nth-child(even){color:var(--soft-pink)}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
-/* ============================================================
-   7. JENIS / KATEGORI
-   ============================================================ */
-.cat-grid{
-  display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
-  gap:clamp(20px, 3vw, 32px);
-}
-.cat-card{
-  background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);
-  border-radius:var(--radius-md);
-  padding:32px 24px;text-align:center;cursor:pointer;
-  box-shadow:var(--shadow-sm);transition:all 0.4s ease;
-}
-.cat-card:hover{
-  border-color:var(--soft-pink);
-  box-shadow:var(--shadow-md);
-  transform:translateY(-4px);
-}
-.cat-icon{
-  width:64px;height:64px;margin:0 auto 20px;border-radius:20px;
-  background:var(--blush);
-  display:grid;place-items:center;font-size:28px;
-}
+/* KATEGORI */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:clamp(20px, 3vw, 32px);}
+.cat-card{background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);border-radius:var(--radius-md);padding:32px 24px;text-align:center;cursor:pointer;box-shadow:var(--shadow-sm);transition:border-color 0.4s ease, box-shadow 0.4s ease;transform-style: preserve-3d;will-change: transform;}
+.cat-card:hover{border-color:var(--soft-pink);box-shadow:var(--shadow-md);}
+.cat-icon{width:76px;height:76px;margin:0 auto 20px;border-radius:20px;background:var(--blush);display:grid;place-items:center;padding:10px;will-change: transform;}
+.cat-icon img{width:100%;height:100%;object-fit:contain;}
 .cat-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
 .cat-card p{font-size:13.5px;color:var(--text-muted);line-height:1.6}
 
-/* ============================================================
-   8. ETALASE / PRODUK
-   ============================================================ */
-.filters{
-  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
-  margin-bottom:clamp(32px, 5vw, 48px);
-}
-.filter-btn{
-  padding:10px 24px;border-radius:999px;background:transparent;
-  border:1.5px solid rgba(244, 163, 192, 0.3);font-weight:600;font-size:13.5px;
-  color:var(--text-muted);transition:all 0.3s ease;
-}
+/* ETALASE */
+.filters{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:clamp(32px, 5vw, 48px);}
+.filter-btn{padding:10px 24px;border-radius:999px;background:transparent;border:1.5px solid rgba(244, 163, 192, 0.3);font-weight:600;font-size:13.5px;color:var(--text-muted);transition:background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;will-change: transform;}
 .filter-btn:hover{border-color:var(--soft-pink);color:var(--rose-ink)}
-.filter-btn.active{
-  background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);
-  box-shadow:0 4px 12px rgba(244, 163, 192, 0.3);
-}
+.filter-btn.active{background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);box-shadow:0 4px 12px rgba(244, 163, 192, 0.3);}
 
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
-  gap:clamp(20px, 3vw, 32px);
-}
-
-.card{
-  background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);
-  border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:var(--shadow-sm);transition:all 0.4s ease;
-}
-.card:hover{
-  box-shadow:var(--shadow-md);
-  transform:translateY(-4px);
-}
-
-.card-img{
-  position:relative;aspect-ratio:4/3.5;display:grid;place-items:center;
-  background:var(--blush);overflow:hidden;
-}
-.card-emoji{
-  font-size:clamp(48px, 6vw, 64px);
-  filter:drop-shadow(0 8px 16px rgba(74, 42, 58, 0.15));
-  will-change:transform;
-}
-.card-photo{
-  position:absolute;inset:0;z-index:1;
-  width:100%;height:100%;object-fit:cover;
-}
-.card-badge{
-  position:absolute;top:16px;left:16px;z-index:2;
-  background:var(--white);color:var(--rose-ink);font-size:10px;font-weight:700;
-  padding:6px 14px;border-radius:999px;letter-spacing:1px;
-  text-transform:uppercase;box-shadow:var(--shadow-sm);
-}
-
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:clamp(20px, 3vw, 32px);}
+.card{background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:box-shadow 0.4s ease;will-change: transform;}
+.card:hover{box-shadow:var(--shadow-md);}
+.card-img{position:relative;aspect-ratio:4/3.5;display:grid;place-items:center;background:var(--blush);overflow:hidden;}
+.card-watercolor{width: 82%;max-height: 82%;object-fit: contain;filter: drop-shadow(0 10px 18px rgba(74, 42, 58, 0.12));will-change: transform;}
+.card-photo{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;will-change: transform;}
+.card-badge{position:absolute;top:16px;left:16px;z-index:2;background:var(--white);color:var(--rose-ink);font-size:10px;font-weight:700;padding:6px 14px;border-radius:999px;letter-spacing:1px;text-transform:uppercase;box-shadow:var(--shadow-sm);}
 .card-body{padding:24px;display:flex;flex-direction:column;gap:8px;flex:1}
-.card-cat{
-  font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1.5px;color:var(--soft-pink);
-}
+.card-cat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--soft-pink);}
 .card-title{font-size:16px;font-weight:700;line-height:1.4}
 .card-desc{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:8px}
-.card-foot{
-  margin-top:auto;padding-top:16px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-}
+.card-foot{margin-top:auto;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .price{font-weight:700;color:var(--rose-ink);font-size:16px}
 .price small{font-size:11px;color:var(--text-muted);font-weight:600}
-
-.btn-buy{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:10px 18px;border-radius:999px;
-  background:var(--blush);color:var(--rose-ink);
-  font-size:13px;font-weight:700;transition:all 0.3s ease;
-}
+.btn-buy{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:999px;background:var(--blush);color:var(--rose-ink);font-size:13px;font-weight:700;transition:background 0.3s, color 0.3s;}
 .btn-buy:hover{background:var(--soft-pink);color:var(--white)}
 .btn-buy svg{width:14px;height:14px}
-
-.etalase-note{
-  text-align:center;margin-top:clamp(32px, 5vw, 48px);
-  font-size:14px;color:var(--text-muted);
-}
+.etalase-note{text-align:center;margin-top:clamp(32px, 5vw, 48px);font-size:14px;color:var(--text-muted);}
 .etalase-note a{color:var(--soft-pink);font-weight:700;border-bottom:1.5px solid var(--soft-pink)}
 
-/* ============================================================
-   9. CARA PESAN
-   ============================================================ */
-.steps{
-  display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
-  gap:clamp(20px, 3vw, 32px);
-}
-.step{
-  background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);
-  border-radius:var(--radius-md);
-  padding:32px 28px;box-shadow:var(--shadow-sm);
-}
-.step-num{
-  width:48px;height:48px;border-radius:50%;
-  background:var(--blush);color:var(--soft-pink);
-  display:grid;place-items:center;
-  font-family:'Playfair Display', serif;font-size:20px;font-weight:600;
-  margin-bottom:20px;
-}
+/* CARA PESAN */
+.steps{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:clamp(20px, 3vw, 32px);position: relative;}
+.step{background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);border-radius:var(--radius-md);padding:32px 28px;box-shadow:var(--shadow-sm);will-change: transform;}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--blush);color:var(--soft-pink);display:grid;place-items:center;font-family:'Playfair Display', serif;font-size:20px;font-weight:600;margin-bottom:20px;will-change: transform;}
 .step h3{font-size:16px;font-weight:700;margin-bottom:8px}
 .step p{font-size:13.5px;color:var(--text-muted);line-height:1.6}
 
-/* ============================================================
-   10. CTA BANNER
-   ============================================================ */
-.cta{
-  background:var(--blush);
-  border-radius:var(--radius-lg);
-  padding:clamp(40px, 8vw, 72px) clamp(24px, 6vw, 64px);
-  text-align:center;position:relative;overflow:hidden;
-}
-.cta::before{
-  content:'🌸';position:absolute;font-size:120px;
-  opacity:0.1;top:-20px;left:-20px;transform:rotate(-15deg);pointer-events:none;
-}
-.cta h2{
-  font-family:'Playfair Display', serif;
-  font-size:clamp(1.8rem, 4vw, 2.6rem);line-height:1.2;
-  color:var(--rose-ink);margin-bottom:16px;position:relative;z-index:1;
-}
-.cta p{
-  color:var(--text-muted);font-size:clamp(14px, 1.8vw, 16px);
-  max-width:50ch;margin:0 auto 32px;position:relative;z-index:1;
-}
+/* CTA */
+.cta{background: linear-gradient(135deg, var(--blush) 0%, #FFE4EE 100%);border-radius:var(--radius-lg);padding:clamp(40px, 8vw, 72px) clamp(24px, 6vw, 64px);text-align:center;position:relative;overflow:hidden;background-size: 200% 200%;}
+.cta-bg-img{position:absolute;right:-30px;bottom:-30px;width:clamp(160px, 28vw, 280px);opacity:0.14;pointer-events:none;z-index:0;}
+.cta-flower{position:absolute;width:clamp(50px, 8vw, 84px);pointer-events:none;opacity:0.42;z-index:0;will-change: transform;}
+.cta-flower img{width:100%;height:auto;display:block}
+.cta-flower.tl { top: 18px; right: 40px; }
+.cta-flower.br { bottom: 16px; right: 24%; width:clamp(36px, 6vw, 62px); }
+.cta h2{font-family:'Playfair Display', serif;font-size:clamp(1.8rem, 4vw, 2.6rem);line-height:1.2;color:var(--rose-ink);margin-bottom:16px;position:relative;z-index:1;}
+.cta p{color:var(--text-muted);font-size:clamp(14px, 1.8vw, 16px);max-width:50ch;margin:0 auto 32px;position:relative;z-index:1;}
 .cta .btn{position:relative;z-index:1}
 
-/* ============================================================
-   11. FOOTER
-   ============================================================ */
-footer{
-  padding:clamp(48px, 6vw, 72px) 0 32px;
-  border-top:1px solid rgba(244, 163, 192, 0.2);
-}
-.foot-grid{
-  display:grid;grid-template-columns:1.5fr 1fr 1fr;
-  gap:clamp(32px, 5vw, 64px);margin-bottom:40px;
-}
+/* FOOTER */
+footer{padding:clamp(48px, 6vw, 72px) 0 32px;border-top:1px solid rgba(244, 163, 192, 0.2);}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:clamp(32px, 5vw, 64px);margin-bottom:40px;}
 .foot-brand p{font-size:14px;color:var(--text-muted);margin-top:16px;max-width:36ch;line-height:1.7}
-.foot-col h4{
-  font-size:12px;font-weight:700;letter-spacing:1.5px;
-  text-transform:uppercase;color:var(--rose-ink);margin-bottom:20px;
-}
-.foot-col a,.foot-col span{
-  display:block;font-size:14px;color:var(--text-muted);
-  margin-bottom:12px;transition:color 0.2s;
-}
+.foot-col h4{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose-ink);margin-bottom:20px;}
+.foot-col a,.foot-col span{display:block;font-size:14px;color:var(--text-muted);margin-bottom:12px;transition:color 0.2s;}
 .foot-col a:hover{color:var(--soft-pink)}
-.foot-bottom{
-  border-top:1px solid rgba(244, 163, 192, 0.2);padding-top:24px;
-  display:flex;flex-wrap:wrap;gap:12px;
-  align-items:center;justify-content:space-between;
-  font-size:13px;color:var(--text-muted);
-}
+.foot-bottom{border-top:1px solid rgba(244, 163, 192, 0.2);padding-top:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-muted);}
 
-/* ============================================================
-   12. TOMBOL WHATSAPP MELAYANG
-   ============================================================ */
-.fab{
-  position:fixed;right:clamp(20px, 4vw, 32px);bottom:clamp(20px, 4vw, 32px);
-  z-index:95;width:60px;height:60px;border-radius:50%;
-  background:var(--mint-leaf);
-  display:grid;place-items:center;
-  box-shadow:0 12px 24px rgba(143, 209, 181, 0.4);
-  transition:all 0.3s ease;
-}
+/* FAB */
+.fab{position:fixed;right:clamp(20px, 4vw, 32px);bottom:clamp(20px, 4vw, 32px);z-index:95;width:60px;height:60px;border-radius:50%;background:var(--mint-leaf);display:grid;place-items:center;box-shadow:0 12px 24px rgba(143, 209, 181, 0.4);transition:box-shadow 0.3s ease;will-change: transform;}
 .fab svg{width:28px;height:28px;fill:var(--white)}
-.fab:hover{
-  transform:scale(1.05);
-  box-shadow:0 16px 32px rgba(143, 209, 181, 0.6);
-}
-.fab-label{
-  position:absolute;right:76px;top:50%;transform:translateY(-50%);
-  background:var(--white);color:var(--rose-ink);font-size:12px;font-weight:700;
-  padding:8px 16px;border-radius:999px;white-space:nowrap;
-  box-shadow:var(--shadow-md);opacity:0;pointer-events:none;
-  transition:opacity 0.3s;
-}
+.fab:hover{ box-shadow:0 16px 32px rgba(143, 209, 181, 0.6); }
+.fab-label{position:absolute;right:76px;top:50%;transform:translateY(-50%);background:var(--white);color:var(--rose-ink);font-size:12px;font-weight:700;padding:8px 16px;border-radius:999px;white-space:nowrap;box-shadow:var(--shadow-md);opacity:0;pointer-events:none;transition:opacity 0.3s;}
 .fab:hover .fab-label{opacity:1}
 
-/* ============================================================
-   13. ANIMASI REVEAL
-   ============================================================ */
-.js .reveal{opacity:0;transform:translateY(30px)}
-.js .card{opacity:0;transform:translateY(30px)}
+/* LOADER */
+.loader{position: fixed;inset: 0;z-index: 9999;background: var(--blush);display: grid;place-items: center;will-change: transform;}
+.loader-text{font-family: 'Fredoka', sans-serif;font-size: clamp(2.4rem, 7vw, 4.4rem);font-weight: 700;color: var(--rose-ink);letter-spacing: -1.5px;display: flex;align-items: center;gap: 10px;}
+.loader-flower{display: inline-block;width: clamp(2rem, 5vw, 3.2rem);height: clamp(2rem, 5vw, 3.2rem);will-change: transform;}
+.loader-flower img{width:100%;height:100%;object-fit:contain;display:block}
 
-/* ============================================================
-   14. RESPONSIVE
-   ============================================================ */
+/* PROGRESS */
+.scroll-progress{position: fixed;top: 0; left: 0;width: 100%; height: 3px;background: linear-gradient(90deg, var(--soft-pink) 0%, var(--butter) 50%, var(--mint-leaf) 100%);transform: scaleX(0);transform-origin: left;z-index: 200;will-change: transform;}
+
+/* CURSOR */
+.cursor, .cursor-dot{position: fixed;top: 0; left: 0;pointer-events: none;border-radius: 50%;transform: translate(-50%, -50%);display: none;z-index: 9998;}
+.cursor{width: 36px; height: 36px;border: 2px solid var(--soft-pink);background: rgba(244, 163, 192, 0.08);will-change: transform, width, height;}
+.cursor-dot{width: 6px; height: 6px;background: var(--rose-ink);z-index: 9999;will-change: transform;}
+@media (pointer: fine){ .cursor, .cursor-dot{ display: block; } }
+body.cursor-hover .cursor{width: 60px; height: 60px;background: rgba(244, 163, 192, 0.2);border-color: var(--rose-ink);}
+
+.magnetic{ will-change: transform; }
+.g-ready .reveal{ opacity: 0; }
+.g-ready .card{ opacity: 0; }
+
 @media (max-width:900px){
   .hero-title { flex-wrap: nowrap; }
   .foot-grid{grid-template-columns:1fr 1fr}
   .foot-brand{grid-column:1 / -1}
+  .bloom-1 { width: clamp(100px, 22vw, 160px); }
+  .bloom-2 { width: clamp(120px, 26vw, 180px); }
+  .bloom-3 { width: clamp(70px, 14vw, 100px); }
 }
 
 @media (max-width:768px){
@@ -524,23 +372,41 @@ footer{
   .fab{width:56px;height:56px}
   .fab svg{width:24px;height:24px}
   .fab-label{display:none}
+  .cursor, .cursor-dot { display: none !important; }
+  .bloom-1 { width: 110px; top: 4%; right: -10px; }
+  .bloom-2 { width: 130px; bottom: 2%; left: -10px; }
+  .bloom-3 { display: none; }
 }
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
   html{scroll-behavior:auto}
-  .js .reveal,.js .card{opacity:1;transform:none}
+  .g-ready .reveal, .g-ready .card{opacity:1}
+  .bloom-slot .bloom-petal{ transform: scale(1); }
+  .bloom-slot .bloom-center{ transform: scale(1); }
 }
 </style>
 </head>
 <body>
 
-<!-- ==================== NAVBAR ==================== -->
+<div class="loader" id="loader">
+  <div class="loader-text">
+    <span>N.Elora</span>
+    <span class="loader-flower">
+      <img src="https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png" alt="">
+    </span>
+  </div>
+</div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
 <header class="nav" id="nav">
   <a href="#home" class="brand" aria-label="N.Elora beranda">
     <div class="logo-box">
       <img src="logo-nelora.png" alt="Logo N.Elora" width="40" height="40" fetchpriority="high"
-           onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>🌸</text></svg>'">
+           onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>N</text></svg>'">
     </div>
     <span class="brand-name">N.Elora</span>
   </a>
@@ -553,7 +419,7 @@ footer{
   </nav>
 
   <div class="nav-right">
-    <a href="#" class="btn btn-primary btn-sm js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya soal bunga kawat bulunya dulu ya.">
+    <a href="#" class="btn btn-primary btn-sm js-wa magnetic" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya soal bunga kawat bulunya dulu ya.">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
       Chat Admin
     </a>
@@ -570,24 +436,23 @@ footer{
   <a href="#kontak">Kontak</a>
 </div>
 
-<!-- ==================== HERO (ANIMASI BUNGA) ==================== -->
 <main>
 <section class="hero" id="home">
+  <div class="hero-blob blob-1"></div>
+  <div class="hero-blob blob-2"></div>
+  <div class="hero-blob blob-3"></div>
+
+  <div class="bloom-slot bloom-1" data-scheme="pink"></div>
+  <div class="bloom-slot bloom-2" data-scheme="blush"></div>
+  <div class="bloom-slot bloom-3" data-scheme="mint"></div>
+
   <div class="container">
     <div class="hero-grid">
-      
       <div class="hero-content">
-        <!-- Judul Utama dengan Animasi GSAP -->
         <div class="hero-title-wrapper">
-          <!-- Hiasan bunga di sekitar teks -->
-          <span class="floating-flower ff-1">🌸</span>
-          <span class="floating-flower ff-2">🌷</span>
-          <span class="floating-flower ff-3">🌺</span>
-          <span class="floating-flower ff-4">🌸</span>
-
           <h1 class="hero-title" id="flowerTitle">
             <span class="letter">N</span>
-            <span class="letter letter-dot">🌸</span>
+            <span class="letter letter-dot" id="heroGerbera" aria-hidden="true"></span>
             <span class="letter">E</span>
             <span class="letter">l</span>
             <span class="letter">o</span>
@@ -601,65 +466,57 @@ footer{
         </p>
 
         <div class="hero-actions">
-          <a href="#etalase" class="btn btn-primary">
-            Lihat Koleksi
-          </a>
-          <a href="#" class="btn btn-outline js-wa" data-pesan="Halo N.Elora 🌸, saya mau custom buket bunga kawat bulu. Boleh tanya-tanya dulu?">
+          <a href="#etalase" class="btn btn-primary magnetic">Lihat Koleksi</a>
+          <a href="#" class="btn btn-outline magnetic js-wa" data-pesan="Halo N.Elora 🌸, saya mau custom buket bunga kawat bulu. Boleh tanya-tanya dulu?">
             Custom Pesanan
           </a>
         </div>
 
         <div class="hero-features">
-          <div class="feature-chip">🌺 Buket Bunga</div>
-          <div class="feature-chip">✨ Custom Nama</div>
-          <div class="feature-chip">🎁 Siap Hadiah</div>
+          <div class="feature-chip">Watercolor Bouquet</div>
+          <div class="feature-chip">Custom Nama</div>
+          <div class="feature-chip">Siap Hadiah</div>
         </div>
-
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ==================== MARQUEE ==================== -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <span>Handmade with love</span><span>✿</span>
-    <span>Buket Bunga Kawat Bulu</span><span>✿</span>
-    <span>Custom Name</span><span>✿</span>
-    <span>Elegant & Cute</span><span>✿</span>
-    <span>Free Gift Card</span><span>✿</span>
-    <span>Handmade with love</span><span>✿</span>
-    <span>Buket Bunga Kawat Bulu</span><span>✿</span>
-    <span>Custom Name</span><span>✿</span>
-    <span>Elegant & Cute</span><span>✿</span>
-    <span>Free Gift Card</span><span>✿</span>
+    <span>Handmade with love</span><span>✦</span>
+    <span>Watercolor Bouquet</span><span>✦</span>
+    <span>Custom Name</span><span>✦</span>
+    <span>Elegant & Cute</span><span>✦</span>
+    <span>Free Gift Card</span><span>✦</span>
+    <span>Handmade with love</span><span>✦</span>
+    <span>Watercolor Bouquet</span><span>✦</span>
+    <span>Custom Name</span><span>✦</span>
+    <span>Elegant & Cute</span><span>✦</span>
+    <span>Free Gift Card</span><span>✦</span>
   </div>
 </div>
 
-<!-- ==================== JENIS / KATEGORI ==================== -->
 <section id="jenis">
   <div class="container">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Kategori</span>
-      <h2 class="sec-title">Pilih <em>Sesuai Momen</em></h2>
+    <div class="sec-head">
+      <span class="eyebrow reveal">Kategori</span>
+      <h2 class="sec-title reveal">Pilih <em>Sesuai Momen</em></h2>
     </div>
 
     <div class="cat-grid">
-      <article class="cat-card reveal" data-filter="buket">
-        <div class="cat-icon">🌸</div>
+      <article class="cat-card reveal tilt" data-filter="buket">
+        <div class="cat-icon"><img src="https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png" alt=""></div>
         <h3>Buket Bunga</h3>
         <p>Rangkaian buket bunga kawat bulu premium warna pastel, cocok untuk hadiah ulang tahun atau anniversary.</p>
       </article>
-
-      <article class="cat-card reveal" data-filter="tunggal">
-        <div class="cat-icon">🌷</div>
+      <article class="cat-card reveal tilt" data-filter="tunggal">
+        <div class="cat-icon"><img src="https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png" alt=""></div>
         <h3>Bunga Tunggal</h3>
         <p>Satu tangkai bunga pilihan (mawar, tulip, atau bunga lain) untuk hiasan meja, vas kecil, atau pelengkap kado.</p>
       </article>
-
-      <article class="cat-card reveal" data-filter="custom">
-        <div class="cat-icon">✨</div>
+      <article class="cat-card reveal tilt" data-filter="custom">
+        <div class="cat-icon"><img src="https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png" alt=""></div>
         <h3>Custom Design</h3>
         <p>Bebas pilih warna, jenis bunga, dan tambahan nama sesuai keinginanmu.</p>
       </article>
@@ -667,35 +524,34 @@ footer{
   </div>
 </section>
 
-<!-- ==================== ETALASE ==================== -->
 <section id="etalase">
   <div class="container">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Etalase</span>
-      <h2 class="sec-title">Koleksi <em>N.Elora</em></h2>
+    <div class="sec-head">
+      <span class="eyebrow reveal">Etalase</span>
+      <h2 class="sec-title reveal">Koleksi <em>N.Elora</em></h2>
     </div>
 
     <div class="filters reveal" id="filters">
-      <button class="filter-btn active" data-filter="semua">Semua</button>
-      <button class="filter-btn" data-filter="buket">Buket</button>
-      <button class="filter-btn" data-filter="tunggal">Bunga Tunggal</button>
-      <button class="filter-btn" data-filter="custom">Custom</button>
+      <button class="filter-btn active magnetic" data-filter="semua">Semua</button>
+      <button class="filter-btn magnetic" data-filter="buket">Buket</button>
+      <button class="filter-btn magnetic" data-filter="tunggal">Bunga Tunggal</button>
+      <button class="filter-btn magnetic" data-filter="custom">Custom</button>
     </div>
 
     <div class="grid" id="productGrid"></div>
 
     <p class="etalase-note reveal">
-      Mau request warna atau jenis bunga tertentu? <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya & request custom bunga kawat bulu.">Chat kami di sini</a>.
+      Mau request warna atau jenis bunga tertentu?
+      <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya & request custom bunga kawat bulu.">Chat kami di sini</a>.
     </p>
   </div>
 </section>
 
-<!-- ==================== CARA PESAN ==================== -->
 <section id="cara">
   <div class="container">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Cara Pesan</span>
-      <h2 class="sec-title">Sangat <em>Mudah</em></h2>
+    <div class="sec-head">
+      <span class="eyebrow reveal">Cara Pesan</span>
+      <h2 class="sec-title reveal">Sangat <em>Mudah</em></h2>
     </div>
 
     <div class="steps">
@@ -704,13 +560,11 @@ footer{
         <h3>Pilih Bunga</h3>
         <p>Jelajahi etalase kami dan temukan buket bunga yang paling kamu suka.</p>
       </article>
-
       <article class="step reveal">
         <div class="step-num">2</div>
         <h3>Chat WhatsApp</h3>
         <p>Klik tombol beli, kamu akan langsung terhubung dengan admin kami.</p>
       </article>
-
       <article class="step reveal">
         <div class="step-num">3</div>
         <h3>Proses & Kirim</h3>
@@ -720,13 +574,15 @@ footer{
   </div>
 </section>
 
-<!-- ==================== CTA ==================== -->
 <section>
   <div class="container">
     <div class="cta reveal">
+      <img src="https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png" alt="" class="cta-bg-img">
+      <span class="cta-flower tl"><img src="https://cdn.budgetpixel.com/image-library/blush-peony-rose-eucalyptus-arrangement-0d1f8c58.png" alt=""></span>
+      <span class="cta-flower br"><img src="https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png" alt=""></span>
       <h2>Buat Hari Spesialnya Lebih Berkesan</h2>
       <p>Bunga kawat bulu N.Elora adalah hadiah sempurna yang tak akan pernah layu.</p>
-      <a href="#" class="btn btn-primary js-wa" data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu. Boleh info katalog & harganya?">
+      <a href="#" class="btn btn-primary magnetic js-wa" data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu. Boleh info katalog & harganya?">
         Pesan Sekarang
       </a>
     </div>
@@ -734,7 +590,6 @@ footer{
 </section>
 </main>
 
-<!-- ==================== FOOTER ==================== -->
 <footer id="kontak">
   <div class="container">
     <div class="foot-grid">
@@ -742,20 +597,18 @@ footer{
         <div class="brand">
           <div class="logo-box">
             <img src="logo-nelora.png" alt="Logo N.Elora" width="40" height="40"
-                 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>🌸</text></svg>'">
+                 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>N</text></svg>'">
           </div>
           <span class="brand-name">N.Elora</span>
         </div>
         <p>Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket bunga elegan yang dibuat khusus untukmu.</p>
       </div>
-
       <div class="foot-col">
         <h4>Navigasi</h4>
         <a href="#jenis">Kategori</a>
         <a href="#etalase">Etalase</a>
         <a href="#cara">Cara Pesan</a>
       </div>
-
       <div class="foot-col">
         <h4>Hubungi Kami</h4>
         <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya.">+62 821-4607-1595</a>
@@ -763,7 +616,6 @@ footer{
         <span>09.00 - 20.00 WIB</span>
       </div>
     </div>
-
     <div class="foot-bottom">
       <span>© <span id="year"></span> N.Elora. Dibuat dengan 💗</span>
       <span>Handmade in Indonesia 🇮🇩 · <a href="admin.html" style="color:var(--text-muted)">Admin</a></span>
@@ -771,63 +623,60 @@ footer{
   </div>
 </footer>
 
-<!-- ==================== FAB WHATSAPP ==================== -->
-<a href="#" class="fab js-wa" id="fab" aria-label="Chat WhatsApp"
+<a href="#" class="fab js-wa magnetic" id="fab" aria-label="Chat WhatsApp"
    data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu.">
   <span class="fab-label">Chat Admin</span>
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
 </a>
 
-<!-- ==================== GSAP ==================== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
 <script src="firebase-config.js"></script>
 
 <script>
-/* ============================================================
-   KONFIGURASI UTAMA (Produk Bunga)
-   ============================================================ */
-const WA_NUMBER = "6282146071595"; 
-
-const CFG = window.NELORA_FIREBASE_CONFIG || null;
+const WA_NUMBER = "6282146071595";
+const CFG  = window.NELORA_FIREBASE_CONFIG || null;
 const MODE = (CFG && CFG.apiKey && CFG.projectId) ? "cloud" : "lokal";
 
+const IMG = {
+  bouquetPink:  "https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png",
+  bouquetBlush: "https://cdn.budgetpixel.com/image-library/blush-peony-rose-eucalyptus-arrangement-0d1f8c58.png",
+  bouquetWild:  "https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png",
+  bouquetLush:  "https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png",
+  branch:       "https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png",
+  photoPeony:   "https://images.pexels.com/photos/31805485/pexels-photo-31805485.jpeg?auto=compress&cs=tinysrgb&w=800"
+};
+
 const DEFAULT_PRODUK = [
-  { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    emoji:"🌺", desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0 },
-  { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    emoji:"💐", desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0 },
-  { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    emoji:"💮", desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0 },
-  { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  emoji:"🌸", desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0 },
-  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  emoji:"🌷", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0 },
-  { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   emoji:"✨", desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0 },
+  { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    img:IMG.bouquetPink,  desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0 },
+  { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    img:IMG.bouquetWild,  desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0 },
+  { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    img:IMG.bouquetBlush, desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0 },
+  { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  img:IMG.branch,       desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0 },
+  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:IMG.photoPeony,   desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0 },
+  { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:IMG.bouquetLush,  desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0 },
 ];
 
 function loadProduk(){
   try {
     const raw = localStorage.getItem("nelora_products");
-    if (raw){
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length) return parsed;
-    }
-  } catch(e){ /* ignore */ }
+    if (raw){ const parsed = JSON.parse(raw); if (Array.isArray(parsed) && parsed.length) return parsed; }
+  } catch(e){}
   return DEFAULT_PRODUK.map(p => ({...p}));
 }
 let PRODUK = loadProduk();
 
-/* ============================================================
-   DATA CLOUD (FIREBASE FIRESTORE)
-   ============================================================ */
 function fmtNum(n){ return (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
-
 function rapikan(list){
   return list.map(p=>({
     ...p,
     harga: typeof p.harga === "number" ? fmtNum(p.harga) : String(p.harga || "0"),
-    cost: typeof p.cost === "number" ? fmtNum(p.cost) : String(p.cost || "0"),
-    sold: parseInt(p.sold,10) || 0,
-    foto: p.foto || ""
+    cost:  typeof p.cost  === "number" ? fmtNum(p.cost)  : String(p.cost  || "0"),
+    sold:  parseInt(p.sold,10) || 0,
+    foto:  p.foto || "",
+    img:   p.img  || p.foto || IMG.bouquetPink
   }));
 }
-
 function muatSkrip(src){
   return new Promise((ok, gagal)=>{
     const s = document.createElement("script");
@@ -837,7 +686,6 @@ function muatSkrip(src){
     document.head.appendChild(s);
   });
 }
-
 async function ambilCloud(){
   const dasar = "https://www.gstatic.com/firebasejs/10.12.2/";
   if (!window.firebase) await muatSkrip(dasar + "firebase-app-compat.js");
@@ -846,26 +694,7 @@ async function ambilCloud(){
   const snap = await firebase.firestore().collection("produk").orderBy("urutan").get();
   return snap.docs.map(d=>d.data());
 }
-
-async function mulai(){
-  if (MODE === "cloud"){
-    try{
-      const data = rapikan(await ambilCloud());
-      if (data.length){
-        PRODUK = data;
-        renderProduk();
-        try{ localStorage.setItem("nelora_products", JSON.stringify(data)); }catch(e){}
-      }
-    }catch(e){
-      console.warn("Data server gagal dimuat, memakai data tersimpan:", e.message);
-    }
-  }
-  initAnimasi();
-}
-
-function waLink(pesan){
-  return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pesan);
-}
+function waLink(pesan){ return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pesan); }
 
 document.querySelectorAll(".js-wa").forEach(el => {
   const pesan = el.dataset.pesan || "Halo N.Elora 🌸, saya mau tanya-tanya.";
@@ -874,18 +703,23 @@ document.querySelectorAll(".js-wa").forEach(el => {
   el.setAttribute("rel", "noopener noreferrer");
 });
 
+/* ============================================================
+   RENDER PRODUK
+   ============================================================ */
 const grid = document.getElementById("productGrid");
-
 function renderProduk(){
   grid.innerHTML = PRODUK.map(p => {
     const pesan = `Halo N.Elora 🌸%0A%0ASaya mau pesan:%0A• Produk: ${p.nama}%0A• Harga: Rp ${p.harga}%0A%0AApakah masih tersedia?`;
     const link  = `https://wa.me/${WA_NUMBER}?text=${pesan}`;
+    const media = p.foto
+      ? `<img class="card-photo" src="${p.foto}" alt="${p.nama}" loading="lazy">`
+      : `<img class="card-watercolor" src="${p.img || IMG.bouquetPink}" alt="${p.nama}" loading="lazy">`;
 
     return `
       <article class="card" data-kategori="${p.kategori}">
         <div class="card-img">
           ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
-          ${p.foto ? `<img class="card-photo" src="${p.foto}" alt="${p.nama}" loading="lazy">` : `<span class="card-emoji">${p.emoji}</span>`}
+          ${media}
         </div>
         <div class="card-body">
           <span class="card-cat">${p.kategori}</span>
@@ -903,148 +737,520 @@ function renderProduk(){
   }).join("");
 }
 renderProduk();
-mulai();
 
 /* ============================================================
-   ANIMASI GSAP
+   GSAP SETUP
    ============================================================ */
-function initAnimasi(){
-const GSAP_OK = !!(window.gsap && window.ScrollTrigger);
-if (!GSAP_OK) document.documentElement.classList.remove("js");
+const GSAP_OK = !!(window.gsap);
+if (GSAP_OK && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+if (GSAP_OK && window.ScrollToPlugin) gsap.registerPlugin(ScrollToPlugin);
 
-if (!GSAP_OK){
-  /* Cadangan bila CDN GSAP gagal dimuat: konten tetap tampil dan filter tetap jalan */
-  const saring = (k) => document.querySelectorAll(".card").forEach(c => {
-    c.style.display = (k === "semua" || c.dataset.kategori === k) ? "flex" : "none";
-  });
-  document.querySelectorAll(".filter-btn").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    saring(b.dataset.filter);
-  }));
-  document.querySelectorAll(".cat-card").forEach(c => c.addEventListener("click", () => saring(c.dataset.filter)));
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isFine = window.matchMedia("(pointer: fine)").matches;
+const hasGsap = GSAP_OK && !reduceMotion;
+
+/* ============================================================
+   3D BLOOM FLOWERS
+   ============================================================ */
+const BLOOM_SCHEMES = {
+  pink:  { back: "#E89AB8", front: "#F4A3C0", center: "#FFD98A" },
+  blush: { back: "#F2B9A8", front: "#F5C8BA", center: "#FFD98A" },
+  mint:  { back: "#8FD1B5", front: "#B6E2CD", center: "#FFE6A2" }
+};
+
+function createBloomFlower(schemeName) {
+  const s = BLOOM_SCHEMES[schemeName] || BLOOM_SCHEMES.pink;
+
+  const outer = [0, 45, 90, 135, 180, 225, 270, 315].map(deg => `
+    <g transform="rotate(${deg} 100 100)">
+      <path class="bloom-petal" d="M 100 100 C 78 72, 72 28, 100 12 C 128 28, 122 72, 100 100 Z" fill="${s.back}"/>
+    </g>
+  `).join("");
+
+  const inner = [22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5].map(deg => `
+    <g transform="rotate(${deg} 100 100)">
+      <path class="bloom-petal" d="M 100 100 C 84 76, 80 40, 100 22 C 120 40, 116 76, 100 100 Z" fill="${s.front}"/>
+    </g>
+  `).join("");
+
+  return `
+    <svg class="bloom-flower" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g class="petals-outer">${outer}</g>
+      <g class="petals-inner">${inner}</g>
+      <circle class="bloom-center" cx="100" cy="100" r="16" fill="${s.center}"/>
+    </svg>
+  `;
 }
 
-if (GSAP_OK) {
-gsap.registerPlugin(ScrollTrigger);
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function initBloomFlowers(){
+  document.querySelectorAll(".bloom-slot").forEach(slot => {
+    const scheme = slot.dataset.scheme || "pink";
+    slot.innerHTML = createBloomFlower(scheme);
+  });
+}
+initBloomFlowers();
 
-gsap.from("#nav", { y: -40, opacity: 0, duration: 1, ease: "power3.out" });
+/* ============================================================
+   GERBERA PINK — kelopak meruncing, sedikit asimetris
+   ============================================================ */
+function createGerberaSVG(){
+  // Petal: mulai dekat pusat, melebar, lalu meruncing ke ujung.
+  // Bentuknya mirip daun → tidak bulat sempurna.
+  const petalPath = (len, w) =>
+    `M 0 -9 C -${w} -${len*0.45}, -${w*0.72} -${len*0.82}, 0 -${len} C ${w*0.72} -${len*0.82}, ${w} -${len*0.45}, 0 -9 Z`;
 
-if (!reduceMotion){
+  // 20 kelopak luar, panjang & sudut sedikit variasi → organik
+  const outer = Array.from({ length: 20 }, (_, i) => {
+    const variation = 1 + Math.sin(i * 1.9) * 0.12;
+    const rot       = i * 18 + Math.cos(i * 1.3) * 5;
+    const len       = 34 * variation;
+    return `<path d="${petalPath(len, 9)}" fill="url(#gPetOuter)" transform="rotate(${rot})"/>`;
+  }).join("");
+
+  // 16 kelopak tengah
+  const mid = Array.from({ length: 16 }, (_, i) => {
+    const variation = 1 + Math.cos(i * 2.1) * 0.09;
+    const rot       = i * 22.5 + 11 + Math.sin(i * 1.7) * 3;
+    const len       = 25 * variation;
+    return `<path d="${petalPath(len, 7.5)}" fill="url(#gPetMid)" transform="rotate(${rot})"/>`;
+  }).join("");
+
+  // 12 kelopak dalam
+  const inner = Array.from({ length: 12 }, (_, i) => {
+    const rot = i * 30 + 15;
+    return `<path d="${petalPath(17, 6)}" fill="url(#gPetInner)" transform="rotate(${rot})"/>`;
+  }).join("");
+
+  return `
+    <svg class="title-flower-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="gerbCenter" cx="45%" cy="40%" r="60%">
+          <stop offset="0%"  stop-color="#FFF2C2"/>
+          <stop offset="45%" stop-color="#FFC94A"/>
+          <stop offset="100%" stop-color="#D9821E"/>
+        </radialGradient>
+        <linearGradient id="gPetOuter" x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%"   stop-color="#FBD4E2"/>
+          <stop offset="100%" stop-color="#E88AB3"/>
+        </linearGradient>
+        <linearGradient id="gPetMid" x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%"   stop-color="#F6B5CD"/>
+          <stop offset="100%" stop-color="#E27BA4"/>
+        </linearGradient>
+        <linearGradient id="gPetInner" x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%"   stop-color="#F193B7"/>
+          <stop offset="100%" stop-color="#C9527E"/>
+        </linearGradient>
+      </defs>
+      <g transform="translate(60 60) rotate(-12)">
+        <g class="gerbera-outer">${outer}</g>
+        <g class="gerbera-mid">${mid}</g>
+        <g class="gerbera-inner">${inner}</g>
+        <circle r="11.5" fill="url(#gerbCenter)"/>
+        <circle r="6.5"  fill="url(#gerbCenter)" opacity="0.7"/>
+        <circle r="3.2"  fill="#FFF2C2" opacity="0.55"/>
+      </g>
+    </svg>
+  `;
+}
+
+function initGerbera(){
+  const slot = document.getElementById("heroGerbera");
+  if (slot) slot.innerHTML = createGerberaSVG();
+}
+initGerbera();
+
+/* ============================================================
+   ANIMATE BLOOM FLOWERS (scroll-driven)
+   ============================================================ */
+function animateBloomFlowers(){
+  if (!hasGsap) return;
+
+  document.querySelectorAll(".bloom-slot").forEach((slot, i) => {
+    const flower  = slot.querySelector(".bloom-flower");
+    const outer   = slot.querySelectorAll(".petals-outer .bloom-petal");
+    const inner   = slot.querySelectorAll(".petals-inner .bloom-petal");
+    const center  = slot.querySelector(".bloom-center");
+
+    gsap.set(outer,  { scale: 0.15, opacity: 0.75 });
+    gsap.set(inner,  { scale: 0.1,  opacity: 0.5  });
+    gsap.set(center, { scale: 0.4,  opacity: 0.9  });
+
+    const bloomST = {
+      trigger: ".hero",
+      start: "top top",
+      end: "center top",
+      scrub: 1.4
+    };
+
+    gsap.to(outer, { scale: 1, opacity: 1, stagger: 0.02, ease: "power2.out",
+      scrollTrigger: { ...bloomST, delay: i * 0.04 } });
+    gsap.to(inner, { scale: 1, opacity: 1, stagger: 0.02, ease: "power2.out",
+      scrollTrigger: { ...bloomST, delay: 0.15 + i * 0.04 } });
+    gsap.to(center, { scale: 1, opacity: 1, ease: "power2.out",
+      scrollTrigger: { ...bloomST, delay: 0.3 } });
+
+    gsap.fromTo(flower, { rotationX: -14, rotationY: 10 },
+      { rotationX: 12, rotationY: -12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 } });
+
+    gsap.to(slot, {
+      y: i % 2 === 0 ? -12 : -18,
+      duration: 3.2 + i * 0.4,
+      repeat: -1, yoyo: true, ease: "sine.inOut"
+    });
+  });
+}
+
+/* ============================================================
+   LOADER INTRO
+   ============================================================ */
+let introPlayed = false;
+function playIntro(){
+  if (introPlayed) return;
+  introPlayed = true;
+
+  const loader = document.getElementById("loader");
+
+  if (!hasGsap){
+    if (loader) loader.remove();
+    animateBloomFlowers();
+    return;
+  }
+
+  document.documentElement.classList.add("g-ready");
+
   const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-  tl.from(".letter", { 
-    y: -100, opacity: 0, rotation: -20, scale: 0.5,
-    duration: 1.2, stagger: 0.1, ease: "elastic.out(1, 0.5)" 
-  })
-  .from(".hero-sub", { y: 20, opacity: 0, duration: 0.8 }, "-=0.6")
-  .from(".hero-actions .btn", { y: 20, opacity: 0, duration: 0.8, stagger: 0.1 }, "-=0.6")
-  .from(".feature-chip", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "back.out(2)" }, "-=0.4")
-  .from(".floating-flower", { scale: 0, opacity: 0, duration: 0.8, stagger: 0.15, ease: "back.out(2)" }, "-=1");
+  tl.to(".loader-flower", {
+      scale: 1.18, duration: 0.55, yoyo: true, repeat: 1, ease: "sine.inOut"
+    })
+    .to(".loader-text", { opacity: 0, y: -10, duration: 0.5 }, "-=0.2")
+    .to(loader, {
+      yPercent: -100, duration: 1, ease: "expo.inOut",
+      onComplete: () => loader.remove()
+    })
+    .from("#nav", { y: -60, opacity: 0, duration: 0.9 }, "-=0.6")
+    .from(".letter", {
+      y: 30, opacity: 0, scale: 0.92,
+      duration: 0.9, stagger: 0.06, ease: "power3.out"
+    }, "-=0.6")
+    .from(".hero-sub",     { y: 20, opacity: 0, duration: 0.7 }, "-=0.5")
+    .from(".hero-actions .btn", { y: 20, opacity: 0, duration: 0.7, stagger: 0.1 }, "-=0.5")
+    .from(".feature-chip", { y: 20, opacity: 0, duration: 0.55, stagger: 0.08, ease: "back.out(1.7)" }, "-=0.35");
 
+  /* Idle: letters bob very slightly, no rotation */
   gsap.to(".letter", {
-    y: -8, rotation: (i) => i % 2 === 0 ? 4 : -4,
-    duration: 1.8, repeat: -1, yoyo: true, ease: "sine.inOut",
-    stagger: 0.1, delay: 2
+    y: -4,
+    duration: 2.2,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+    stagger: { each: 0.08, from: "center" },
+    delay: 1.4
   });
 
-  gsap.to(".ff-1", { y: -20, rotation: 360, duration: 8, repeat: -1, ease: "none" });
-  gsap.to(".ff-2", { y: 15, rotation: -360, duration: 10, repeat: -1, ease: "none" });
-  gsap.to(".ff-3", { y: -15, rotation: 180, duration: 6, repeat: -1, yoyo: true, ease: "sine.inOut" });
-  gsap.to(".ff-4", { y: 20, rotation: -180, duration: 7, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  /* Gerbera breathing */
+  gsap.fromTo(".gerbera-outer, .gerbera-mid, .gerbera-inner",
+    { scale: 0.94 },
+    { scale: 1, duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut",
+      stagger: { each: 0.06, from: "center" } }
+  );
+  gsap.to(".title-flower-img", {
+    scale: 1.04,
+    duration: 2.8,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut"
+  });
+
+  animateBloomFlowers();
 }
 
-gsap.utils.toArray(".reveal").forEach(el => {
-  gsap.to(el, {
-    opacity: 1, y: 0, duration: 1, ease: "power3.out",
-    scrollTrigger: { trigger: el, start: "top 85%", once: true }
+window.addEventListener("load", playIntro);
+setTimeout(playIntro, 3000);
+
+/* ============================================================
+   CORE GSAP ANIMATIONS
+   ============================================================ */
+function initAnimasi(){
+  if (!hasGsap){
+    const saring = (k) => document.querySelectorAll(".card").forEach(c => {
+      c.style.display = (k === "semua" || c.dataset.kategori === k) ? "flex" : "none";
+    });
+    document.querySelectorAll(".filter-btn").forEach(b => b.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      saring(b.dataset.filter);
+    }));
+    document.querySelectorAll(".cat-card").forEach(c => c.addEventListener("click", () => saring(c.dataset.filter)));
+    document.querySelectorAll(".reveal").forEach(el => el.style.opacity = 1);
+    document.querySelectorAll(".card").forEach(el => el.style.opacity = 1);
+    return;
+  }
+
+  gsap.to("#scrollProgress", {
+    scaleX: 1, ease: "none",
+    scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: 0.3 }
   });
-});
 
-ScrollTrigger.batch(".card", {
-  start: "top 90%", once: true,
-  onEnter: batch => gsap.to(batch, {
-    opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out", overwrite: true
-  })
-});
-
-document.querySelectorAll(".card").forEach(card => {
-  const emoji = card.querySelector(".card-emoji, .card-photo");
-  if (!emoji) return;  card.addEventListener("mouseenter", () => {
-    gsap.to(emoji, { scale: 1.1, y: -5, duration: 0.4, ease: "power2.out" });
-  });
-  card.addEventListener("mouseleave", () => {
-    gsap.to(emoji, { scale: 1, y: 0, duration: 0.4, ease: "power2.out" });
-  });
-});
-
-const filterBtns = document.querySelectorAll(".filter-btn");
-
-function filterProduk(kategori, btn){
-  filterBtns.forEach(b => b.classList.remove("active"));
-  if (btn) btn.classList.add("active");
-
-  const cards = document.querySelectorAll(".card");
-  cards.forEach(card => {
-    const cocok = kategori === "semua" || card.dataset.kategori === kategori;
-    gsap.killTweensOf(card);
-    if (cocok){
-      card.style.display = "flex";
-      gsap.fromTo(card,
-        { opacity: 0, scale: 0.95, y: 15 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "power2.out" }
-      );
-    } else {
-      gsap.to(card, {
-        opacity: 0, scale: 0.95, duration: 0.3, ease: "power1.in",
-        onComplete: () => { card.style.display = "none"; }
-      });
+  let lastY = 0;
+  ScrollTrigger.create({
+    start: 0, end: "max",
+    onUpdate: (self) => {
+      const y = self.scroll();
+      const nav = document.getElementById("nav");
+      nav.classList.toggle("scrolled", y > 20);
+      if (y > lastY && y > 300){
+        gsap.to(nav, { yPercent: -100, duration: 0.4, ease: "power2.out", overwrite: "auto" });
+      } else {
+        gsap.to(nav, { yPercent: 0, duration: 0.4, ease: "power2.out", overwrite: "auto" });
+      }
+      lastY = y;
     }
   });
 
-  document.getElementById("etalase").scrollIntoView({ behavior: "smooth", block: "start" });
+  let skewSetter = gsap.quickTo(".marquee-track", "skewX", { duration: 0.3, ease: "power2.out" });
+  let clamp = gsap.utils.clamp(-12, 12);
+  ScrollTrigger.create({ onUpdate: (self) => skewSetter(clamp(self.getVelocity() / 280)) });
+
+  gsap.to(".hero-blob.blob-1", { yPercent: 40, xPercent: -15, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+  gsap.to(".hero-blob.blob-2", { yPercent: -30, xPercent: 12, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+  gsap.to(".hero-blob.blob-3", { yPercent: 25, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+  gsap.to(".hero-content", { yPercent: 14, opacity: 0.4, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "50% top", end: "bottom top", scrub: true } });
+
+  gsap.utils.toArray(".sec-head").forEach(head => {
+    const eyebrow = head.querySelector(".eyebrow");
+    const title   = head.querySelector(".sec-title");
+    const sub     = head.querySelector(".sec-sub");
+    const tl = gsap.timeline({ scrollTrigger: { trigger: head, start: "top 85%", once: true } });
+    if (eyebrow) tl.from(eyebrow, { opacity: 0, y: 16, letterSpacing: "8px", duration: 0.8, ease: "power3.out" });
+    if (title)   tl.from(title, { opacity: 0, yPercent: 30, duration: 0.9, ease: "power3.out" }, "-=0.5");
+    if (sub)     tl.from(sub, { opacity: 0, y: 16, duration: 0.6 }, "-=0.4");
+  });
+
+  gsap.utils.toArray(".reveal").forEach(el => {
+    if (el.closest(".sec-head")) return;
+    gsap.fromTo(el, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 85%", once: true } });
+  });
+
+  gsap.utils.toArray(".cat-card").forEach((card, i) => {
+    gsap.fromTo(card, { opacity: 0, y: 60, rotationY: -22 },
+      { opacity: 1, y: 0, rotationY: 0, duration: 0.9, ease: "power3.out", delay: i * 0.08,
+        scrollTrigger: { trigger: card, start: "top 88%", once: true } });
+
+    if (!isFine) return;
+    card.addEventListener("mousemove", (e) => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top  - r.height / 2;
+      gsap.to(card, {
+        rotationY: (x / r.width) * 14,
+        rotationX: -(y / r.height) * 14,
+        transformPerspective: 900, transformOrigin: "center",
+        duration: 0.4, ease: "power2.out"
+      });
+      gsap.to(card.querySelector(".cat-icon"), { scale: 1.12, rotation: 6, duration: 0.4 });
+    });
+    card.addEventListener("mouseleave", () => {
+      gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.7, ease: "elastic.out(1, 0.5)" });
+      gsap.to(card.querySelector(".cat-icon"), { scale: 1, rotation: 0, duration: 0.5 });
+    });
+  });
+
+  gsap.utils.toArray(".step").forEach((step, i) => {
+    gsap.fromTo(step, { opacity: 0, y: 50, rotationZ: i % 2 === 0 ? -1 : 1 },
+      { opacity: 1, y: 0, rotationZ: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: step, start: "top 85%", once: true } });
+    gsap.from(step.querySelector(".step-num"), { scale: 0, rotation: -180, duration: 0.8, ease: "back.out(2)",
+      scrollTrigger: { trigger: step, start: "top 80%", once: true } });
+  });
+
+  gsap.to(".cta", { backgroundPosition: "100% 100%", duration: 6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  gsap.utils.toArray(".cta-flower").forEach((el, i) => {
+    gsap.to(el, { y: i % 2 === 0 ? -20 : 20, duration: 8 + i * 2, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  });
+  gsap.from(".cta h2, .cta p, .cta .btn", { opacity: 0, y: 30, stagger: 0.15, duration: 0.9, ease: "power3.out",
+    scrollTrigger: { trigger: ".cta", start: "top 80%", once: true } });
+
+  gsap.from(".foot-brand, .foot-col", { opacity: 0, y: 40, stagger: 0.1, duration: 0.8, ease: "power3.out",
+    scrollTrigger: { trigger: "footer", start: "top 90%", once: true } });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener("click", (e) => {
+      const href = a.getAttribute("href");
+      if (!href || href === "#" || href.length < 2) return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      gsap.to(window, { duration: 1, scrollTo: { y: target, offsetY: 90 }, ease: "power3.inOut" });
+    });
+  });
 }
 
-filterBtns.forEach(btn => {
-  btn.addEventListener("click", () => filterProduk(btn.dataset.filter, btn));
-});
+/* ============================================================
+   CUSTOM CURSOR + MAGNETIC
+   ============================================================ */
+function initCursor(){
+  if (!hasGsap || !isFine) return;
+  const cursor = document.getElementById("cursor");
+  const dot    = document.getElementById("cursorDot");
+  if (!cursor || !dot) return;
 
-document.querySelectorAll(".cat-card").forEach(cat => {
-  cat.addEventListener("click", () => {
-    const f = cat.dataset.filter;
-    const target = document.querySelector(`.filter-btn[data-filter="${f}"]`);
-    filterProduk(f, target);
+  const xTo  = gsap.quickTo(cursor, "x", { duration: 0.35, ease: "power3.out" });
+  const yTo  = gsap.quickTo(cursor, "y", { duration: 0.35, ease: "power3.out" });
+  const xDot = gsap.quickTo(dot,    "x", { duration: 0.08, ease: "power2.out" });
+  const yDot = gsap.quickTo(dot,    "y", { duration: 0.08, ease: "power2.out" });
+
+  window.addEventListener("mousemove", (e) => { xTo(e.clientX); yTo(e.clientY); xDot(e.clientX); yDot(e.clientY); });
+  document.addEventListener("mouseleave", () => gsap.to([cursor, dot], { opacity: 0, duration: 0.3 }));
+  document.addEventListener("mouseenter", () => gsap.to([cursor, dot], { opacity: 1, duration: 0.3 }));
+
+  document.querySelectorAll("a, button, .cat-card, .card, .filter-btn").forEach(el => {
+    el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
+    el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
   });
-});
+}
 
-ScrollTrigger.create({
-  start: "top -20",
-  onUpdate: self => {
-    document.getElementById("nav").classList.toggle("scrolled", self.scroll() > 20);
+function initMagnetic(){
+  if (!hasGsap || !isFine) return;
+  document.querySelectorAll(".magnetic, .btn, .filter-btn, .fab").forEach(el => {
+    const xTo = gsap.quickTo(el, "x", { duration: 0.4, ease: "power2.out" });
+    const yTo = gsap.quickTo(el, "y", { duration: 0.4, ease: "power2.out" });
+    el.addEventListener("mousemove", (e) => {
+      const r = el.getBoundingClientRect();
+      xTo((e.clientX - r.left - r.width  / 2) * 0.35);
+      yTo((e.clientY - r.top  - r.height / 2) * 0.35);
+    });
+    el.addEventListener("mouseleave", () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
+    });
+  });
+}
+
+/* ============================================================
+   CARD ANIMATIONS
+   ============================================================ */
+function initCardAnimations(){
+  if (!hasGsap) return;
+  const cards = document.querySelectorAll(".card");
+
+  ScrollTrigger.getAll().forEach(t => {
+    const trig = t.vars.trigger;
+    if (trig && trig.classList && trig.classList.contains("card")) t.kill();
+  });
+
+  ScrollTrigger.batch(cards, {
+    start: "top 90%", once: true,
+    onEnter: batch => gsap.fromTo(batch,
+      { opacity: 0, y: 50, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "power3.out", overwrite: true })
+  });
+
+  cards.forEach(card => {
+    const media = card.querySelector(".card-watercolor, .card-photo");
+    if (!media) return;
+    card.addEventListener("mouseenter", () => gsap.to(media, { scale: 1.12, y: -6, duration: 0.5, ease: "power2.out" }));
+    card.addEventListener("mouseleave", () => gsap.to(media, { scale: 1, y: 0, duration: 0.5, ease: "power2.out" }));
+  });
+}
+
+/* ============================================================
+   FILTER PRODUK
+   ============================================================ */
+function bindFilter(){
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  function filterProduk(kategori, btn){
+    filterBtns.forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    const cards = document.querySelectorAll(".card");
+    let i = 0;
+    cards.forEach(card => {
+      const cocok = kategori === "semua" || card.dataset.kategori === kategori;
+      gsap.killTweensOf(card);
+      if (cocok){
+        card.style.display = "flex";
+        gsap.fromTo(card, { opacity: 0, scale: 0.9, y: 30 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.5, delay: i * 0.05, ease: "back.out(1.4)" });
+        i++;
+      } else {
+        gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, ease: "power1.in",
+          onComplete: () => { card.style.display = "none"; } });
+      }
+    });
+    gsap.to(window, { duration: 0.8, scrollTo: { y: "#etalase", offsetY: 90 }, ease: "power2.inOut" });
   }
-});
+  filterBtns.forEach(btn => btn.addEventListener("click", () => filterProduk(btn.dataset.filter, btn)));
+  document.querySelectorAll(".cat-card").forEach(cat => {
+    cat.addEventListener("click", () => {
+      const f = cat.dataset.filter;
+      const target = document.querySelector(`.filter-btn[data-filter="${f}"]`);
+      filterProduk(f, target);
+    });
+  });
 }
 
-const burger = document.getElementById("burger");
-const mobileMenu = document.getElementById("mobileMenu");
-
-burger.addEventListener("click", () => {
-  const open = mobileMenu.classList.toggle("show");
-  burger.classList.toggle("open", open);
-  burger.setAttribute("aria-expanded", open);
-});
-
-mobileMenu.querySelectorAll("a").forEach(a => {
-  a.addEventListener("click", () => {
-    mobileMenu.classList.remove("show");
-    burger.classList.remove("open");
-    burger.setAttribute("aria-expanded", "false");
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+function initMobileMenu(){
+  const burger = document.getElementById("burger");
+  const mobileMenu = document.getElementById("mobileMenu");
+  burger.addEventListener("click", () => {
+    const open = mobileMenu.classList.toggle("show");
+    burger.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", open);
+    if (open && hasGsap){
+      gsap.fromTo(mobileMenu.querySelectorAll("a"), { opacity: 0, x: -20 },
+        { opacity: 1, x: 0, duration: 0.35, stagger: 0.05, ease: "power2.out" });
+    }
   });
-});
+  mobileMenu.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      mobileMenu.classList.remove("show");
+      burger.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+/* ============================================================
+   START
+   ============================================================ */
+async function mulai(){
+  initAnimasi();
+  initCardAnimations();
+  bindFilter();
+  initCursor();
+  initMagnetic();
+  initMobileMenu();
+
+  if (MODE === "cloud"){
+    try {
+      const data = rapikan(await ambilCloud());
+      if (data.length){
+        PRODUK = data;
+        renderProduk();
+        initCardAnimations();
+        try { localStorage.setItem("nelora_products", JSON.stringify(data)); } catch(e){}
+        if (hasGsap) ScrollTrigger.refresh();
+      }
+    } catch (e){
+      console.warn("Data server gagal dimuat, memakai data tersimpan:", e.message);
+    }
+  }
+}
 
 document.getElementById("year").textContent = new Date().getFullYear();
-if (GSAP_OK) window.addEventListener("load", () => ScrollTrigger.refresh());
+mulai();
+
+if (hasGsap){
+  window.addEventListener("load", () => ScrollTrigger.refresh());
 }
 </script>
 </body>

@@ -2,6 +2,11 @@
 
 Panduan ini untuk mengaktifkan mode server, supaya perubahan di halaman admin langsung terlihat di halaman utama pada semua perangkat, bukan hanya di browser yang dipakai mengedit.
 
+## Status proyek
+
+- Proyek Firebase: `nelora-b735c` (sudah dibuat, konfigurasi sudah terpasang di `firebase-config.js`).
+- Yang masih perlu diselesaikan: Authentication Email/Password, akun admin, Firestore, Storage, dan aturan keamanan.
+
 ## 1. Buat proyek Firebase
 
 1. Buka https://console.firebase.google.com lalu masuk dengan akun Google.

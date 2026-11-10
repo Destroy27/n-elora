@@ -432,6 +432,10 @@ document.getElementById("loginForm").addEventListener("submit", e=>{
       loginErr.textContent = "Terlalu banyak percobaan. Coba lagi nanti.";
     } else if (kode.indexOf("network") >= 0){
       loginErr.textContent = "Jaringan bermasalah. Periksa koneksi internet.";
+    } else if (kode.indexOf("configuration-not-found") >= 0 || kode.indexOf("operation-not-allowed") >= 0){
+      loginErr.textContent = "Login email belum diaktifkan di Firebase. Buka Authentication > Sign-in method > Email/Password, lalu coba lagi.";
+    } else if (kode.indexOf("api-key-not-valid") >= 0 || kode.indexOf("invalid-api-key") >= 0){
+      loginErr.textContent = "Konfigurasi Firebase tidak dikenali. Periksa kembali isi firebase-config.js.";
     } else {
       loginErr.textContent = "Gagal masuk: " + (err.message || "kesalahan tidak dikenal");
     }

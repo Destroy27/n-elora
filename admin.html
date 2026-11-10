@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N.Elora - Admin</title>
+<meta name="description" content="Halaman admin N.Elora untuk mengatur harga, modal, dan keuntungan.">
+<meta name="robots" content="noindex,nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blush:#FFF0F5;--soft-pink:#F4A3C0;--rose-ink:#4A2A3A;--mint-leaf:#8FD1B5;--butter:#FFD98A;
+  --pink-50:#FFF7FA;--pink-100:#FFEBF2;--pink-200:#FFD8E6;
+  --rose:#D85A87;--rose-dark:#4A2A3A;--plum:#4A2A3A;--muted:#8A6A7A;--white:#FFFFFF;
+  --shadow-sm:0 6px 18px rgba(74,42,58,.08);--shadow-md:0 16px 40px rgba(74,42,58,.12);
+  --radius:18px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Quicksand',system-ui,-apple-system,sans-serif;background:var(--pink-50);color:var(--plum);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(620px 620px at 8% -5%,var(--blush) 0%,transparent 62%),radial-gradient(760px 760px at 95% 15%,#FFEAF3 0%,transparent 62%)}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+img{max-width:100%;display:block}
+
+.container{width:min(1180px,94%);margin-inline:auto;padding:24px 0 40px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--pink-100);position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:10px}
+.logo-box{width:38px;height:38px;display:grid;place-items:center;overflow:hidden}
+.logo-box img{width:100%;height:100%;object-fit:contain}
+.brand-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--rose-dark)}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:999px;font-weight:700;font-size:13.5px;border:2px solid transparent;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,var(--soft-pink),var(--rose));color:#fff;box-shadow:0 8px 18px rgba(232,92,142,.30)}
+.btn-ghost{background:#fff;color:var(--rose-dark);border-color:var(--pink-200);box-shadow:var(--shadow-sm)}
+.btn-ghost:hover{border-color:var(--soft-pink)}
+.btn-danger{background:#fff;color:#B33A5A;border-color:#F2B6C6}
+.btn-danger:hover{background:#FFF1F5}
+.btn-sm{padding:7px 14px;font-size:12.5px}
+
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 4px}
+.sub{color:var(--muted);font-size:13.5px}
+
+.card{background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);margin-bottom:16px}
+.card h2{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--rose-dark)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm)}
+.stat .label{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.stat .value{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose-dark);margin-top:4px}
+.stat .hint{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--pink-100);border-radius:var(--radius);background:#fff}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--pink-100);font-size:13px;vertical-align:middle}
+th{background:var(--pink-50);font-weight:700;color:var(--rose-dark);text-align:left;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FFF9FC}
+td input{width:100%;padding:7px 9px;border:1.5px solid var(--pink-200);border-radius:10px;font-family:inherit;font-size:13px;color:var(--plum);background:#fff}
+td input:focus{outline:none;border-color:var(--soft-pink)}
+td input.num{text-align:right}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--pink-100);color:var(--rose)}
+.profit-pos{color:#2E8B57;font-weight:700}
+.profit-neg{color:#B33A5A;font-weight:700}
+
+.login-box{max-width:420px;margin:60px auto;background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow-md);text-align:center}
+.login-box h1{margin-bottom:6px}
+.login-box .sub{margin-bottom:18px}
+.field{margin-bottom:14px;text-align:left}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--rose-dark);margin-bottom:6px}
+.field input{width:100%;padding:11px 13px;border:1.5px solid var(--pink-200);border-radius:12px;font-family:inherit;font-size:14px}
+.field input:focus{outline:none;border-color:var(--soft-pink)}
+.err{color:#B33A5A;font-size:13px;margin-top:8px;display:none}
+.err.show{display:block}
+
+.modal-back{position:fixed;inset:0;background:rgba(74,42,58,.45);display:none;place-items:center;z-index:200;padding:16px}
+.modal-back.show{display:grid}
+.modal{background:#fff;border-radius:var(--radius);padding:22px;width:min(520px,100%);max-height:90vh;overflow:auto;box-shadow:var(--shadow-lg)}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid .full{grid-column:1/-1}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--rose-dark);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s;z-index:300}
+.toast.show{opacity:1}
+
+@media (max-width:640px){.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar" style="display:none">
+  <div class="brand">
+    <div class="logo-box"><img src="logo-nelora.png" alt="Logo N.Elora"></div>
+    <span class="brand-name">N.Elora Admin</span>
+  </div>
+  <div class="topbar-actions">
+    <a href="index.html" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">Lihat Situs</a>
+    <button class="btn btn-danger btn-sm" id="logoutBtn" type="button">Keluar</button>
+  </div>
+</div>
+
+<div class="container" id="app">
+  <!-- Login -->
+  <div id="loginView">
+    <div class="login-box">
+      <div class="logo-box" style="margin:0 auto 12px;width:56px;height:56px"><img src="logo-nelora.png" alt="Logo N.Elora"></div>
+      <h1>Admin N.Elora</h1>
+      <p class="sub">Masuk untuk mengatur harga, modal, dan keuntungan.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="pwd">Kata Sandi</label>
+          <input type="password" id="pwd" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Masuk</button>
+        <p class="err" id="loginErr">Kata sandi salah. Coba lagi.</p>
+      </form>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:14px">Default: <b>findi</b> (ubah di kode jika perlu)</p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashView" style="display:none">
+    <h1>Dashboard</h1>
+    <p class="sub">Atur harga jual, harga modal, dan jumlah terjual. Data tersimpan di browser ini dan langsung dipakai halaman utama.</p>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <h2 style="margin:0">Produk</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" id="resetBtn" type="button">Reset Default</button>
+          <button class="btn btn-primary btn-sm" id="addBtn" type="button">+ Tambah Produk</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Kategori</th>
+              <th>Emoji</th>
+              <th>Harga Jual (Rp)</th>
+              <th>Harga Modal (Rp)</th>
+              <th>Terjual (pcs)</th>
+              <th>Profit/Unit</th>
+              <th>Profit Total</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">Tip: ubah angka lalu tekan Enter / klik di luar untuk menyimpan otomatis.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="modalBack">
+  <div class="modal">
+    <h2 id="modalTitle">Tambah Produk</h2>
+    <form id="prodForm">
+      <div class="form-grid">
+        <div class="field full">
+          <label for="fNama">Nama Produk</label>
+          <input type="text" id="fNama" required>
+        </div>
+        <div class="field">
+          <label for="fKat">Kategori</label>
+          <select id="fKat" style="width:100%;padding:11px 13px;border:1.5px solid var(--pink-200);border-radius:12px;font-family:inherit;font-size:14px">
+            <option value="buket">buket</option>
+            <option value="tunggal">tunggal</option>
+            <option value="custom">custom</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fEmoji">Emoji</label>
+          <input type="text" id="fEmoji" maxlength="4">
+        </div>
+        <div class="field full">
+          <label for="fDesc">Deskripsi</label>
+          <input type="text" id="fDesc">
+        </div>
+        <div class="field">
+          <label for="fBadge">Badge</label>
+          <input type="text" id="fBadge" placeholder="Best Seller, Favorit, ...">
+        </div>
+        <div class="field">
+          <label for="fHarga">Harga Jual (Rp)</label>
+          <input type="text" id="fHarga" inputmode="numeric" required>
+        </div>
+        <div class="field">
+          <label for="fCost">Harga Modal (Rp)</label>
+          <input type="text" id="fCost" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label for="fSold">Terjual (pcs)</label>
+          <input type="number" id="fSold" min="0" value="0">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="cancelBtn">Batal</button>
+        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast">Tersimpan</div>
+
+<script>
+/* ============================================================
+   KONFIGURASI
+   ============================================================ */
+const ADMIN_PASSWORD = "findi"; // kata sandi admin (ubah jika perlu)
+const STORAGE_KEY = "nelora_products";
+
+const DEFAULT_PRODUK = [
+  { nama:"Buket Mawar Kawat Bulu",  harga:"45.000", kategori:"buket",    emoji:"🌹", desc:"12 tangkai mawar gradasi pink, wrapping korean style.", badge:"Best Seller", cost:"25.000", sold:0 },
+  { nama:"Buket Tulip Pastel",      harga:"55.000", kategori:"buket",    emoji:"🌷", desc:"Tulip lembut warna pastel, cocok untuk anniversary.", badge:"Favorit", cost:"30.000", sold:0 },
+  { nama:"Buket Graduation",        harga:"65.000", kategori:"buket",    emoji:"💐", desc:"Bunga + boneka mini + kartu ucapan wisuda.", badge:"", cost:"35.000", sold:0 },
+  { nama:"Bunga Tunggal Matahari",  harga:"15.000", kategori:"tunggal",  emoji:"🌻", desc:"Satu tangkai besar, pas untuk hiasan meja kerja.", badge:"", cost:"7.000", sold:0 },
+  { nama:"Bunga Tunggal Sakura",    harga:"12.000", kategori:"tunggal",  emoji:"🌸", desc:"Mungil dan manis, bisa jadi pelengkap kado.", badge:"Hemat", cost:"5.000", sold:0 },
+  { nama:"Custom Name Flower",      harga:"75.000", kategori:"custom",   emoji:"✨", desc:"Bunga + nama/quote sesuai request, bebas warna.", badge:"Custom", cost:"40.000", sold:0 },
+];
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function parseNum(str){ return parseInt(String(str||"").replace(/\./g,"").replace(/[^\d]/g,""),10) || 0; }
+function fmtNum(n){ return (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg || "Tersimpan";
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>t.classList.remove("show"),1600);
+}
+
+function loadProduk(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw){
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  }catch(e){}
+  return DEFAULT_PRODUK.map(p=>({...p}));
+}
+function saveProduk(list){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+let produk = loadProduk();
+let editingIndex = -1; // -1 = new
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+const loginView = document.getElementById("loginView");
+const dashView = document.getElementById("dashView");
+const topbar = document.getElementById("topbar");
+
+function showDash(){
+  loginView.style.display = "none";
+  dashView.style.display = "block";
+  topbar.style.display = "flex";
+  render();
+}
+function showLogin(){
+  loginView.style.display = "block";
+  dashView.style.display = "none";
+  topbar.style.display = "none";
+}
+
+document.getElementById("loginForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const v = document.getElementById("pwd").value;
+  if (v === ADMIN_PASSWORD){
+    sessionStorage.setItem("nelora_admin","1");
+    document.getElementById("loginErr").classList.remove("show");
+    showDash();
+  } else {
+    document.getElementById("loginErr").classList.add("show");
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  sessionStorage.removeItem("nelora_admin");
+  showLogin();
+});
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render(){
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  if (!produk.length){
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">Belum ada produk. Klik "Tambah Produk".</td></tr>`;
+  }
+  produk.forEach((p,i)=>{
+    const sell = parseNum(p.harga);
+    const cost = parseNum(p.cost);
+    const sold = parseInt(p.sold,10) || 0;
+    const perUnit = sell - cost;
+    const total = perUnit * sold;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><b>${escapeHtml(p.nama)}</b><br><span style="font-size:11px;color:var(--muted)">${escapeHtml(p.desc||"")}</span></td>
+      <td><span class="badge">${escapeHtml(p.kategori)}</span></td>
+      <td style="font-size:20px;text-align:center">${escapeHtml(p.emoji||"")}</td>
+      <td><input class="num" data-i="${i}" data-field="harga" value="${fmtNum(sell)}" inputmode="numeric"></td>
+      <td><input class="num" data-i="${i}" data-field="cost" value="${fmtNum(cost)}" inputmode="numeric"></td>
+      <td><input class="num" data-i="${i}" data-field="sold" type="number" min="0" value="${sold}"></td>
+      <td class="${perUnit>=0?'profit-pos':'profit-neg'}">Rp ${fmtNum(perUnit)}</td>
+      <td class="${total>=0?'profit-pos':'profit-neg'}">Rp ${fmtNum(total)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" data-edit="${i}" type="button">Edit</button>
+        <button class="btn btn-danger btn-sm" data-del="${i}" type="button">Hapus</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // stats
+  let totalSold = 0, omzet = 0, profit = 0;
+  produk.forEach(p=>{
+    const sell = parseNum(p.harga), cost = parseNum(p.cost), sold = parseInt(p.sold,10)||0;
+    totalSold += sold;
+    omzet += sell*sold;
+    profit += (sell-cost)*sold;
+  });
+  document.getElementById("stats").innerHTML = `
+    <div class="stat"><div class="label">Jumlah Produk</div><div class="value">${produk.length}</div><div class="hint">varian aktif</div></div>
+    <div class="stat"><div class="label">Total Terjual</div><div class="value">${fmtNum(totalSold)}</div><div class="hint">pcs</div></div>
+    <div class="stat"><div class="label">Total Omzet</div><div class="value">Rp ${fmtNum(omzet)}</div><div class="hint">harga jual × terjual</div></div>
+    <div class="stat"><div class="label">Total Keuntungan</div><div class="value" style="color:${profit>=0?'#2E8B57':'#B33A5A'}">Rp ${fmtNum(profit)}</div><div class="hint">omzet − modal</div></div>
+  `;
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+/* inline edit handlers */
+document.getElementById("tbody").addEventListener("change", e=>{
+  const el = e.target;
+  if (!el.dataset || !el.dataset.field) return;
+  const i = parseInt(el.dataset.i,10);
+  const field = el.dataset.field;
+  if (field === "sold"){
+    produk[i].sold = Math.max(0, parseInt(el.value,10)||0);
+  } else {
+    produk[i][field] = fmtNum(parseNum(el.value));
+  }
+  saveProduk(produk);
+  render();
+  toast("Tersimpan");
+});
+document.getElementById("tbody").addEventListener("click", e=>{
+  const editBtn = e.target.closest("[data-edit]");
+  const delBtn = e.target.closest("[data-del]");
+  if (editBtn){
+    openModal(parseInt(editBtn.dataset.edit,10));
+  } else if (delBtn){
+    const i = parseInt(delBtn.dataset.del,10);
+    if (confirm("Hapus produk \""+produk[i].nama+"\"?")){
+      produk.splice(i,1);
+      saveProduk(produk);
+      render();
+      toast("Produk dihapus");
+    }
+  }
+});
+
+/* modal */
+const modalBack = document.getElementById("modalBack");
+function openModal(i){
+  editingIndex = i;
+  const p = (i>=0) ? produk[i] : { nama:"", kategori:"buket", emoji:"", desc:"", badge:"", harga:"", cost:"", sold:0 };
+  document.getElementById("modalTitle").textContent = (i>=0) ? "Edit Produk" : "Tambah Produk";
+  document.getElementById("fNama").value = p.nama||"";
+  document.getElementById("fKat").value = p.kategori||"buket";
+  document.getElementById("fEmoji").value = p.emoji||"";
+  document.getElementById("fDesc").value = p.desc||"";
+  document.getElementById("fBadge").value = p.badge||"";
+  document.getElementById("fHarga").value = fmtNum(parseNum(p.harga));
+  document.getElementById("fCost").value = fmtNum(parseNum(p.cost));
+  document.getElementById("fSold").value = parseInt(p.sold,10)||0;
+  modalBack.classList.add("show");
+}
+function closeModal(){ modalBack.classList.remove("show"); editingIndex = -1; }
+document.getElementById("cancelBtn").addEventListener("click", closeModal);
+modalBack.addEventListener("click", e=>{ if (e.target===modalBack) closeModal(); });
+
+document.getElementById("prodForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const obj = {
+    nama: document.getElementById("fNama").value.trim(),
+    kategori: document.getElementById("fKat").value,
+    emoji: document.getElementById("fEmoji").value.trim(),
+    desc: document.getElementById("fDesc").value.trim(),
+    badge: document.getElementById("fBadge").value.trim(),
+    harga: fmtNum(parseNum(document.getElementById("fHarga").value)),
+    cost: fmtNum(parseNum(document.getElementById("fCost").value)),
+    sold: Math.max(0, parseInt(document.getElementById("fSold").value,10)||0),
+  };
+  if (editingIndex >= 0) produk[editingIndex] = obj;
+  else produk.push(obj);
+  saveProduk(produk);
+  closeModal();
+  render();
+  toast("Produk disimpan");
+});
+
+document.getElementById("addBtn").addEventListener("click", ()=>openModal(-1));
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  if (confirm("Reset semua produk ke default? Perubahan harga & keuntungan akan hilang.")){
+    produk = DEFAULT_PRODUK.map(p=>({...p}));
+    saveProduk(produk);
+    render();
+    toast("Reset ke default");
+  }
+});
+
+/* init */
+if (sessionStorage.getItem("nelora_admin")==="1") showDash(); else showLogin();
+</script>
+</body>
+</html>

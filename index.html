@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>N.Elora — Bunga Kawat Bulu Handmade</title>
-<meta name="description" content="N.Elora — Buket & bunga kawat bulu handmade, dibuat penuh cinta. Custom nama, warna, dan bentuk sesuai keinginanmu.">
+<title>N.Elora - Bunga Kawat Bulu Handmade</title>
+<meta name="description" content="N.Elora - Buket & bunga kawat bulu handmade, dibuat penuh cinta. Custom nama, warna, dan bentuk sesuai keinginanmu.">
 <link rel="icon" href="logo-nelora.png" type="image/png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -247,7 +247,7 @@ section{padding:clamp(56px,8vw,104px) 0;position:relative}
   background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.9), transparent 58%);
   pointer-events:none;
 }
-.hero-blob .emoji{position:relative;z-index:1;filter:drop-shadow(0 12px 18px rgba(74,42,58,.18))}
+.hero-blob .hero-logo{position:relative;z-index:1;width:62%;height:auto;object-fit:contain;filter:drop-shadow(0 12px 18px rgba(74,42,58,.18))}
 
 .float-chip{
   position:absolute;background:#fff;border-radius:999px;
@@ -647,7 +647,7 @@ footer{
 
       <div class="hero-visual">
         <div class="hero-blob" id="heroBlob">
-          <span class="emoji">💐</span>
+          <img src="logo-nelora.png" alt="Logo N.Elora" class="hero-logo" width="240" height="240" fetchpriority="high">
         </div>
 
         <div class="float-chip chip-1" id="chip1">🌷 Tahan Lama</div>
@@ -685,7 +685,7 @@ footer{
     <div class="sec-head reveal">
       <span class="eyebrow">Jenis Bunga</span>
       <h2 class="sec-title">Pilih <em>Sesuai Momenmu</em></h2>
-      <p class="sec-sub">Dari buket besar sampai gantungan kunci mungil — semuanya dirangkai handmade.</p>
+      <p class="sec-sub">Dari buket besar sampai gantungan kunci mungil - semuanya dirangkai handmade.</p>
     </div>
 
     <div class="cat-grid">
@@ -706,7 +706,7 @@ footer{
       <article class="cat-card reveal" data-filter="custom">
         <div class="cat-icon">✨</div>
         <h3>Custom</h3>
-        <p>Bebas pilih warna, bunga, nama, dan tema — kami buat khusus untukmu.</p>
+        <p>Bebas pilih warna, bunga, nama, dan tema - kami buat khusus untukmu.</p>
       </article>
     </div>
   </div>
@@ -773,7 +773,7 @@ footer{
   <div class="container">
     <div class="cta reveal">
       <h2>Siap bikin orang tersayang senyum hari ini?</h2>
-      <p>Bunga kawat bulu N.Elora nggak akan pernah layu — sama seperti rasa sayangmu. 💗</p>
+      <p>Bunga kawat bulu N.Elora nggak akan pernah layu - sama seperti rasa sayangmu. 💗</p>
       <a href="#" class="btn btn-primary js-wa" data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu. Boleh info katalog & harganya?">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 18.15h-.01a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>
         Pesan Sekarang
@@ -817,7 +817,7 @@ footer{
 
     <div class="foot-bottom">
       <span>© <span id="year"></span> <b>N.Elora</b>. Dibuat dengan 💗</span>
-      <span>Handmade in Indonesia 🇮🇩</span>
+      <span>Handmade in Indonesia 🇮🇩 · <a href="admin.html" style="color:var(--muted)">Admin</a></span>
     </div>
   </div>
 </footer>
@@ -839,15 +839,26 @@ footer{
    ============================================================ */
 const WA_NUMBER = "6282146071595"; // Nomor WhatsApp tujuan
 
-// Produk Dekorasi sudah dihapus
-const PRODUK = [
-  { nama:"Buket Mawar Kawat Bulu",  harga:"45.000", kategori:"buket",    emoji:"🌹", desc:"12 tangkai mawar gradasi pink, wrapping korean style.", badge:"Best Seller" },
-  { nama:"Buket Tulip Pastel",      harga:"55.000", kategori:"buket",    emoji:"🌷", desc:"Tulip lembut warna pastel, cocok untuk anniversary.", badge:"Favorit" },
-  { nama:"Buket Graduation",        harga:"65.000", kategori:"buket",    emoji:"💐", desc:"Bunga + boneka mini + kartu ucapan wisuda.", badge:"" },
-  { nama:"Bunga Tunggal Matahari",  harga:"15.000", kategori:"tunggal",  emoji:"🌻", desc:"Satu tangkai besar, pas untuk hiasan meja kerja.", badge:"" },
-  { nama:"Bunga Tunggal Sakura",    harga:"12.000", kategori:"tunggal",  emoji:"🌸", desc:"Mungil dan manis, bisa jadi pelengkap kado.", badge:"Hemat" },
-  { nama:"Custom Name Flower",      harga:"75.000", kategori:"custom",   emoji:"✨", desc:"Bunga + nama/quote sesuai request, bebas warna.", badge:"Custom" },
+const DEFAULT_PRODUK = [
+  { nama:"Buket Mawar Kawat Bulu",  harga:"45.000", kategori:"buket",    emoji:"🌹", desc:"12 tangkai mawar gradasi pink, wrapping korean style.", badge:"Best Seller", cost:"25.000", sold:0 },
+  { nama:"Buket Tulip Pastel",      harga:"55.000", kategori:"buket",    emoji:"🌷", desc:"Tulip lembut warna pastel, cocok untuk anniversary.", badge:"Favorit", cost:"30.000", sold:0 },
+  { nama:"Buket Graduation",        harga:"65.000", kategori:"buket",    emoji:"💐", desc:"Bunga + boneka mini + kartu ucapan wisuda.", badge:"", cost:"35.000", sold:0 },
+  { nama:"Bunga Tunggal Matahari",  harga:"15.000", kategori:"tunggal",  emoji:"🌻", desc:"Satu tangkai besar, pas untuk hiasan meja kerja.", badge:"", cost:"7.000", sold:0 },
+  { nama:"Bunga Tunggal Sakura",    harga:"12.000", kategori:"tunggal",  emoji:"🌸", desc:"Mungil dan manis, bisa jadi pelengkap kado.", badge:"Hemat", cost:"5.000", sold:0 },
+  { nama:"Custom Name Flower",      harga:"75.000", kategori:"custom",   emoji:"✨", desc:"Bunga + nama/quote sesuai request, bebas warna.", badge:"Custom", cost:"40.000", sold:0 },
 ];
+
+function loadProduk(){
+  try {
+    const raw = localStorage.getItem("nelora_products");
+    if (raw){
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  } catch(e){ /* ignore */ }
+  return DEFAULT_PRODUK.map(p => ({...p}));
+}
+let PRODUK = loadProduk();
 
 /* ============================================================
    UTIL WHATSAPP
@@ -937,7 +948,7 @@ if (!reduceMotion){
     duration: 5, repeat: -1, yoyo: true, ease: "sine.inOut"
   });
 
-  gsap.to("#heroBlob .emoji", {
+  gsap.to("#heroBlob .hero-logo", {
     y: -16, rotation: 5,
     duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut"
   });

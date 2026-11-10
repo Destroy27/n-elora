@@ -17,10 +17,23 @@ Website landing page untuk **N.Elora**, toko bunga kawat bulu handmade. Dibuat d
 ```
 n-elora/
 ├── index.html
+├── admin.html
 ├── logo-nelora.png
 ├── README.md
 └── .gitignore
 ```
+
+## Halaman Admin
+
+Buka `admin.html` di browser. Kata sandi default: `findi`.
+
+Fitur admin:
+- Ubah harga jual, harga modal, dan jumlah terjual per produk
+- Tambah / hapus produk
+- Lihat total omzet dan total keuntungan
+- Reset ke data default
+
+Data disimpan di localStorage browser ini dan langsung dipakai halaman utama (`index.html`).
 
 ## Cara Menjalankan
 

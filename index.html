@@ -371,46 +371,73 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .marquee-track span:nth-child(even){color:var(--soft-pink)}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
-/* KATEGORI - SATU KARTU UTAMA, KARTU LAIN MEREDUP */
-.cat-carousel{position:relative;max-width:430px;margin:0 auto;}
-.cat-panggung{position:relative;height:clamp(404px, 82vw, 492px);}
-.cat-stack{position:absolute;inset:0;touch-action:pan-y pinch-zoom;user-select:none;
-  cursor:grab;outline:none;border-radius:var(--radius-md);}
-.cat-stack.menarik{cursor:grabbing;}
-.cat-stack:focus-visible{outline:2px solid var(--soft-pink);outline-offset:6px;}
-.cat-kartu{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;
-  background:var(--white);border-radius:var(--radius-md);
-  box-shadow:0 22px 44px -24px rgba(74, 42, 58, 0.46), 0 6px 16px rgba(74, 42, 58, 0.06);
-  transform:translate3d(var(--cat-x, 0px), var(--cat-y, 14px), 0) scale(var(--cat-s, 0.93));
-  opacity:var(--cat-o, 0.3);pointer-events:none;
-  transition:transform 0.62s cubic-bezier(0.22, 0.9, 0.28, 1), opacity 0.62s ease;
-  will-change:transform, opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
-.cat-kartu.aktif{transform:translate3d(0, 0, 0) scale(1);opacity:1;pointer-events:auto;}
-.cat-stack.menarik .cat-kartu{transition:none;}
-@media (hover:hover) and (pointer:fine){
-  .cat-kartu.aktif:hover{transform:translate3d(0, -4px, 0) scale(1);}
-}
-.cat-foto{position:relative;flex:1 1 auto;min-height:0;background:var(--blush);}
-.cat-foto img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;}
-.cat-isi{padding:16px 20px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;}
-.cat-isi h3{font-family:'Playfair Display', serif;font-size:clamp(19px, 4.6vw, 23px);font-weight:600;line-height:1.2;color:var(--rose-ink);}
-.cat-isi p{color:var(--text-muted);font-size:clamp(12px, 3vw, 13px);line-height:1.5;margin:0 0 8px;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.cat-isi .cat-lihat{min-height:44px;padding:0 24px;font-size:12.5px;}
-.cat-kendali{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:26px;}
-.cat-panah{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+/* KATEGORI - TIGA KARTU BERJEJAR, FLIP SAAT DIKETUK */
+.cat-carousel{
+  --card-w:clamp(150px, 36vw, 226px);
+  --card-h:calc(var(--card-w) * 1.5);
+  --shift:clamp(80px, 24vw, 172px);
+  --skala-samping:0.74;
+  position:relative;max-width:600px;margin:0 auto;}
+.cat-panggung{position:relative;height:calc(var(--card-h) + 52px);perspective:1300px;
+  touch-action:pan-y pinch-zoom;outline:none;cursor:grab;}
+.cat-panggung.menarik{cursor:grabbing;}
+.cat-panggung:focus-visible{outline:2px solid var(--soft-pink);outline-offset:4px;border-radius:24px;}
+.cat-kartu{position:absolute;top:50%;left:50%;width:var(--card-w);height:var(--card-h);
+  margin:calc(var(--card-h) / -2) 0 0 calc(var(--card-w) / -2);
+  perspective:1000px;z-index:1;pointer-events:none;
+  transition:transform 0.76s cubic-bezier(0.33, 1.1, 0.45, 1), opacity 0.6s ease;
+  will-change:transform,opacity;}
+.cat-kartu.pos-kiri{transform:translateX(calc(var(--shift) * -1)) scale(var(--skala-samping));opacity:0.72;z-index:1;}
+.cat-kartu.pos-tengah{transform:translateX(0) scale(1);opacity:1;z-index:3;pointer-events:auto;cursor:pointer;}
+.cat-kartu.pos-kanan{transform:translateX(var(--shift)) scale(var(--skala-samping));opacity:0.72;z-index:2;}
+.cat-kartu.pos-kiri-jauh{transform:translateX(calc(var(--shift) * -2.05)) scale(0.55) rotate(-8deg);opacity:0;z-index:0;}
+.cat-kartu.pos-kanan-jauh{transform:translateX(calc(var(--shift) * 2.05)) scale(0.55) rotate(8deg);opacity:0;z-index:0;}
+.cat-kartu-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform 0.72s cubic-bezier(0.45, 0.05, 0.2, 1);}
+.cat-kartu.terbalik .cat-kartu-inner{transform:rotateY(180deg);}
+.cat-muka{position:absolute;inset:0;border-radius:20px;overflow:hidden;background:var(--white);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:0 20px 40px -22px rgba(74, 42, 58, 0.5), 0 4px 12px rgba(74, 42, 58, 0.06);}
+.cat-kartu.pos-tengah .cat-muka{box-shadow:0 26px 52px -24px rgba(74, 42, 58, 0.55), 0 8px 18px rgba(74, 42, 58, 0.08);}
+.cat-kartu.pos-kiri .cat-muka,.cat-kartu.pos-kanan .cat-muka{box-shadow:0 14px 30px -20px rgba(74, 42, 58, 0.42), 0 3px 9px rgba(74, 42, 58, 0.05);}
+.cat-depan img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;}
+.cat-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;
+  gap:8px;padding:12px;
+  background:linear-gradient(to top, rgba(58, 32, 45, 0.94) 0%, rgba(58, 32, 45, 0.55) 42%, rgba(58, 32, 45, 0) 72%);}
+.cat-overlay h3{color:var(--white);font-family:'Playfair Display', serif;font-size:clamp(15px, 3.8vw, 20px);
+  font-weight:600;line-height:1.2;text-shadow:0 2px 10px rgba(0, 0, 0, 0.35);}
+.cat-detail{min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255, 255, 255, 0.94);
+  color:var(--rose-ink);font-size:11.5px;font-weight:600;letter-spacing:0.2px;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:background 0.3s ease, color 0.3s ease;}
+.cat-detail:hover{background:var(--white);color:var(--soft-pink);}
+.cat-belakang{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:flex-start;
+  padding:16px 14px 14px;background:linear-gradient(150deg, var(--blush) 0%, #FFE4EE 100%);
+  border:1px solid rgba(244, 163, 192, 0.55);}
+.cat-belakang h3{font-family:'Playfair Display', serif;font-size:clamp(15px, 3.8vw, 19px);font-weight:600;
+  line-height:1.25;color:var(--rose-ink);padding-right:34px;}
+.cat-belakang p{flex:1 1 auto;min-height:0;overflow-y:auto;margin:6px 0 10px;
+  font-size:clamp(11px, 2.8vw, 12.5px);line-height:1.55;color:var(--text-muted);}
+.cat-belakang .cat-lihat{min-height:44px;width:100%;font-size:11.5px;padding:0 12px;}
+.cat-tutup{position:absolute;top:6px;right:6px;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(255, 255, 255, 0.85);color:var(--rose-ink);
+  transition:background 0.3s ease, color 0.3s ease;}
+.cat-tutup svg{width:16px;height:16px;display:block;}
+.cat-tutup:hover{background:var(--soft-pink);color:var(--white);}
+.cat-kendali{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:22px;}
+.cat-panah,.cat-jeda{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
   background:var(--white);border:1px solid rgba(244, 163, 192, 0.45);color:var(--rose-ink);
   box-shadow:var(--shadow-sm);transition:background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;}
-.cat-panah svg{width:18px;height:18px;display:block;}
-.cat-panah:hover:not(:disabled){background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);}
-.cat-panah:disabled{opacity:0.3;cursor:not-allowed;}
-.cat-titik{display:flex;align-items:center;justify-content:center;}
-.cat-titik button{width:32px;height:44px;display:grid;place-items:center;background:none;border-radius:50%;}
-.cat-titik button span{width:8px;height:8px;border-radius:50%;background:rgba(244, 163, 192, 0.5);
-  transition:width 0.3s ease, border-radius 0.3s ease, background 0.3s ease;}
-.cat-titik button[aria-current="true"] span{width:22px;border-radius:999px;background:var(--soft-pink);}
-.cat-titik button:focus-visible{outline:2px solid var(--soft-pink);outline-offset:-6px;}
-.cat-kosong{text-align:center;color:var(--text-muted);font-size:13px;margin-top:10px;}
+.cat-panah svg,.cat-jeda svg{width:17px;height:17px;display:block;}
+.cat-panah:hover:not(:disabled),.cat-jeda:hover:not(:disabled){background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);}
+.cat-panah:disabled,.cat-jeda:disabled{opacity:0.3;cursor:not-allowed;}
+.cat-jeda[aria-pressed="true"]{background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);}
+.cat-kosong{text-align:center;color:var(--text-muted);font-size:13px;margin-top:12px;}
+@media (max-width: 480px){
+  .cat-carousel{--card-h:calc(var(--card-w) * 1.62);}
+  .cat-belakang{padding:14px 12px 12px;}
+  .cat-belakang p{margin:4px 0 8px;}
+}
 
 /* ETALASE - DIPERBARUI UNTUK BG PUTIH */
 .filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
@@ -521,12 +548,11 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .btn { padding: 14px 28px; font-size: 14px; }
   .btn-sm { padding: 10px 20px; font-size: 13px; }
   
-  .cat-carousel { max-width: 460px; }
-  .cat-panggung { height: clamp(452px, 54vw, 520px); }
-  .cat-isi { padding: 20px 24px 22px; }
-  .cat-isi h3 { font-size: 24px; }
-  .cat-isi p { font-size: 14px; }
-  .cat-kendali { gap: 8px; margin-top: 30px; }
+  .cat-carousel { max-width: 620px; }
+  .cat-panggung { height: calc(var(--card-h) + 64px); }
+  .cat-overlay { padding: 16px; gap: 10px; }
+  .cat-belakang { padding: 20px 18px 18px; }
+  .cat-kendali { gap: 12px; margin-top: 28px; }
   
   .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
   .card { border-radius: var(--radius-md); }
@@ -571,6 +597,7 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .sparkle { animation: none !important; }
   .nav-indicator { transition: none !important; }
   .cat-kartu { transition: none !important; }
+  .cat-kartu-inner { transition: none !important; }
 }
 </style>
 </head>
@@ -680,16 +707,20 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
     </div>
 
     <div class="cat-carousel reveal">
-      <div class="cat-panggung">
-        <div class="cat-stack" id="catStack" role="group" aria-roledescription="korsel"
-             aria-label="Kategori produk N.Elora" tabindex="0"></div>
+      <div class="cat-panggung" id="catPanggung" tabindex="0" role="group"
+           aria-roledescription="korsel" aria-label="Kategori produk N.Elora">
+        <div class="cat-kartu pos-kiri" aria-hidden="true"></div>
+        <div class="cat-kartu pos-tengah" aria-hidden="false"></div>
+        <div class="cat-kartu pos-kanan" aria-hidden="true"></div>
       </div>
       <div class="cat-kendali">
         <button class="cat-panah" id="catPrev" type="button" aria-label="Kategori sebelumnya">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
-        <div class="cat-titik" id="catTitik"></div>
+        <button class="cat-jeda" id="catJeda" type="button" aria-pressed="false" aria-label="Jeda animasi kategori">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        </button>
         <button class="cat-panah" id="catNext" type="button" aria-label="Kategori berikutnya">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
@@ -992,33 +1023,38 @@ function renderProduk(){
 renderProduk();
 
 /* ============================================================
-   KATEGORI (SATU KARTU UTAMA) & FILTER
+   KATEGORI (TIGA KARTU, FLIP SAAT DIKETUK) & FILTER
    ============================================================ */
 const filtersWrap = document.getElementById("filters");
-const catStack = document.getElementById("catStack");
+const catPanggung = document.getElementById("catPanggung");
 const catPrev = document.getElementById("catPrev");
 const catNext = document.getElementById("catNext");
-const catTitik = document.getElementById("catTitik");
+const catJedaBtn = document.getElementById("catJeda");
 const catKosong = document.getElementById("catKosong");
 
-const CAT_JEDA = 5200;
-const CAT_AMBANG = 54;
+const CAT_ROTASI_MS = 5600;
+const CAT_GESER_MS = 800;
 const catTenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const IKON_JEDA = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`;
+const IKON_LANJUT = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`;
+const IKON_TUTUP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
 
-let catAktif = 0;
-let catArah = 1;
+let catElemen = [];        // urutan peran: kiri, tengah, kanan
+let catPusat = 0;          // indeks kategori yang sedang di tengah
 let catTimer = null;
-let catTahan = false;          // berhenti sejenak: hover, fokus, atau drag
-let catGeser = false;          // pointer sedang menekan
-let catGeserTerjadi = false;   // gerakan sudah melewati ambang
-let catBlokirKlik = false;     // tahan klik sesudah drag
-let catPointer = null;
-let catMulaiX = 0;
-let catMulaiY = 0;
+let catRotasi = false;
+let catTerbuka = false;
+let catHover = false;
+let catFokus = false;
+let catJeda = catTenang;
+let catBlokirKlik = false;
+let catPointerId = null;
 let catGeserX = 0;
+let catGeserY = 0;
+let catGeserAktif = false;
 
-function kartuKategori(){
-  return catStack ? Array.from(catStack.querySelectorAll(".cat-kartu")) : [];
+function docHidden(){
+  return typeof document !== "undefined" && document.hidden;
 }
 
 function renderFilter(){
@@ -1041,224 +1077,344 @@ function coverKategori(k){
   return IMG_KAT[k.slug] || IMG.bouquetPink;
 }
 
-function terapkanKategori(){
-  const kartu = kartuKategori();
-  if (!kartu.length) return;
+let catVersi = 0;
 
-  catAktif = Math.max(0, Math.min(kartu.length - 1, catAktif));
+function isiKartu(el, indeks){
+  const k = KATEGORI[indeks];
+  if (!el || !k) return;
+  const desc = k.desc || ("Koleksi " + k.nama + " pilihan dari N.Elora.");
+  el.dataset.filter = k.slug;
+  el.setAttribute("aria-label", k.nama);
+  el.classList.remove("terbalik");
+  el.innerHTML = `
+      <div class="cat-kartu-inner">
+        <div class="cat-muka cat-depan">
+          <img src="${coverKategori(k)}" alt="" loading="lazy" decoding="async">
+          <div class="cat-overlay">
+            <h3>${esc(k.nama)}</h3>
+            <button type="button" class="cat-detail" tabindex="-1">Lihat Detail</button>
+          </div>
+        </div>
+        <div class="cat-muka cat-belakang">
+          <h3>${esc(k.nama)}</h3>
+          <p>${esc(desc)}</p>
+          <button type="button" class="btn btn-primary btn-sm cat-lihat" data-filter="${esc(k.slug)}" tabindex="-1">Lihat Koleksi</button>
+          <button type="button" class="cat-tutup" aria-label="Tutup detail ${esc(k.nama)}" tabindex="-1">${IKON_TUTUP}</button>
+        </div>
+      </div>`;
+}
 
-  kartu.forEach((el, i) => {
-    const jarak = i - catAktif;
-    const jauh = Math.min(Math.abs(jarak), 3);
-    const aktif = jarak === 0;
-    el.classList.toggle("aktif", aktif);
-    el.setAttribute("aria-hidden", aktif ? "false" : "true");
-    el.style.zIndex = String(30 - jauh);
-    el.style.setProperty("--cat-x", (Math.sign(jarak) * jauh * 16) + "px");
-    el.style.setProperty("--cat-y", (jauh * 12) + "px");
-    el.style.setProperty("--cat-s", String(1 - jauh * 0.045));
-    el.style.setProperty("--cat-o", String(aktif ? 1 : Math.max(0.14, 0.34 - jauh * 0.07)));
-    el.style.transform = "";
-    const img = el.querySelector("img");
-    if (img && jauh <= 1) img.loading = "eager";
+function aturKartu(){
+  catElemen.forEach(el => {
+    const tengah = el.classList.contains("pos-tengah");
+    const jauh = el.classList.contains("pos-kiri-jauh") || el.classList.contains("pos-kanan-jauh");
+    const terbalik = el.classList.contains("terbalik");
+    if (!tengah) el.classList.remove("terbalik");
+    el.setAttribute("aria-hidden", jauh ? "true" : "false");
+    const detail = el.querySelector(".cat-detail");
+    const tutup = el.querySelector(".cat-tutup");
+    const lihat = el.querySelector(".cat-lihat");
+    if (detail) detail.tabIndex = (tengah && !terbalik) ? 0 : -1;
+    if (tutup) tutup.tabIndex = (tengah && terbalik) ? 0 : -1;
+    if (lihat) lihat.tabIndex = (tengah && terbalik) ? 0 : -1;
   });
+}
 
-  if (catPrev) catPrev.disabled = catAktif === 0;
-  if (catNext) catNext.disabled = catAktif === kartu.length - 1;
-  if (catTitik){
-    Array.from(catTitik.children).forEach((btn, i) => {
-      const aktif = i === catAktif;
-      btn.setAttribute("aria-current", aktif ? "true" : "false");
-      btn.tabIndex = aktif ? 0 : -1;
-    });
-  }
+function perbaruiJeda(){
+  if (!catJedaBtn) return;
+  catJedaBtn.innerHTML = catJeda ? IKON_LANJUT : IKON_JEDA;
+  catJedaBtn.setAttribute("aria-pressed", catJeda ? "true" : "false");
+  catJedaBtn.setAttribute("aria-label", catJeda ? "Lanjutkan animasi kategori" : "Jeda animasi kategori");
+}
+
+function aturKontrol(){
+  const bisa = KATEGORI.length > 1;
+  if (catPrev) catPrev.disabled = !bisa;
+  if (catNext) catNext.disabled = !bisa;
+  if (catJedaBtn) catJedaBtn.disabled = !bisa;
 }
 
 function jadwalkanKategori(){
   clearTimeout(catTimer);
-  if (catTenang) return;
-  if (kartuKategori().length < 2) return;
+  if (catTenang || catJeda || catTerbuka || catHover || catFokus || docHidden()) return;
+  if (KATEGORI.length < 2 || catRotasi) return;
   catTimer = setTimeout(() => {
-    if (docHidden() || catTahan || catGeser){
-      jadwalkanKategori();
-      return;
-    }
-    const akhir = kartuKategori().length - 1;
-    let tujuan = catAktif + catArah;
-    if (tujuan > akhir){ catArah = -1; tujuan = catAktif - 1; }
-    else if (tujuan < 0){ catArah = 1; tujuan = catAktif + 1; }
-    pindahKategori(tujuan);
-  }, CAT_JEDA);
+    if (catJeda || catTerbuka || catHover || catFokus || docHidden()) return;
+    rotasi(1);
+  }, CAT_ROTASI_MS);
 }
 
-function docHidden(){
-  return typeof document !== "undefined" && document.hidden;
+function teleport(el, kelas){
+  el.style.transition = "none";
+  el.className = "cat-kartu " + kelas;
+  void el.offsetWidth;
+  el.style.transition = "";
 }
 
-function pindahKategori(tujuan){
-  const kartu = kartuKategori();
-  if (!kartu.length) return;
-  const baru = Math.max(0, Math.min(kartu.length - 1, tujuan));
-  clearTimeout(catTimer);
-  if (baru !== catAktif){
-    catArah = baru > catAktif ? 1 : -1;
-    catAktif = baru;
-    terapkanKategori();
+function tutupTerbuka(){
+  if (!catPanggung) return;
+  const kartu = catPanggung.querySelector(".cat-kartu.terbalik");
+  if (kartu){
+    if (kartu.contains(document.activeElement)) catPanggung.focus({ preventScroll: true });
+    kartu.classList.remove("terbalik");
   }
-  jadwalkanKategori();
+  catTerbuka = false;
+}
+
+function rotasi(arah){
+  const n = KATEGORI.length;
+  if (n < 2 || catRotasi || catElemen.length < 3) return;
+  if (catTerbuka) tutupTerbuka();
+  catRotasi = true;
+  clearTimeout(catTimer);
+
+  const versi = catVersi;
+  const maju = arah >= 0;
+  const kiri = catElemen[0];
+  const tengah = catElemen[1];
+  const kanan = catElemen[2];
+
+  if (maju){
+    kiri.classList.replace("pos-kiri", "pos-kiri-jauh");
+    tengah.classList.replace("pos-tengah", "pos-kiri");
+    kanan.classList.replace("pos-kanan", "pos-tengah");
+    catPusat = (catPusat + 1) % n;
+  } else {
+    kanan.classList.replace("pos-kanan", "pos-kanan-jauh");
+    tengah.classList.replace("pos-tengah", "pos-kanan");
+    kiri.classList.replace("pos-kiri", "pos-tengah");
+    catPusat = (catPusat - 1 + n) % n;
+  }
+  aturKartu();
+
+  setTimeout(() => {
+    if (versi !== catVersi) return;
+    if (maju){
+      teleport(kiri, "pos-kanan-jauh");
+      isiKartu(kiri, (catPusat + 1) % n);
+      catElemen = [tengah, kanan, kiri];
+      requestAnimationFrame(() => {
+        if (versi !== catVersi) return;
+        kiri.classList.remove("pos-kanan-jauh");
+        kiri.classList.add("pos-kanan");
+        aturKartu();
+        catRotasi = false;
+        jadwalkanKategori();
+      });
+    } else {
+      teleport(kanan, "pos-kiri-jauh");
+      isiKartu(kanan, (catPusat - 1 + n) % n);
+      catElemen = [kanan, kiri, tengah];
+      requestAnimationFrame(() => {
+        if (versi !== catVersi) return;
+        kanan.classList.remove("pos-kiri-jauh");
+        kanan.classList.add("pos-kiri");
+        aturKartu();
+        catRotasi = false;
+        jadwalkanKategori();
+      });
+    }
+  }, CAT_GESER_MS);
+}
+
+function bukaKartu(el, buka){
+  if (!el) return;
+  if (buka && (catRotasi || !el.classList.contains("pos-tengah"))) return;
+  el.classList.toggle("terbalik", buka);
+  catTerbuka = buka;
+  aturKartu();
+  if (buka){
+    clearTimeout(catTimer);
+    const t = el.querySelector(".cat-tutup");
+    if (t) t.focus({ preventScroll: true });
+  } else {
+    jadwalkanKategori();
+  }
 }
 
 function renderKategori(){
-  if (!catStack) return;
-  const ada = KATEGORI.length > 0;
+  if (!catPanggung) return;
+  catVersi++;
+  clearTimeout(catTimer);
+  catRotasi = false;
+  catTerbuka = false;
+  catHover = false;
+  catFokus = false;
+  catElemen = Array.from(catPanggung.querySelectorAll(".cat-kartu"));
+
+  const n = KATEGORI.length;
+  const ada = n > 0;
   if (catKosong) catKosong.hidden = ada;
-  if (catPrev) catPrev.disabled = !ada;
-  if (catNext) catNext.disabled = !ada;
-  if (catTitik) catTitik.innerHTML = "";
+  catPanggung.hidden = !ada;
 
   if (!ada){
-    catStack.innerHTML = "";
-    clearTimeout(catTimer);
+    catElemen.forEach(el => {
+      el.className = "cat-kartu pos-kiri-jauh";
+      el.setAttribute("aria-hidden", "true");
+      el.innerHTML = "";
+    });
+    aturKontrol();
+    perbaruiJeda();
     return;
   }
 
-  catStack.innerHTML = KATEGORI.map((k, i) => {
-    const desc = k.desc || ("Koleksi " + k.nama + " pilihan dari N.Elora.");
-    return `
-      <article class="cat-kartu" data-filter="${esc(k.slug)}"
-               aria-roledescription="kartu" aria-label="${i + 1} dari ${KATEGORI.length}: ${esc(k.nama)}">
-        <div class="cat-foto">
-          <img src="${coverKategori(k)}" alt="${esc(k.nama)}" loading="lazy" decoding="async">
-        </div>
-        <div class="cat-isi">
-          <h3>${esc(k.nama)}</h3>
-          <p>${esc(desc)}</p>
-          <button type="button" class="btn btn-primary btn-sm cat-lihat" data-filter="${esc(k.slug)}">Lihat Koleksi</button>
-        </div>
-      </article>`;
-  }).join("");
+  catPusat = 0;
+  const peran = ["kiri", "tengah", "kanan"];
+  const sisi = n > 1;
 
-  if (catTitik){
-    catTitik.innerHTML = KATEGORI.map((k, i) =>
-      `<button type="button" data-ke="${i}" aria-label="Tampilkan kategori ${esc(k.nama)}"
-               aria-current="${i === 0 ? "true" : "false"}" tabindex="${i === 0 ? 0 : -1}"><span></span></button>`
-    ).join("");
-  }
+  catElemen.forEach((el, i) => {
+    if (i === 1){
+      el.className = "cat-kartu pos-tengah";
+      isiKartu(el, 0);
+    } else if (!sisi){
+      el.className = "cat-kartu pos-" + (i === 0 ? "kiri-jauh" : "kanan-jauh");
+      el.setAttribute("aria-hidden", "true");
+      el.innerHTML = "";
+    } else {
+      const idx = i === 0 ? (n - 1) % n : 1 % n;
+      el.className = "cat-kartu pos-" + peran[i];
+      isiKartu(el, idx);
+    }
+  });
 
-  catAktif = 0;
-  catArah = 1;
-  terapkanKategori();
+  aturKartu();
+  aturKontrol();
+  perbaruiJeda();
   jadwalkanKategori();
 }
 
 function bindKategori(){
-  if (!catStack) return;
+  if (!catPanggung) return;
 
-  const tahanSebentar = () => {
-    catTahan = true;
+  catPanggung.addEventListener("pointerenter", e => {
+    if (e.pointerType !== "mouse") return;
+    catHover = true;
     clearTimeout(catTimer);
-  };
-  const lanjutkan = () => {
-    catTahan = false;
+  });
+  catPanggung.addEventListener("pointerleave", e => {
+    if (e.pointerType !== "mouse") return;
+    catHover = false;
     jadwalkanKategori();
-  };
-
-  catStack.addEventListener("pointerenter", e => {
-    if (e.pointerType === "mouse") tahanSebentar();
-  });
-  catStack.addEventListener("pointerleave", e => {
-    if (e.pointerType === "mouse" && !catGeser) lanjutkan();
-  });
-  catStack.addEventListener("focusin", tahanSebentar);
-  catStack.addEventListener("focusout", e => {
-    if (!catStack.contains(e.relatedTarget)) lanjutkan();
   });
 
-  catStack.addEventListener("pointerdown", e => {
+  catPanggung.addEventListener("focusin", e => {
+    const keyboard = e.target === catPanggung || e.target.matches(":focus-visible");
+    if (!keyboard) return;
+    catFokus = true;
+    clearTimeout(catTimer);
+  });
+  catPanggung.addEventListener("focusout", e => {
+    if (catPanggung.contains(e.relatedTarget)) return;
+    catFokus = false;
+    jadwalkanKategori();
+  });
+
+  catPanggung.addEventListener("pointerdown", e => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    catFokus = false;
     if (e.target.closest("button, a")) return;
-    catPointer = e.pointerId;
-    catMulaiX = e.clientX;
-    catMulaiY = e.clientY;
-    catGeserX = 0;
-    catGeser = true;
-    catGeserTerjadi = false;
-    tahanSebentar();
-    try { catStack.setPointerCapture(e.pointerId); } catch(err){}
+    catPointerId = e.pointerId;
+    catGeserX = e.clientX;
+    catGeserY = e.clientY;
+    catGeserAktif = false;
+    clearTimeout(catTimer);
+    try { catPanggung.setPointerCapture(e.pointerId); } catch(err){}
   });
 
-  catStack.addEventListener("pointermove", e => {
-    if (!catGeser || e.pointerId !== catPointer) return;
-    const dx = e.clientX - catMulaiX;
-    const dy = e.clientY - catMulaiY;
-    if (!catGeserTerjadi){
-      if (Math.abs(dx) < 10) return;
-      if (Math.abs(dx) <= Math.abs(dy)) return;
-      catGeserTerjadi = true;
-      catBlokirKlik = true;
-      catStack.classList.add("menarik");
-    }
-    catGeserX = dx;
-    const kartu = catStack.querySelector(".cat-kartu.aktif");
-    if (kartu){
-      const geser = Math.max(-110, Math.min(110, dx * 0.5));
-      kartu.style.transform = "translate3d(" + geser.toFixed(1) + "px, 0, 0) scale(1)";
-    }
+  catPanggung.addEventListener("pointermove", e => {
+    if (catPointerId === null || e.pointerId !== catPointerId) return;
+    if (catGeserAktif) return;
+    const dx = e.clientX - catGeserX;
+    const dy = e.clientY - catGeserY;
+    if (Math.abs(dx) < 12) return;
+    if (Math.abs(dx) <= Math.abs(dy)) return;
+    catGeserAktif = true;
+    catPanggung.classList.add("menarik");
   });
 
   function lepas(e){
-    if (!catGeser) return;
-    catGeser = false;
-    catPointer = null;
-    catStack.classList.remove("menarik");
-    const kartu = catStack.querySelector(".cat-kartu.aktif");
-    if (kartu) kartu.style.transform = "";
-    try { catStack.releasePointerCapture(e.pointerId); } catch(err){}
-
-    if (catGeserTerjadi && Math.abs(catGeserX) >= CAT_AMBANG){
-      pindahKategori(catAktif + (catGeserX < 0 ? 1 : -1));
+    if (catPointerId === null) return;
+    const dx = e.clientX - catGeserX;
+    catPointerId = null;
+    catPanggung.classList.remove("menarik");
+    try { catPanggung.releasePointerCapture(e.pointerId); } catch(err){}
+    if (catGeserAktif && Math.abs(dx) >= 44){
+      catBlokirKlik = true;
+      setTimeout(() => { catBlokirKlik = false; }, 320);
+      rotasi(dx < 0 ? 1 : -1);
     } else {
       jadwalkanKategori();
     }
-    catGeserX = 0;
-    catGeserTerjadi = false;
-    catTahan = false;
-    if (catBlokirKlik) setTimeout(() => { catBlokirKlik = false; }, 80);
+    catGeserAktif = false;
   }
+  catPanggung.addEventListener("pointerup", lepas);
+  catPanggung.addEventListener("pointercancel", lepas);
 
-  catStack.addEventListener("pointerup", lepas);
-  catStack.addEventListener("pointercancel", lepas);
+  if (catPrev) catPrev.addEventListener("click", () => rotasi(-1));
+  if (catNext) catNext.addEventListener("click", () => rotasi(1));
 
-  if (catPrev) catPrev.addEventListener("click", () => pindahKategori(catAktif - 1));
-  if (catNext) catNext.addEventListener("click", () => pindahKategori(catAktif + 1));
-
-  if (catTitik){
-    catTitik.addEventListener("click", e => {
-      const btn = e.target.closest("button[data-ke]");
-      if (!btn) return;
-      pindahKategori(Number(btn.dataset.ke));
-    });
-  }
-
-  catStack.addEventListener("keydown", e => {
-    if (e.key === "ArrowLeft"){ e.preventDefault(); pindahKategori(catAktif - 1); }
-    else if (e.key === "ArrowRight"){ e.preventDefault(); pindahKategori(catAktif + 1); }
-    else if (e.key === "Home"){ e.preventDefault(); pindahKategori(0); }
-    else if (e.key === "End"){ e.preventDefault(); pindahKategori(kartuKategori().length - 1); }
+  if (catJedaBtn) catJedaBtn.addEventListener("click", () => {
+    catJeda = !catJeda;
+    perbaruiJeda();
+    if (catJeda) clearTimeout(catTimer);
+    else jadwalkanKategori();
   });
 
-  catStack.addEventListener("click", e => {
-    const lihat = e.target.closest(".cat-lihat");
-    if (!lihat) return;
+  catPanggung.addEventListener("click", e => {
     if (catBlokirKlik){ e.preventDefault(); return; }
-    lanjutkan();
-    const f = lihat.dataset.filter;
-    const btn = filtersWrap ? filtersWrap.querySelector('.filter-btn[data-filter="' + f + '"]') : null;
-    terapkanFilter(f, btn);
+
+    const tutup = e.target.closest(".cat-tutup");
+    if (tutup){
+      const kartu = tutup.closest(".cat-kartu");
+      bukaKartu(kartu, false);
+      const depan = kartu.querySelector(".cat-detail");
+      if (depan) depan.focus({ preventScroll: true });
+      return;
+    }
+
+    const lihat = e.target.closest(".cat-lihat");
+    if (lihat){
+      const kartu = lihat.closest(".cat-kartu");
+      bukaKartu(kartu, false);
+      terapkanFilter(lihat.dataset.filter);
+      return;
+    }
+
+    const detail = e.target.closest(".cat-detail");
+    if (detail){
+      bukaKartu(detail.closest(".cat-kartu"), true);
+      return;
+    }
+
+    const kartu = e.target.closest(".cat-kartu.pos-tengah");
+    if (kartu && !kartu.classList.contains("terbalik")) bukaKartu(kartu, true);
+  });
+
+  catPanggung.addEventListener("keydown", e => {
+    if (e.key === "Escape"){
+      const buka = catPanggung.querySelector(".cat-kartu.terbalik");
+      if (!buka) return;
+      e.preventDefault();
+      bukaKartu(buka, false);
+      const depan = buka.querySelector(".cat-detail");
+      if (depan) depan.focus({ preventScroll: true });
+      return;
+    }
+
+    if (e.target.closest(".cat-tutup, .cat-lihat, .cat-detail")) return;
+
+    if (e.key === "ArrowLeft"){ e.preventDefault(); rotasi(-1); }
+    else if (e.key === "ArrowRight"){ e.preventDefault(); rotasi(1); }
+    else if (e.key === "Enter" || e.key === " " || e.key === "Spacebar"){
+      const tengah = catPanggung.querySelector(".cat-kartu.pos-tengah");
+      if (!tengah) return;
+      e.preventDefault();
+      bukaKartu(tengah, !tengah.classList.contains("terbalik"));
+    }
   });
 
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) clearTimeout(catTimer);
+    if (docHidden()) clearTimeout(catTimer);
     else jadwalkanKategori();
   });
 }

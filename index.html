@@ -452,7 +452,7 @@ body.cursor-hover .cursor{width: 60px; height: 60px;background: rgba(244, 163, 1
         <div class="hero-title-wrapper">
           <h1 class="hero-title" id="flowerTitle">
             <span class="letter">N</span>
-            <span class="letter letter-dot" id="heroGerbera" aria-hidden="true"></span>
+            <span class="letter letter-dot" id="heroBunga" aria-hidden="true"></span>
             <span class="letter">E</span>
             <span class="letter">l</span>
             <span class="letter">o</span>
@@ -791,15 +791,15 @@ function initBloomFlowers(){
 initBloomFlowers();
 
 /* ============================================================
-   GERBERA PINK — kelopak meruncing, sedikit asimetris
+   BUNGA PINK - kelopak meruncing, sedikit asimetris
    ============================================================ */
-function createGerberaSVG(){
+function createBungaSVG(){
   // Petal: mulai dekat pusat, melebar, lalu meruncing ke ujung.
-  // Bentuknya mirip daun → tidak bulat sempurna.
+  // Bentuknya mirip daun jadi tidak bulat sempurna.
   const petalPath = (len, w) =>
     `M 0 -9 C -${w} -${len*0.45}, -${w*0.72} -${len*0.82}, 0 -${len} C ${w*0.72} -${len*0.82}, ${w} -${len*0.45}, 0 -9 Z`;
 
-  // 20 kelopak luar, panjang & sudut sedikit variasi → organik
+  // 20 kelopak luar, panjang & sudut sedikit variasi jadi organik
   const outer = Array.from({ length: 20 }, (_, i) => {
     const variation = 1 + Math.sin(i * 1.9) * 0.12;
     const rot       = i * 18 + Math.cos(i * 1.3) * 5;
@@ -843,9 +843,9 @@ function createGerberaSVG(){
         </linearGradient>
       </defs>
       <g transform="translate(60 60) rotate(-12)">
-        <g class="gerbera-outer">${outer}</g>
-        <g class="gerbera-mid">${mid}</g>
-        <g class="gerbera-inner">${inner}</g>
+        <g class="bunga-outer">${outer}</g>
+        <g class="bunga-mid">${mid}</g>
+        <g class="bunga-inner">${inner}</g>
         <circle r="11.5" fill="url(#gerbCenter)"/>
         <circle r="6.5"  fill="url(#gerbCenter)" opacity="0.7"/>
         <circle r="3.2"  fill="#FFF2C2" opacity="0.55"/>
@@ -854,11 +854,11 @@ function createGerberaSVG(){
   `;
 }
 
-function initGerbera(){
-  const slot = document.getElementById("heroGerbera");
-  if (slot) slot.innerHTML = createGerberaSVG();
+function initBunga(){
+  const slot = document.getElementById("heroBunga");
+  if (slot) slot.innerHTML = createBungaSVG();
 }
-initGerbera();
+initBunga();
 
 /* ============================================================
    ANIMATE BLOOM FLOWERS (scroll-driven)
@@ -950,8 +950,8 @@ function playIntro(){
     delay: 1.4
   });
 
-  /* Gerbera breathing */
-  gsap.fromTo(".gerbera-outer, .gerbera-mid, .gerbera-inner",
+  /* Bunga bernapas */
+  gsap.fromTo(".bunga-outer, .bunga-mid, .bunga-inner",
     { scale: 0.94 },
     { scale: 1, duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut",
       stagger: { each: 0.06, from: "center" } }

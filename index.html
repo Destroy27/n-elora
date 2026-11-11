@@ -1298,7 +1298,7 @@ function bindKategori(){
   });
 
   catPanggung.addEventListener("focusin", e => {
-    const keyboard = e.target === catPanggung || e.target.matches(":focus-visible");
+    const keyboard = e.target.matches && e.target.matches(":focus-visible");
     if (!keyboard) return;
     catFokus = true;
     clearTimeout(catTimer);

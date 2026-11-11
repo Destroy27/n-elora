@@ -9,3 +9,10 @@ desktop.ini
 
 # Logs
 *.log
+
+# Kunci rahasia (jangan pernah masuk repositori)
+*firebase-adminsdk*.json
+*service-account*.json
+serviceAccountKey.json
+.env
+.env.*

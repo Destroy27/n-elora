@@ -54,19 +54,27 @@ Isi `firestore.rules`:
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function admin() {
+      return request.auth != null && request.auth.uid in [
+        'Q18p1ELC8CffcoHrQUzDAtZCaV73',
+        'YVQ4eHwB61hPkUCSDp4WepcVsXt2'
+      ];
+    }
     match /produk/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if admin();
     }
     match /kategori/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if admin();
     }
   }
 }
 ```
 
-Artinya pengunjung boleh melihat katalog dan daftar jenis produk, tetapi hanya admin yang sudah login yang boleh menambah, mengubah, atau menghapusnya.
+Artinya pengunjung boleh melihat katalog dan daftar jenis produk, tetapi hanya dua akun admin yang UID-nya terdaftar yang boleh menambah, mengubah, atau menghapus. Akun lain, walaupun berhasil login, tetap ditolak.
+
+Bila ada admin baru, tambahkan UID-nya ke daftar tersebut. UID terlihat di Firebase Console pada halaman Authentication, kolom User UID.
 
 Untuk menerbitkan aturan setelah diubah:
 

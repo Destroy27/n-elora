@@ -40,7 +40,7 @@
   --bunga-susut: 31px;
 }
 
-html{scroll-behavior:smooth;scroll-padding-top:70px;scroll-padding-bottom:100px}
+html{scroll-padding-top:70px;scroll-padding-bottom:100px}
 
 body{
   font-family:'Quicksand', sans-serif;
@@ -204,7 +204,8 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  letter-spacing: -1px;
+  letter-spacing: 0;
+  gap: 0.015em;
   position: relative;
   z-index: 2; 
 }
@@ -523,7 +524,6 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
-  html{scroll-behavior:auto}
   .g-ready .reveal, .g-ready .card{opacity:1}
   .bloom-slot .bloom-petal{ transform: scale(1); }
   .bloom-slot .bloom-center{ transform: scale(1); }
@@ -1185,14 +1185,13 @@ function playIntro(){
     .from(".hero-actions .btn", { y: 20, opacity: 0, duration: 0.7, stagger: 0.1 }, "-=0.5");
 
   /* 
-   * ANIMASI HERO BARU: 
-   * - Tidak hanya naik turun, tapi juga bergeser sedikit ke samping (x) dan berotasi.
-   * - Nilai y hanya negatif (ke atas) agar tidak menabrak teks bawah.
+   * ANIMASI HERO:
+   * Huruf hanya naik turun dengan jeda bergelombang. Tidak ada geser
+   * menyamping atau miring, supaya jarak antarhuruf tetap stabil
+   * dan E tidak menempel ke l.
    */
   gsap.to(".letter", {
-    y: -10, // Hanya bergerak ke atas
-    x: (i) => i % 2 === 0 ? 3 : -3, // Geser kiri-kanan halus
-    rotation: (i) => i % 2 === 0 ? 2 : -2, // Miring sedikit
+    y: -10,
     duration: 2.8,
     repeat: -1,
     yoyo: true,
@@ -1282,6 +1281,27 @@ function initBottomNav() {
   });
 }
 initBottomNav();
+
+/* ============================================================
+   GULIR HALUS KE BAGIAN HALAMAN
+   ============================================================ */
+function gulirKe(target, durasi){
+  const el = typeof target === "string" ? document.querySelector(target) : target;
+  if (!el) return;
+  const nav = document.getElementById("nav");
+  const jarak = (nav ? nav.offsetHeight : 60) + 10;
+  const y = Math.max(0, el.getBoundingClientRect().top + window.scrollY - jarak);
+  if (hasGsap && window.ScrollToPlugin){
+    gsap.to(window, {
+      duration: durasi || 0.55,
+      scrollTo: { y: y, autoKill: true },
+      ease: "power2.out",
+      overwrite: true
+    });
+  } else {
+    window.scrollTo(0, y);
+  }
+}
 
 /* ============================================================
    CORE GSAP ANIMATIONS
@@ -1401,7 +1421,7 @@ function initAnimasi(){
       const target = document.querySelector(href);
       if (!target) return;
       e.preventDefault();
-      gsap.to(window, { duration: 1, scrollTo: { y: target, offsetY: 70 }, ease: "power3.inOut" });
+      gulirKe(target, 0.55);
     });
   });
 }
@@ -1475,7 +1495,7 @@ function bindFilter(){
           onComplete: () => { card.style.display = "none"; } });
       }
     });
-    gsap.to(window, { duration: 0.8, scrollTo: { y: "#etalase", offsetY: 70 }, ease: "power2.inOut" });
+    gulirKe("#etalase", 0.5);
   }
   filterBtns.forEach(btn => btn.addEventListener("click", () => filterProduk(btn.dataset.filter, btn)));
   document.querySelectorAll(".cat-card").forEach(cat => {

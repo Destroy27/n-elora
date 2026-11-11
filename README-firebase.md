@@ -85,10 +85,31 @@ npx firebase-tools deploy --only firestore:rules --project nelora-b735c
 
 ## Mengelola akun admin
 
+Semua pengelolaan akun dilakukan di Firebase Console, tanpa mengubah kode dan tanpa menjalankan berkas JavaScript.
+
 Buka https://console.firebase.google.com/project/nelora-b735c/authentication/users
 
-- Menambah admin baru: klik **Add user**, isi email dan kata sandi.
-- Menghapus akses: hapus pengguna dari daftar. Akun yang tidak dipakai sebaiknya langsung dihapus, karena aturan Firestore mengizinkan setiap akun yang berhasil login untuk menulis data.
+Pastikan dua hal sebelum menambah akun:
+
+1. Nama proyek di pojok kiri atas adalah **nelora-b735c**, bukan proyek lain.
+2. Masuk ke menu **Authentication**, tab **Users**, dan metode **Email/Password** sudah aktif di tab **Sign-in method**.
+
+### Menambah admin baru
+
+1. Klik **Add user**.
+2. Isi **Email** dan **Password**. Firebase menerima kata sandi minimal 6 karakter, tetapi pakai 8 karakter atau lebih.
+3. Klik **Add user** untuk menyimpan.
+4. Buka halaman admin, masuk memakai email dan kata sandi tersebut. Akun langsung berlaku tanpa mengubah `firestore.rules`, karena aturan saat ini mengizinkan setiap akun yang berhasil login untuk menulis data.
+
+Kalau akun baru gagal masuk, periksa tiga hal: emailnya sama persis, kata sandinya tidak salah ketik, dan akun itu memang ada di daftar Users proyek `nelora-b735c`.
+
+### Menghapus akses
+
+Klik ikon titik tiga pada baris pengguna, pilih **Delete account**. Akun yang tidak dipakai sebaiknya langsung dihapus, karena setiap akun yang berhasil login bisa mengubah bahkan menghapus seluruh katalog.
+
+### Catatan
+
+Jangan menambahkan formulir pendaftaran akun di halaman admin. Halaman itu terbuka untuk umum, jadi formulir semacam itu akan membuat siapa pun bisa membuat akun admin sendiri. Penambahan akun cukup lewat Firebase Console.
 
 ### Mengganti kata sandi
 

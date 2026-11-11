@@ -164,6 +164,32 @@ td input.num{text-align:right}
       </div>
       <p style="font-size:12px;color:var(--muted);margin-top:10px">Tip: ubah angka lalu tekan Enter / klik di luar untuk menyimpan otomatis.</p>
     </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <div>
+          <h2 style="margin:0">Jenis Produk</h2>
+          <p class="sub" style="margin:4px 0 0">Daftar ini muncul di filter etalase dan di bagian "Pilih Sesuai Momen" halaman utama.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="addKatBtn" type="button">+ Tambah Jenis</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Slug</th>
+              <th>Deskripsi</th>
+              <th>Cover</th>
+              <th>Jumlah Produk</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="katBody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">Slug dipakai untuk mencocokkan produk dengan jenisnya dan tidak bisa diubah setelah dibuat. Jenis yang masih dipakai produk tidak dapat dihapus.</p>
+    </div>
   </div>
 </div>
 
@@ -235,6 +261,42 @@ td input.num{text-align:right}
   </div>
 </div>
 
+<div class="modal-back" id="katBack">
+  <div class="modal">
+    <h2 id="katTitle">Tambah Jenis Produk</h2>
+    <form id="katForm">
+      <div class="form-grid">
+        <div class="field full">
+          <label for="kNama">Nama Jenis</label>
+          <input type="text" id="kNama" required maxlength="40" placeholder="Contoh: Buket Bunga">
+        </div>
+        <div class="field full">
+          <label for="kSlug">Slug</label>
+          <input type="text" id="kSlug" maxlength="40" placeholder="otomatis dari nama">
+          <p style="font-size:11.5px;color:var(--muted);margin-top:6px">Slug dipakai untuk mencocokkan produk. Setelah disimpan, slug tidak bisa diubah.</p>
+        </div>
+        <div class="field full">
+          <label for="kDesc">Deskripsi Singkat</label>
+          <input type="text" id="kDesc" maxlength="160" placeholder="Tampil di balik kartu kategori">
+        </div>
+        <div class="field full">
+          <label for="kFoto">Foto Cover (opsional)</label>
+          <input type="file" id="kFoto" accept="image/*" style="padding:9px 11px;border:1.5px dashed var(--pink-200);border-radius:12px;background:var(--pink-50)">
+          <div id="katFotoPreview" style="display:none;align-items:center;gap:10px;margin-top:10px">
+            <img id="katFotoImg" alt="Pratinjau cover" style="width:98px;height:86px;object-fit:contain;background:#fff;border-radius:12px;border:1px solid var(--pink-200)">
+            <button type="button" class="btn btn-danger btn-sm" id="katFotoHapus">Hapus foto</button>
+          </div>
+          <p style="font-size:11.5px;color:var(--muted);margin-top:6px">Jika kosong, cover memakai foto produk pada jenis tersebut.</p>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="katCancel">Batal</button>
+        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="toast" id="toast">Tersimpan</div>
 
 <script src="firebase-config.js"></script>
@@ -244,6 +306,7 @@ td input.num{text-align:right}
    ============================================================ */
 const ADMIN_PASSWORD = "findi"; // dipakai hanya pada mode lokal
 const STORAGE_KEY = "nelora_products";
+const KAT_KEY = "nelora_kategori";
 
 const CFG = window.NELORA_FIREBASE_CONFIG || null;
 const MODE_AWAL = (CFG && CFG.apiKey && CFG.projectId) ? "cloud" : "lokal";
@@ -256,6 +319,12 @@ const DEFAULT_PRODUK = [
   { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  emoji:"🌸", desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0 },
   { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  emoji:"🌷", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0 },
   { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   emoji:"✨", desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0 },
+];
+
+const DEFAULT_KATEGORI = [
+  { slug:"buket",   nama:"Buket Bunga",   desc:"Rangkaian buket kawat bulu premium warna pastel, cocok untuk hadiah ulang tahun atau anniversary.", foto:"" },
+  { slug:"tunggal", nama:"Bunga Tunggal", desc:"Satu tangkai bunga pilihan untuk hiasan meja, vas kecil, atau pelengkap kado.", foto:"" },
+  { slug:"custom",  nama:"Custom Design", desc:"Bebas pilih warna, jenis bunga, dan tambahan nama atau quote sesuai keinginanmu.", foto:"" }
 ];
 
 /* ============================================================
@@ -285,9 +354,12 @@ function muatSkrip(src){
    PENYIMPANAN
    ============================================================ */
 let produk = [];
+let kategori = [];
 let editingIndex = -1;
 let fotoTemp = "";
-let auth = null, db = null, unsub = null;
+let katEditingId = null;
+let katFotoTemp = "";
+let auth = null, db = null, unsub = null, unsubKat = null, seedKategori = false;
 
 function bacaLokal(){
   try{
@@ -302,6 +374,42 @@ function bacaLokal(){
 function simpanLokal(list){
   try{
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function slugDari(nama){
+  return String(nama || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+}
+function rapikanKategori(list){
+  return list.map((k,i)=>({
+    _id: k._id || k.id || k.slug || ("kategori-" + i),
+    nama: k.nama || "",
+    slug: String(k.slug || k.nama || ("kategori-" + i)).toLowerCase(),
+    desc: k.desc || "",
+    foto: k.foto || "",
+    urutan: Number(k.urutan) || i
+  })).sort((a,b)=>a.urutan - b.urutan);
+}
+function bacaLokalKategori(){
+  try{
+    const raw = localStorage.getItem(KAT_KEY);
+    if (raw){
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) return rapikanKategori(parsed);
+    }
+  }catch(e){}
+  return rapikanKategori(DEFAULT_KATEGORI);
+}
+function simpanLokalKategori(list){
+  try{
+    localStorage.setItem(KAT_KEY, JSON.stringify(list));
     return true;
   }catch(e){
     return false;
@@ -348,6 +456,41 @@ function pantau(){
   }, err=>{
     toast("Gagal memuat data: " + err.message);
   });
+  pantauKategori();
+}
+
+function pantauKategori(){
+  if (unsubKat) unsubKat();
+  unsubKat = db.collection("kategori").orderBy("urutan").onSnapshot(async snap=>{
+    if (snap.empty){
+      if (seedKategori) return;
+      seedKategori = true;
+      try{
+        const batch = db.batch();
+        DEFAULT_KATEGORI.forEach((k,i)=>{
+          batch.set(db.collection("kategori").doc(k.slug), {
+            nama: k.nama, slug: k.slug, desc: k.desc, foto: "", urutan: i
+          });
+        });
+        await batch.commit();
+      }catch(e){
+        toast("Gagal menyiapkan jenis produk: " + e.message);
+      }finally{
+        seedKategori = false;
+      }
+      return;
+    }
+    kategori = rapikanKategori(snap.docs.map(d=>{
+      const v = d.data();
+      return { _id:d.id, nama:v.nama || "", slug:v.slug || d.id, desc:v.desc || "", foto:v.foto || "", urutan:v.urutan };
+    }));
+    simpanLokalKategori(kategori);
+    renderKategoriAdmin();
+    isiPilihanKategori();
+    render();
+  }, err=>{
+    toast("Gagal memuat jenis produk: " + err.message);
+  });
 }
 
 async function simpanSatu(i){
@@ -392,6 +535,7 @@ function showDash(){
   loginView.style.display = "none";
   dashView.style.display = "block";
   topbar.style.display = "flex";
+  isiPilihanKategori();
   render();
 }
 function showLogin(){
@@ -495,7 +639,190 @@ function render(){
     <div class="stat"><div class="label">Total Omzet</div><div class="value">Rp ${fmtNum(omzet)}</div><div class="hint">harga jual x terjual</div></div>
     <div class="stat"><div class="label">Total Keuntungan</div><div class="value" style="color:${profit>=0?'#2E8B57':'#B33A5A'}">Rp ${fmtNum(profit)}</div><div class="hint">omzet dikurangi modal</div></div>
   `;
+
+  renderKategoriAdmin();
 }
+
+/* ============================================================
+   JENIS PRODUK (KATEGORI)
+   ============================================================ */
+const katBack = document.getElementById("katBack");
+const katFotoInput = document.getElementById("kFoto");
+const katFotoPreview = document.getElementById("katFotoPreview");
+const katFotoImg = document.getElementById("katFotoImg");
+
+function renderKategoriAdmin(){
+  const tbody = document.getElementById("katBody");
+  if (!tbody) return;
+  if (!kategori.length){
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Belum ada jenis produk. Klik "Tambah Jenis".</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = kategori.map((k,i)=>{
+    const jumlah = produk.filter(p=>p.kategori === k.slug).length;
+    return `
+      <tr>
+        <td><b>${escapeHtml(k.nama)}</b></td>
+        <td><span style="font-size:11.5px;color:var(--muted)">${escapeHtml(k.slug)}</span></td>
+        <td><span style="font-size:11.5px;color:var(--muted)">${escapeHtml(k.desc || "-")}</span></td>
+        <td style="text-align:center">${k.foto ? `<img src="${k.foto}" alt="" style="width:44px;height:38px;object-fit:contain;background:#fff;border-radius:10px">` : `<span style="font-size:11.5px;color:var(--muted)">-</span>`}</td>
+        <td style="text-align:center">${jumlah}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost btn-sm" data-katedit="${i}" type="button">Edit</button>
+          <button class="btn btn-danger btn-sm" data-katdel="${i}" type="button">Hapus</button>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+function isiPilihanKategori(nilai){
+  const sel = document.getElementById("fKat");
+  if (!sel) return;
+  const sekarang = (nilai !== undefined ? nilai : sel.value) || (kategori[0] ? kategori[0].slug : "buket");
+  if (!kategori.length){
+    sel.innerHTML = `<option value="buket">Buket Bunga</option>`;
+    return;
+  }
+  sel.innerHTML = kategori.map(k =>
+    `<option value="${escapeHtml(k.slug)}">${escapeHtml(k.nama)}</option>`
+  ).join("");
+  sel.value = sekarang;
+  if (!sel.value && sel.options.length) sel.value = sel.options[0].value;
+}
+
+function setPreviewKategori(){
+  if (katFotoTemp){
+    katFotoImg.src = katFotoTemp;
+    katFotoPreview.style.display = "flex";
+  } else {
+    katFotoImg.removeAttribute("src");
+    katFotoPreview.style.display = "none";
+  }
+}
+
+function openKategori(id){
+  const k = id ? kategori.find(x=>x._id === id) : null;
+  katEditingId = k ? k._id : null;
+  document.getElementById("katTitle").textContent = k ? "Edit Jenis Produk" : "Tambah Jenis Produk";
+  document.getElementById("kNama").value = k ? k.nama : "";
+  const slugInput = document.getElementById("kSlug");
+  slugInput.value = k ? k.slug : "";
+  slugInput.disabled = !!k;
+  document.getElementById("kDesc").value = k ? k.desc : "";
+  katFotoTemp = k ? (k.foto || "") : "";
+  katFotoInput.value = "";
+  setPreviewKategori();
+  katBack.classList.add("show");
+}
+function closeKategori(){
+  katBack.classList.remove("show");
+  katEditingId = null;
+}
+
+function hapusKategori(i){
+  const k = kategori[i];
+  if (!k) return;
+  const dipakai = produk.filter(p=>p.kategori === k.slug).length;
+  if (dipakai){
+    toast("Tidak bisa dihapus, " + dipakai + " produk masih memakai jenis ini");
+    return;
+  }
+  if (kategori.length <= 1){
+    toast("Minimal harus ada satu jenis produk");
+    return;
+  }
+  if (!confirm('Hapus jenis "' + k.nama + '"?')) return;
+
+  if (modeAktif === "lokal"){
+    kategori.splice(i,1);
+    simpanLokalKategori(kategori);
+    renderKategoriAdmin();
+    isiPilihanKategori();
+    toast("Jenis produk dihapus");
+    return;
+  }
+  db.collection("kategori").doc(k._id).delete()
+    .then(()=>toast("Jenis produk dihapus"))
+    .catch(e=>toast("Gagal menghapus: " + e.message));
+}
+
+document.getElementById("addKatBtn").addEventListener("click", ()=>openKategori(null));
+
+document.getElementById("katBody").addEventListener("click", e=>{
+  const editBtn = e.target.closest("[data-katedit]");
+  const delBtn = e.target.closest("[data-katdel]");
+  if (editBtn){
+    const k = kategori[parseInt(editBtn.dataset.katedit,10)];
+    if (k) openKategori(k._id);
+  } else if (delBtn){
+    hapusKategori(parseInt(delBtn.dataset.katdel,10));
+  }
+});
+
+katFotoInput.addEventListener("change", ()=>{
+  const f = katFotoInput.files && katFotoInput.files[0];
+  prosesFoto(f, hasil=>{
+    katFotoTemp = hasil;
+    setPreviewKategori();
+    toast("Foto cover siap disimpan");
+  });
+});
+
+document.getElementById("katFotoHapus").addEventListener("click", ()=>{
+  katFotoTemp = "";
+  katFotoInput.value = "";
+  setPreviewKategori();
+});
+
+document.getElementById("katCancel").addEventListener("click", closeKategori);
+katBack.addEventListener("click", e=>{ if (e.target === katBack) closeKategori(); });
+
+document.getElementById("katForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const tombol = e.target.querySelector('button[type="submit"]');
+  const nama = document.getElementById("kNama").value.trim();
+  const slugInput = document.getElementById("kSlug");
+  const slug = katEditingId ? slugInput.value : (slugDari(slugInput.value || nama));
+  const desc = document.getElementById("kDesc").value.trim();
+
+  if (!nama){ toast("Nama jenis belum diisi"); return; }
+  if (!slug){ toast("Slug tidak valid, gunakan huruf atau angka"); return; }
+
+  const bentrok = kategori.some(k => k.slug === slug && k._id !== katEditingId);
+  if (bentrok){ toast("Slug sudah dipakai jenis lain"); return; }
+
+  const isi = { nama: nama, slug: slug, desc: desc, foto: katFotoTemp || "" };
+
+  if (tombol){ tombol.disabled = true; tombol.textContent = "Menyimpan..."; }
+  try{
+    if (modeAktif === "lokal"){
+      if (katEditingId){
+        const idx = kategori.findIndex(k=>k._id === katEditingId);
+        if (idx >= 0) kategori[idx] = { ...kategori[idx], ...isi };
+      } else {
+        kategori.push({ _id: slug, ...isi, urutan: kategori.length });
+      }
+      simpanLokalKategori(kategori);
+      closeKategori();
+      renderKategoriAdmin();
+      isiPilihanKategori();
+      toast("Jenis produk disimpan");
+    } else {
+      if (katEditingId){
+        await db.collection("kategori").doc(katEditingId).update(isi);
+      } else {
+        isi.urutan = Date.now();
+        await db.collection("kategori").doc(slug).set(isi);
+      }
+      closeKategori();
+      toast("Jenis produk disimpan");
+    }
+  }catch(err){
+    toast("Gagal menyimpan: " + (err.message || "kesalahan tidak dikenal"));
+  }finally{
+    if (tombol){ tombol.disabled = false; tombol.textContent = "Simpan"; }
+  }
+});
 
 /* inline edit */
 document.getElementById("tbody").addEventListener("change", e=>{
@@ -529,7 +856,7 @@ function openModal(i){
   const p = (i>=0) ? produk[i] : { nama:"", kategori:"buket", emoji:"", desc:"", badge:"", harga:"", cost:"", sold:0, foto:"" };
   document.getElementById("modalTitle").textContent = (i>=0) ? "Edit Produk" : "Tambah Produk";
   document.getElementById("fNama").value = p.nama||"";
-  document.getElementById("fKat").value = p.kategori||"buket";
+  isiPilihanKategori(p.kategori || "buket");
   document.getElementById("fEmoji").value = p.emoji||"";
   document.getElementById("fDesc").value = p.desc||"";
   document.getElementById("fBadge").value = p.badge||"";
@@ -542,6 +869,9 @@ function openModal(i){
   modalBack.classList.add("show");
 }
 function closeModal(){ modalBack.classList.remove("show"); editingIndex = -1; }
+
+document.getElementById("cancelBtn").addEventListener("click", closeModal);
+modalBack.addEventListener("click", e=>{ if (e.target === modalBack) closeModal(); });
 
 /* foto produk */
 const fotoInput = document.getElementById("fFoto");
@@ -564,10 +894,9 @@ document.getElementById("fotoHapus").addEventListener("click", ()=>{
   setPreview();
 });
 
-fotoInput.addEventListener("change", ()=>{
-  const f = fotoInput.files && fotoInput.files[0];
-  if (!f) return;
-  if (!f.type || f.type.indexOf("image/") !== 0){ toast("File harus berupa gambar"); return; }
+function prosesFoto(file, selesai){
+  if (!file) return;
+  if (!file.type || file.type.indexOf("image/") !== 0){ toast("File harus berupa gambar"); return; }
 
   function kecilkan(gambar, sisi, mutu){
     const skala = Math.min(1, sisi / Math.max(gambar.width, gambar.height));
@@ -592,15 +921,22 @@ fotoInput.addEventListener("change", ()=>{
         hasil = kecilkan(img, sisi, 0.72);
       }
       if (hasil.length > 700000){ toast("Foto terlalu besar, coba gambar lain"); return; }
-      fotoTemp = hasil;
-      setPreview();
-      toast("Foto siap disimpan");
+      selesai(hasil);
     };
     img.onerror = ()=>toast("Gambar tidak bisa dibaca");
     img.src = rd.result;
   };
   rd.onerror = ()=>toast("Gagal membaca file");
-  rd.readAsDataURL(f);
+  rd.readAsDataURL(file);
+}
+
+fotoInput.addEventListener("change", ()=>{
+  const f = fotoInput.files && fotoInput.files[0];
+  prosesFoto(f, hasil=>{
+    fotoTemp = hasil;
+    setPreview();
+    toast("Foto siap disimpan");
+  });
 });
 
 /* simpan form */
@@ -684,6 +1020,8 @@ document.getElementById("resetBtn").addEventListener("click", async ()=>{
 });
 
 /* init */
+kategori = bacaLokalKategori();
+
 document.getElementById("dashSub").textContent = (modeAktif === "cloud")
   ? "Data tersimpan di server Firebase, jadi perubahan langsung dipakai halaman utama di semua perangkat."
   : "Data tersimpan di browser ini. Isi firebase-config.js untuk mengaktifkan sinkronisasi server.";

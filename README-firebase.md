@@ -22,7 +22,7 @@ Koleksi Firestore: `produk`. Setiap dokumen berisi:
 | Field | Tipe | Keterangan |
 |---|---|---|
 | nama | string | nama produk |
-| kategori | string | buket, tunggal, atau custom |
+| kategori | string | slug jenis produk, misalnya buket, tunggal, atau custom |
 | emoji | string | cadangan bila foto kosong |
 | desc | string | deskripsi singkat |
 | badge | string | Best Seller, Favorit, dan sebagainya |
@@ -31,6 +31,18 @@ Koleksi Firestore: `produk`. Setiap dokumen berisi:
 | sold | number | jumlah terjual |
 | foto | string | foto JPEG yang sudah diperkecil, berbentuk data URL |
 | urutan | number | penanda urutan tampil |
+
+Koleksi Firestore: `kategori`. Setiap dokumen berisi:
+
+| Field | Tipe | Keterangan |
+|---|---|---|
+| nama | string | nama jenis produk yang tampil di filter dan kartu kategori |
+| slug | string | kode unik, dipakai produk pada field `kategori` |
+| desc | string | deskripsi di balik kartu kategori |
+| foto | string | foto cover opsional, berbentuk data URL |
+| urutan | number | penanda urutan tampil |
+
+Jenis produk bisa ditambah dan diubah langsung dari halaman admin. Sebuah jenis tidak dapat dihapus selama masih ada produk yang memakainya. Saat pertama dibuka, admin otomatis membuat tiga jenis awal: `buket`, `tunggal`, dan `custom`.
 
 Batas satu dokumen Firestore adalah 1 MB. Karena itu foto diperkecil menjadi JPEG 640 px dengan mutu 0,72 sebelum disimpan, sehingga satu produk biasanya hanya 20 sampai 60 KB.
 
@@ -46,11 +58,15 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth != null;
     }
+    match /kategori/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
   }
 }
 ```
 
-Artinya pengunjung boleh melihat katalog, tetapi hanya admin yang sudah login yang boleh menambah, mengubah, atau menghapus produk.
+Artinya pengunjung boleh melihat katalog dan daftar jenis produk, tetapi hanya admin yang sudah login yang boleh menambah, mengubah, atau menghapusnya.
 
 Untuk menerbitkan aturan setelah diubah:
 

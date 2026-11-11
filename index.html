@@ -371,14 +371,35 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .marquee-track span:nth-child(even){color:var(--soft-pink)}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
-/* KATEGORI */
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:10px;}
-.cat-card{background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);border-radius:var(--radius-md);padding:16px 12px;text-align:center;cursor:pointer;box-shadow:var(--shadow-sm);transition:border-color 0.4s ease, box-shadow 0.4s ease;transform-style: preserve-3d;will-change: transform;}
-.cat-card:hover{border-color:var(--soft-pink);box-shadow:var(--shadow-md);}
-.cat-icon{width:48px;height:48px;margin:0 auto 10px;border-radius:12px;background:var(--blush);display:grid;place-items:center;padding:8px;will-change: transform;}
-.cat-icon img{width:100%;height:100%;object-fit:contain;}
-.cat-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
-.cat-card p{font-size:11px;color:var(--text-muted);line-height:1.4}
+/* KATEGORI - MARQUEE FLIP CARD */
+.cat-marquee-wrap{overflow:hidden;width:100%;position:relative;padding:10px 0 20px;
+  mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image:linear-gradient(to right, transparent, black 8%, black 92%, transparent);}
+.cat-track{display:flex;width:max-content;animation:catScroll 40s linear infinite;will-change:transform;}
+.cat-track:hover,.cat-track.paused{animation-play-state:paused;}
+.cat-group{display:flex;gap:14px;padding-right:14px;}
+@keyframes catScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.cat-slide-card{width:clamp(176px, 42vw, 250px);height:clamp(232px, 53vw, 310px);perspective:1200px;flex-shrink:0;cursor:pointer;animation:catPulse 4s ease-in-out infinite;will-change:transform;position:relative;}
+.cat-slide-card:nth-child(2n){animation-delay:1.3s}
+.cat-slide-card:nth-child(3n){animation-delay:2.6s}
+.cat-slide-card:hover{animation-play-state:paused}
+.cat-slide-card:focus-visible{outline:2px solid var(--soft-pink);outline-offset:3px}
+@keyframes catPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+
+.cat-card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 0.8s cubic-bezier(0.4,0,0.2,1);}
+.cat-slide-card.flipped .cat-card-inner{transform:rotateY(180deg);}
+.cat-card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);}
+.cat-card-front{background:var(--white);}
+.cat-card-front img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;}
+.cat-slide-card:hover .cat-card-front img{transform:scale(1.06);}
+.cat-slide-overlay{position:absolute;inset:0;background:linear-gradient(to top, rgba(74,42,58,0.94) 0%, rgba(74,42,58,0.28) 55%, transparent 78%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;pointer-events:none;}
+.cat-slide-overlay h3{color:var(--white);font-family:'Playfair Display', serif;font-size:clamp(16px, 4vw, 20px);font-weight:600;line-height:1.2;}
+.cat-slide-overlay .hint{color:rgba(255,255,255,0.78);font-size:10.5px;margin-top:6px;font-weight:500;letter-spacing:0.3px;}
+.cat-card-back{transform:rotateY(180deg);background:linear-gradient(135deg, var(--blush) 0%, #FFE4EE 100%);border:2px solid var(--soft-pink);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 20px;text-align:center;}
+.cat-card-back h3{font-family:'Playfair Display', serif;font-size:clamp(17px, 4.5vw, 21px);color:var(--rose-ink);margin-bottom:10px;line-height:1.2;}
+.cat-card-back p{color:var(--text-muted);font-size:clamp(12px, 2.8vw, 13.5px);line-height:1.55;margin-bottom:18px;}
+.cat-card-back .btn-lihat{padding:10px 22px;font-size:12px;gap:4px;}
 
 /* ETALASE - DIPERBARUI UNTUK BG PUTIH */
 .filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
@@ -428,6 +449,7 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .btn-buy:hover{background:var(--soft-pink);color:var(--white)}
 .btn-buy svg{width:12px;height:12px}
 .etalase-note{text-align:center;margin-top:20px;font-size:12px;color:var(--text-muted);}
+.grid-kosong{text-align:center;color:var(--text-muted);font-size:12px;padding:28px 0;}
 .etalase-note a{color:var(--soft-pink);font-weight:700;border-bottom:1.5px solid var(--soft-pink)}
 
 /* CARA PESAN */
@@ -488,11 +510,11 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .btn { padding: 14px 28px; font-size: 14px; }
   .btn-sm { padding: 10px 20px; font-size: 13px; }
   
-  .cat-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
-  .cat-card { padding: 28px 20px; }
-  .cat-icon { width: 64px; height: 64px; margin-bottom: 16px; }
-  .cat-card h3 { font-size: 16px; }
-  .cat-card p { font-size: 13px; }
+  .cat-group { gap: 24px; padding-right: 24px; }
+  .cat-slide-card { width: 280px; height: 340px; }
+  .cat-card-back { padding: 32px 24px; }
+  .cat-card-back h3 { font-size: 24px; }
+  .cat-card-back p { font-size: 14px; }
   
   .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
   .card { border-radius: var(--radius-md); }
@@ -536,6 +558,10 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .letter-dot::before { animation: none; opacity: 0.6; }
   .sparkle { animation: none !important; }
   .nav-indicator { transition: none !important; }
+  .cat-track { animation: none !important; }
+  .cat-slide-card { animation: none !important; }
+  .cat-card-inner { transition: none !important; }
+  .cat-marquee-wrap { overflow-x: auto; mask-image: none; -webkit-mask-image: none; }
 }
 </style>
 </head>
@@ -625,12 +651,12 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
     <span>Handmade with love</span><span>✦</span>
-    <span>Watercolor Bouquet</span><span>✦</span>
+    <span>Buket Kawat Bulu</span><span>✦</span>
     <span>Custom Name</span><span>✦</span>
     <span>Elegant & Cute</span><span>✦</span>
     <span>Free Gift Card</span><span>✦</span>
     <span>Handmade with love</span><span>✦</span>
-    <span>Watercolor Bouquet</span><span>✦</span>
+    <span>Buket Kawat Bulu</span><span>✦</span>
     <span>Custom Name</span><span>✦</span>
     <span>Elegant & Cute</span><span>✦</span>
     <span>Free Gift Card</span><span>✦</span>
@@ -644,22 +670,8 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
       <h2 class="sec-title reveal">Pilih <em>Sesuai Momen</em></h2>
     </div>
 
-    <div class="cat-grid">
-      <article class="cat-card reveal tilt" data-filter="buket">
-        <div class="cat-icon"><img src="https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png" alt=""></div>
-        <h3>Buket Bunga</h3>
-        <p>Rangkaian premium warna pastel untuk hadiah spesial.</p>
-      </article>
-      <article class="cat-card reveal tilt" data-filter="tunggal">
-        <div class="cat-icon"><img src="https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png" alt=""></div>
-        <h3>Bunga Tunggal</h3>
-        <p>Satu tangkai cantik untuk hiasan meja atau pelengkap kado.</p>
-      </article>
-      <article class="cat-card reveal tilt" data-filter="custom">
-        <div class="cat-icon"><img src="https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png" alt=""></div>
-        <h3>Custom Design</h3>
-        <p>Bebas pilih warna, jenis bunga, dan tambahan nama.</p>
-      </article>
+    <div class="cat-marquee-wrap reveal">
+      <div class="cat-track" id="catTrack" aria-label="Kategori produk N.Elora"></div>
     </div>
   </div>
 </section>
@@ -671,14 +683,10 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
       <h2 class="sec-title reveal">Koleksi <em>N.Elora</em></h2>
     </div>
 
-    <div class="filters reveal" id="filters">
-      <button class="filter-btn active magnetic" data-filter="semua">Semua</button>
-      <button class="filter-btn magnetic" data-filter="buket">Buket</button>
-      <button class="filter-btn magnetic" data-filter="tunggal">Tunggal</button>
-      <button class="filter-btn magnetic" data-filter="custom">Custom</button>
-    </div>
+    <div class="filters reveal" id="filters"></div>
 
     <div class="grid" id="productGrid"></div>
+    <p class="grid-kosong" id="gridKosong" hidden>Belum ada produk untuk jenis ini.</p>
 
     <p class="etalase-note reveal">
       Mau request warna atau jenis bunga tertentu?
@@ -821,6 +829,44 @@ const DEFAULT_PRODUK = [
   { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:IMG.bouquetLush,  desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0 },
 ];
 
+const DEFAULT_KATEGORI = [
+  { slug:"buket",   nama:"Buket Bunga",   desc:"Rangkaian buket kawat bulu premium warna pastel, cocok untuk hadiah ulang tahun atau anniversary." },
+  { slug:"tunggal", nama:"Bunga Tunggal", desc:"Satu tangkai bunga pilihan untuk hiasan meja, vas kecil, atau pelengkap kado." },
+  { slug:"custom",  nama:"Custom Design", desc:"Bebas pilih warna, jenis bunga, dan tambahan nama atau quote sesuai keinginanmu." }
+];
+
+const IMG_KAT = {
+  buket: IMG.bouquetPink,
+  tunggal: IMG.branch,
+  custom: IMG.bouquetLush
+};
+
+function rapikanKategori(list){
+  return list.map((k,i)=>({
+    slug: String(k.slug || k.nama || ("kategori-" + i)).toLowerCase(),
+    nama: String(k.nama || k.slug || "Kategori"),
+    desc: String(k.desc || ""),
+    foto: k.foto || "",
+    urutan: Number(k.urutan) || i
+  })).sort((a,b)=>a.urutan - b.urutan);
+}
+function loadKategori(){
+  try {
+    const raw = localStorage.getItem("nelora_kategori");
+    if (raw){ const parsed = JSON.parse(raw); if (Array.isArray(parsed) && parsed.length) return rapikanKategori(parsed); }
+  } catch(e){}
+  return DEFAULT_KATEGORI.map(k => ({...k}));
+}
+let KATEGORI = loadKategori();
+
+function namaKategori(slug){
+  const k = KATEGORI.find(x => x.slug === slug);
+  return k ? k.nama : slug;
+}
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
 function loadProduk(){
   try {
     const raw = localStorage.getItem("nelora_products");
@@ -850,12 +896,27 @@ function muatSkrip(src){
     document.head.appendChild(s);
   });
 }
+let dbSiap = null;
+function siapkanFirestore(){
+  if (!dbSiap){
+    dbSiap = (async ()=>{
+      const dasar = "https://www.gstatic.com/firebasejs/10.12.2/";
+      if (!window.firebase) await muatSkrip(dasar + "firebase-app-compat.js");
+      if (!window.firebase.firestore) await muatSkrip(dasar + "firebase-firestore-compat.js");
+      if (!firebase.apps.length) firebase.initializeApp(CFG);
+      return firebase.firestore();
+    })();
+  }
+  return dbSiap;
+}
 async function ambilCloud(){
-  const dasar = "https://www.gstatic.com/firebasejs/10.12.2/";
-  if (!window.firebase) await muatSkrip(dasar + "firebase-app-compat.js");
-  if (!window.firebase.firestore) await muatSkrip(dasar + "firebase-firestore-compat.js");
-  if (!firebase.apps.length) firebase.initializeApp(CFG);
-  const snap = await firebase.firestore().collection("produk").orderBy("urutan").get();
+  const db = await siapkanFirestore();
+  const snap = await db.collection("produk").orderBy("urutan").get();
+  return snap.docs.map(d=>d.data());
+}
+async function ambilKategori(){
+  const db = await siapkanFirestore();
+  const snap = await db.collection("kategori").orderBy("urutan").get();
   return snap.docs.map(d=>d.data());
 }
 function waLink(pesan){ return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pesan); }
@@ -887,7 +948,7 @@ function renderProduk(){
           ${media}
         </div>
         <div class="card-body">
-          <span class="card-cat">${p.kategori}</span>
+          <span class="card-cat">${esc(namaKategori(p.kategori))}</span>
           <h3 class="card-title">${p.nama}</h3>
           <p class="card-desc">${p.desc}</p>
           <div class="card-foot">
@@ -900,8 +961,100 @@ function renderProduk(){
         </div>
       </article>`;
   }).join("");
+
+  const kosong = document.getElementById("gridKosong");
+  if (kosong) kosong.hidden = PRODUK.length > 0;
 }
 renderProduk();
+
+/* ============================================================
+   KATEGORI (MARQUEE FLIP CARD) & FILTER
+   ============================================================ */
+const filtersWrap = document.getElementById("filters");
+const catTrack = document.getElementById("catTrack");
+
+function renderFilter(){
+  if (!filtersWrap) return;
+  const aktif = filtersWrap.querySelector(".filter-btn.active");
+  const aktifSlug = aktif ? aktif.dataset.filter : "semua";
+  let html = `<button class="filter-btn magnetic${aktifSlug === "semua" ? " active" : ""}" data-filter="semua" type="button">Semua</button>`;
+  html += KATEGORI.map(k =>
+    `<button class="filter-btn magnetic${aktifSlug === k.slug ? " active" : ""}" data-filter="${esc(k.slug)}" type="button">${esc(k.nama)}</button>`
+  ).join("");
+  filtersWrap.innerHTML = html;
+}
+
+function coverKategori(k){
+  if (k.foto) return k.foto;
+  const punya = PRODUK.filter(p => p.kategori === k.slug);
+  const berfoto = punya.find(p => p.foto);
+  if (berfoto) return berfoto.foto;
+  if (punya[0] && punya[0].img) return punya[0].img;
+  return IMG_KAT[k.slug] || IMG.bouquetPink;
+}
+
+function renderKategori(){
+  if (!catTrack) return;
+  const set = KATEGORI.map(k => {
+    const desc = k.desc || ("Koleksi " + k.nama + " pilihan dari N.Elora.");
+    return `
+      <div class="cat-slide-card" tabindex="0" aria-label="${esc(k.nama)}. Ketuk untuk melihat detail." data-filter="${esc(k.slug)}">
+        <div class="cat-card-inner">
+          <div class="cat-card-face cat-card-front">
+            <img src="${coverKategori(k)}" alt="${esc(k.nama)}" loading="lazy">
+            <div class="cat-slide-overlay">
+              <h3>${esc(k.nama)}</h3>
+              <span class="hint">Ketuk untuk lihat detail</span>
+            </div>
+          </div>
+          <div class="cat-card-face cat-card-back">
+            <h3>${esc(k.nama)}</h3>
+            <p>${esc(desc)}</p>
+            <button type="button" class="btn btn-primary btn-sm btn-lihat" data-filter="${esc(k.slug)}">Lihat Koleksi</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+  catTrack.innerHTML =
+    `<div class="cat-group">${set}</div>` +
+    `<div class="cat-group">${set}</div>`;
+  catTrack.classList.remove("paused");
+}
+
+function bindKategori(){
+  if (!catTrack) return;
+  catTrack.addEventListener("click", e => {
+    const card = e.target.closest(".cat-slide-card");
+    if (!card) return;
+    const lihat = e.target.closest(".btn-lihat");
+    if (lihat){
+      const f = lihat.dataset.filter;
+      const btn = filtersWrap ? filtersWrap.querySelector('.filter-btn[data-filter="' + f + '"]') : null;
+      terapkanFilter(f, btn);
+      setTimeout(() => {
+        catTrack.querySelectorAll(".cat-slide-card.flipped").forEach(c => c.classList.remove("flipped"));
+        catTrack.classList.remove("paused");
+      }, 700);
+      return;
+    }
+    const sudahTerbuka = card.classList.contains("flipped");
+    catTrack.querySelectorAll(".cat-slide-card.flipped").forEach(c => {
+      if (c !== card) c.classList.remove("flipped");
+    });
+    card.classList.toggle("flipped");
+    catTrack.classList.toggle("paused", !sudahTerbuka);
+  });
+  catTrack.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const card = e.target.closest(".cat-slide-card");
+    if (!card || e.target.closest(".btn-lihat")) return;
+    e.preventDefault();
+    card.click();
+  });
+}
+
+renderFilter();
+renderKategori();
 
 /* ============================================================
    GSAP SETUP
@@ -1314,15 +1467,6 @@ function gulirKe(target, durasi){
    ============================================================ */
 function initAnimasi(){
   if (!hasGsap){
-    const saring = (k) => document.querySelectorAll(".card").forEach(c => {
-      c.style.display = (k === "semua" || c.dataset.kategori === k) ? "flex" : "none";
-    });
-    document.querySelectorAll(".filter-btn").forEach(b => b.addEventListener("click", () => {
-      document.querySelectorAll(".filter-btn").forEach(x => x.classList.remove("active"));
-      b.classList.add("active");
-      saring(b.dataset.filter);
-    }));
-    document.querySelectorAll(".cat-card").forEach(c => c.addEventListener("click", () => saring(c.dataset.filter)));
     document.querySelectorAll(".reveal").forEach(el => el.style.opacity = 1);
     document.querySelectorAll(".card").forEach(el => el.style.opacity = 1);
     return;
@@ -1378,30 +1522,6 @@ function initAnimasi(){
       scrollTrigger: { trigger: el, start: "top 85%", once: true } });
   });
 
-  gsap.utils.toArray(".cat-card").forEach((card, i) => {
-    gsap.fromTo(card, { opacity: 0, y: 60, rotationY: -22 },
-      { opacity: 1, y: 0, rotationY: 0, duration: 0.9, ease: "power3.out", delay: i * 0.08,
-        scrollTrigger: { trigger: card, start: "top 88%", once: true } });
-
-    if (!isFine) return;
-    card.addEventListener("mousemove", (e) => {
-      const r = card.getBoundingClientRect();
-      const x = e.clientX - r.left - r.width / 2;
-      const y = e.clientY - r.top  - r.height / 2;
-      gsap.to(card, {
-        rotationY: (x / r.width) * 14,
-        rotationX: -(y / r.height) * 14,
-        transformPerspective: 900, transformOrigin: "center",
-        duration: 0.4, ease: "power2.out"
-      });
-      gsap.to(card.querySelector(".cat-icon"), { scale: 1.12, rotation: 6, duration: 0.4 });
-    });
-    card.addEventListener("mouseleave", () => {
-      gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.7, ease: "elastic.out(1, 0.5)" });
-      gsap.to(card.querySelector(".cat-icon"), { scale: 1, rotation: 0, duration: 0.5 });
-    });
-  });
-
   gsap.utils.toArray(".step").forEach((step, i) => {
     gsap.fromTo(step, { opacity: 0, y: 50, rotationZ: i % 2 === 0 ? -1 : 1 },
       { opacity: 1, y: 0, rotationZ: 0, duration: 0.9, ease: "power3.out",
@@ -1438,6 +1558,8 @@ function initAnimasi(){
 function initMagnetic(){
   if (!hasGsap || !isFine) return;
   document.querySelectorAll(".magnetic, .btn, .filter-btn").forEach(el => {
+    if (el.dataset.magnet === "1") return;
+    el.dataset.magnet = "1";
     const xTo = gsap.quickTo(el, "x", { duration: 0.4, ease: "power2.out" });
     const yTo = gsap.quickTo(el, "y", { duration: 0.4, ease: "power2.out" });
     el.addEventListener("mousemove", (e) => {
@@ -1465,9 +1587,13 @@ function initCardAnimations(){
 
   ScrollTrigger.batch(cards, {
     start: "top 90%", once: true,
-    onEnter: batch => gsap.fromTo(batch,
-      { opacity: 0, y: 50, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "power3.out", overwrite: true })
+    onEnter: batch => {
+      const siap = batch.filter(card => card.dataset.saring !== "0");
+      if (!siap.length) return;
+      gsap.fromTo(siap,
+        { opacity: 0, y: 50, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "power3.out", overwrite: true });
+    }
   });
 
   cards.forEach(card => {
@@ -1482,56 +1608,85 @@ function initCardAnimations(){
    FILTER PRODUK
    ============================================================ */
 function bindFilter(){
-  const filterBtns = document.querySelectorAll(".filter-btn");
-  function filterProduk(kategori, btn){
-    filterBtns.forEach(b => b.classList.remove("active"));
-    if (btn) btn.classList.add("active");
-    const cards = document.querySelectorAll(".card");
-    let i = 0;
-    cards.forEach(card => {
-      const cocok = kategori === "semua" || card.dataset.kategori === kategori;
-      gsap.killTweensOf(card);
-      if (cocok){
-        card.style.display = "flex";
-        gsap.fromTo(card, { opacity: 0, scale: 0.9, y: 30 },
-          { opacity: 1, scale: 1, y: 0, duration: 0.5, delay: i * 0.05, ease: "back.out(1.4)" });
-        i++;
-      } else {
-        gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, ease: "power1.in",
-          onComplete: () => { card.style.display = "none"; } });
-      }
-    });
-    gulirKe("#etalase", 0.5);
-  }
-  filterBtns.forEach(btn => btn.addEventListener("click", () => filterProduk(btn.dataset.filter, btn)));
-  document.querySelectorAll(".cat-card").forEach(cat => {
-    cat.addEventListener("click", () => {
-      const f = cat.dataset.filter;
-      const target = document.querySelector(`.filter-btn[data-filter="${f}"]`);
-      filterProduk(f, target);
-    });
+  if (!filtersWrap) return;
+  filtersWrap.addEventListener("click", e => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    terapkanFilter(btn.dataset.filter, btn);
   });
+}
+
+function terapkanFilter(kategori, btn){
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  if (!btn){
+    btn = document.querySelector('.filter-btn[data-filter="' + kategori + '"]');
+  }
+  if (btn) btn.classList.add("active");
+
+  const cards = document.querySelectorAll(".card");
+  const kosong = document.getElementById("gridKosong");
+  let i = 0;
+  let tampil = 0;
+  cards.forEach(card => {
+    const cocok = kategori === "semua" || card.dataset.kategori === kategori;
+    card.dataset.saring = cocok ? "1" : "0";
+    if (cocok) tampil++;
+    if (!hasGsap){
+      card.style.display = cocok ? "flex" : "none";
+      return;
+    }
+    gsap.killTweensOf(card);
+    if (cocok){
+      card.style.display = "flex";
+      gsap.fromTo(card, { opacity: 0, scale: 0.9, y: 30 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, delay: i * 0.05, ease: "back.out(1.4)" });
+      i++;
+    } else {
+      gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, ease: "power1.in",
+        onComplete: () => { card.style.display = "none"; } });
+    }
+  });
+
+  if (kosong) kosong.hidden = tampil > 0;
+  if (hasGsap) gulirKe("#etalase", 0.5);
 }
 
 /* ============================================================
    START
    ============================================================ */
 async function mulai(){
+  bindKategori();
+  bindFilter();
   initAnimasi();
   initCardAnimations();
-  bindFilter();
   initMagnetic();
 
   if (MODE === "cloud"){
     try {
-      const data = rapikan(await ambilCloud());
-      if (data.length){
-        PRODUK = data;
-        renderProduk();
-        initCardAnimations();
-        try { localStorage.setItem("nelora_products", JSON.stringify(data)); } catch(e){}
-        if (hasGsap) ScrollTrigger.refresh();
+      const [hasilProduk, hasilKategori] = await Promise.allSettled([ambilCloud(), ambilKategori()]);
+
+      if (hasilProduk.status === "fulfilled" && hasilProduk.value.length){
+        PRODUK = rapikan(hasilProduk.value);
+        try { localStorage.setItem("nelora_products", JSON.stringify(PRODUK)); } catch(e){}
+      } else if (hasilProduk.status === "rejected"){
+        console.warn("Produk gagal dimuat, memakai data tersimpan:",
+          (hasilProduk.reason && hasilProduk.reason.message) || hasilProduk.reason);
       }
+
+      if (hasilKategori.status === "fulfilled" && hasilKategori.value.length){
+        KATEGORI = rapikanKategori(hasilKategori.value);
+        try { localStorage.setItem("nelora_kategori", JSON.stringify(KATEGORI)); } catch(e){}
+      } else if (hasilKategori.status === "rejected"){
+        console.warn("Kategori gagal dimuat, memakai data tersimpan:",
+          (hasilKategori.reason && hasilKategori.reason.message) || hasilKategori.reason);
+      }
+
+      renderFilter();
+      renderKategori();
+      renderProduk();
+      initCardAnimations();
+      initMagnetic();
+      if (hasGsap) ScrollTrigger.refresh();
     } catch (e){
       console.warn("Data server gagal dimuat, memakai data tersimpan:", e.message);
     }

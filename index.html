@@ -371,64 +371,46 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .marquee-track span:nth-child(even){color:var(--soft-pink)}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
-/* KATEGORI - MARQUEE FLIP CARD */
-.cat-carousel{position:relative;}
-.cat-carousel::before,.cat-carousel::after{content:"";position:absolute;top:0;bottom:0;width:clamp(24px, 6vw, 56px);
-  z-index:3;pointer-events:none;}
-.cat-carousel::before{left:0;background:linear-gradient(to right, var(--bg-color) 12%, rgba(255, 250, 252, 0));}
-.cat-carousel::after{right:0;background:linear-gradient(to left, var(--bg-color) 12%, rgba(255, 250, 252, 0));}
-.cat-marquee-wrap{width:100%;position:relative;padding:16px 0 24px;
-  overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
-  cursor:grab;scrollbar-width:none;-ms-overflow-style:none;
-  -webkit-overflow-scrolling:touch;}
-.cat-marquee-wrap::-webkit-scrollbar{display:none}
-.cat-marquee-wrap.dragging{cursor:grabbing;user-select:none;}
-.cat-track{display:flex;width:max-content;}
-.cat-group{display:flex;gap:14px;padding-right:14px;}
-
-.cat-slide-card{width:clamp(176px, 42vw, 250px);height:clamp(232px, 53vw, 310px);perspective:1200px;flex-shrink:0;cursor:pointer;animation:catPulse 5s ease-in-out infinite;will-change:transform, translate;position:relative;transition:translate 0.5s cubic-bezier(0.22, 0.9, 0.28, 1);}
-.cat-slide-card:nth-child(2n){animation-delay:1.3s}
-.cat-slide-card:nth-child(3n){animation-delay:2.6s}
-.cat-slide-card:hover{animation-play-state:paused}
+/* KATEGORI - SATU KARTU UTAMA, KARTU LAIN MEREDUP */
+.cat-carousel{position:relative;max-width:430px;margin:0 auto;}
+.cat-panggung{position:relative;height:clamp(404px, 82vw, 492px);}
+.cat-stack{position:absolute;inset:0;touch-action:pan-y pinch-zoom;user-select:none;
+  cursor:grab;outline:none;border-radius:var(--radius-md);}
+.cat-stack.menarik{cursor:grabbing;}
+.cat-stack:focus-visible{outline:2px solid var(--soft-pink);outline-offset:6px;}
+.cat-kartu{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--white);border-radius:var(--radius-md);
+  box-shadow:0 22px 44px -24px rgba(74, 42, 58, 0.46), 0 6px 16px rgba(74, 42, 58, 0.06);
+  transform:translate3d(var(--cat-x, 0px), var(--cat-y, 14px), 0) scale(var(--cat-s, 0.93));
+  opacity:var(--cat-o, 0.3);pointer-events:none;
+  transition:transform 0.62s cubic-bezier(0.22, 0.9, 0.28, 1), opacity 0.62s ease;
+  will-change:transform, opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.cat-kartu.aktif{transform:translate3d(0, 0, 0) scale(1);opacity:1;pointer-events:auto;}
+.cat-stack.menarik .cat-kartu{transition:none;}
 @media (hover:hover) and (pointer:fine){
-  .cat-slide-card:hover{translate:0 -10px;}
+  .cat-kartu.aktif:hover{transform:translate3d(0, -4px, 0) scale(1);}
 }
-.cat-slide-card:focus-visible{outline:2px solid var(--soft-pink);outline-offset:3px}
-.cat-slide-card::after{content:"";position:absolute;left:14%;right:14%;bottom:-12px;height:16px;border-radius:50%;
-  background:radial-gradient(ellipse at center, rgba(74, 42, 58, 0.24), transparent 72%);
-  filter:blur(3px);opacity:0.7;z-index:-1;pointer-events:none;
-  transition:opacity 0.5s ease, translate 0.5s ease;}
-@media (hover:hover) and (pointer:fine){
-  .cat-slide-card:hover::after{opacity:1;translate:0 8px;}
-}
-@keyframes catPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.016)}}
-
-.cat-card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 0.8s cubic-bezier(0.4,0,0.2,1);}
-.cat-slide-card.flipped .cat-card-inner{transform:rotateY(180deg);}
-.cat-card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius-md);overflow:hidden;
-  box-shadow:0 16px 32px -16px rgba(74, 42, 58, 0.38), 0 4px 12px rgba(74, 42, 58, 0.07);
-  transition:box-shadow 0.5s ease;}
-.cat-slide-card:hover .cat-card-face{box-shadow:0 26px 46px -18px rgba(74, 42, 58, 0.46), 0 10px 20px rgba(74, 42, 58, 0.1);}
-.cat-card-front{background:var(--white);}
-.cat-card-front::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.18);}
-.cat-card-front img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;pointer-events:none;user-select:none;-webkit-user-drag:none;}
-.cat-slide-card:hover .cat-card-front img{transform:scale(1.06);}
-.cat-slide-overlay{position:absolute;inset:0;background:linear-gradient(to top, rgba(74,42,58,0.94) 0%, rgba(74,42,58,0.28) 55%, transparent 78%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;pointer-events:none;}
-.cat-slide-overlay h3{color:var(--white);font-family:'Playfair Display', serif;font-size:clamp(16px, 4vw, 20px);font-weight:600;line-height:1.2;}
-.cat-slide-overlay .hint{color:rgba(255,255,255,0.78);font-size:10.5px;margin-top:6px;font-weight:500;letter-spacing:0.3px;}
-.cat-card-back{transform:rotateY(180deg);background:linear-gradient(135deg, var(--blush) 0%, #FFE4EE 100%);border:2px solid var(--soft-pink);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 20px;text-align:center;}
-.cat-card-back h3{font-family:'Playfair Display', serif;font-size:clamp(17px, 4.5vw, 21px);color:var(--rose-ink);margin-bottom:10px;line-height:1.2;}
-.cat-card-back p{color:var(--text-muted);font-size:clamp(12px, 2.8vw, 13.5px);line-height:1.55;margin-bottom:18px;}
-.cat-card-back .btn-lihat{padding:10px 22px;font-size:12px;gap:4px;}
-
-/* Perangkat sentuh: ringankan lapisan agar tidak berkedip saat digeser */
-@media (hover:none){
-  .cat-slide-card{animation:none;will-change:auto;transform:translateZ(0);}
-  .cat-slide-card::after{display:none;}
-  .cat-card-face{box-shadow:0 10px 22px -14px rgba(74, 42, 58, 0.42), 0 3px 8px rgba(74, 42, 58, 0.06);}
-  .cat-slide-card:hover .cat-card-face{box-shadow:0 10px 22px -14px rgba(74, 42, 58, 0.42), 0 3px 8px rgba(74, 42, 58, 0.06);}
-}
+.cat-foto{position:relative;flex:1 1 auto;min-height:0;background:var(--blush);}
+.cat-foto img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;}
+.cat-isi{padding:16px 20px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;}
+.cat-isi h3{font-family:'Playfair Display', serif;font-size:clamp(19px, 4.6vw, 23px);font-weight:600;line-height:1.2;color:var(--rose-ink);}
+.cat-isi p{color:var(--text-muted);font-size:clamp(12px, 3vw, 13px);line-height:1.5;margin:0 0 8px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.cat-isi .cat-lihat{min-height:44px;padding:0 24px;font-size:12.5px;}
+.cat-kendali{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:26px;}
+.cat-panah{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:var(--white);border:1px solid rgba(244, 163, 192, 0.45);color:var(--rose-ink);
+  box-shadow:var(--shadow-sm);transition:background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;}
+.cat-panah svg{width:18px;height:18px;display:block;}
+.cat-panah:hover:not(:disabled){background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);}
+.cat-panah:disabled{opacity:0.3;cursor:not-allowed;}
+.cat-titik{display:flex;align-items:center;justify-content:center;}
+.cat-titik button{width:32px;height:44px;display:grid;place-items:center;background:none;border-radius:50%;}
+.cat-titik button span{width:8px;height:8px;border-radius:50%;background:rgba(244, 163, 192, 0.5);
+  transition:width 0.3s ease, border-radius 0.3s ease, background 0.3s ease;}
+.cat-titik button[aria-current="true"] span{width:22px;border-radius:999px;background:var(--soft-pink);}
+.cat-titik button:focus-visible{outline:2px solid var(--soft-pink);outline-offset:-6px;}
+.cat-kosong{text-align:center;color:var(--text-muted);font-size:13px;margin-top:10px;}
 
 /* ETALASE - DIPERBARUI UNTUK BG PUTIH */
 .filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
@@ -539,11 +521,12 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .btn { padding: 14px 28px; font-size: 14px; }
   .btn-sm { padding: 10px 20px; font-size: 13px; }
   
-  .cat-group { gap: 24px; padding-right: 24px; }
-  .cat-slide-card { width: 280px; height: 340px; }
-  .cat-card-back { padding: 32px 24px; }
-  .cat-card-back h3 { font-size: 24px; }
-  .cat-card-back p { font-size: 14px; }
+  .cat-carousel { max-width: 460px; }
+  .cat-panggung { height: clamp(452px, 54vw, 520px); }
+  .cat-isi { padding: 20px 24px 22px; }
+  .cat-isi h3 { font-size: 24px; }
+  .cat-isi p { font-size: 14px; }
+  .cat-kendali { gap: 8px; margin-top: 30px; }
   
   .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
   .card { border-radius: var(--radius-md); }
@@ -587,8 +570,7 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .letter-dot::before { animation: none; opacity: 0.6; }
   .sparkle { animation: none !important; }
   .nav-indicator { transition: none !important; }
-  .cat-slide-card { animation: none !important; }
-  .cat-card-inner { transition: none !important; }
+  .cat-kartu { transition: none !important; }
 }
 </style>
 </head>
@@ -698,9 +680,22 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
     </div>
 
     <div class="cat-carousel reveal">
-      <div class="cat-marquee-wrap">
-        <div class="cat-track" id="catTrack" aria-label="Kategori produk N.Elora"></div>
+      <div class="cat-panggung">
+        <div class="cat-stack" id="catStack" role="group" aria-roledescription="korsel"
+             aria-label="Kategori produk N.Elora" tabindex="0"></div>
       </div>
+      <div class="cat-kendali">
+        <button class="cat-panah" id="catPrev" type="button" aria-label="Kategori sebelumnya">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="cat-titik" id="catTitik"></div>
+        <button class="cat-panah" id="catNext" type="button" aria-label="Kategori berikutnya">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <p class="cat-kosong" id="catKosong" hidden>Belum ada kategori untuk ditampilkan.</p>
     </div>
   </div>
 </section>
@@ -997,22 +992,33 @@ function renderProduk(){
 renderProduk();
 
 /* ============================================================
-   KATEGORI (MARQUEE FLIP CARD) & FILTER
+   KATEGORI (SATU KARTU UTAMA) & FILTER
    ============================================================ */
 const filtersWrap = document.getElementById("filters");
-const catTrack = document.getElementById("catTrack");
-const catWrap = document.querySelector(".cat-marquee-wrap");
+const catStack = document.getElementById("catStack");
+const catPrev = document.getElementById("catPrev");
+const catNext = document.getElementById("catNext");
+const catTitik = document.getElementById("catTitik");
+const catKosong = document.getElementById("catKosong");
 
-let catBuka = false;          // ada kartu yang sedang terbuka
-let catHover = false;         // kursor sedang di atas marquee
-let catSentuh = false;        // layar sedang disentuh atau baru selesai disentuh
-let catGeser = false;         // sedang drag dengan mouse
-let catGeserTerjadi = false;  // drag melewati ambang, dipakai menahan klik kartu
-let catX = 0, catScroll = 0, catSetengah = 0, catPosisi = 0, catTimerSentuh = null;
-let catLaju = 0, catMomentum = 0, catDorong = 0, catWaktuGerak = 0, catScrollGerak = 0;
+const CAT_JEDA = 5200;
+const CAT_AMBANG = 54;
+const catTenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function ukurCat(){
-  if (catTrack) catSetengah = catTrack.scrollWidth / 2;
+let catAktif = 0;
+let catArah = 1;
+let catTimer = null;
+let catTahan = false;          // berhenti sejenak: hover, fokus, atau drag
+let catGeser = false;          // pointer sedang menekan
+let catGeserTerjadi = false;   // gerakan sudah melewati ambang
+let catBlokirKlik = false;     // tahan klik sesudah drag
+let catPointer = null;
+let catMulaiX = 0;
+let catMulaiY = 0;
+let catGeserX = 0;
+
+function kartuKategori(){
+  return catStack ? Array.from(catStack.querySelectorAll(".cat-kartu")) : [];
 }
 
 function renderFilter(){
@@ -1035,180 +1041,231 @@ function coverKategori(k){
   return IMG_KAT[k.slug] || IMG.bouquetPink;
 }
 
-function renderKategori(){
-  if (!catTrack) return;
-  const set = KATEGORI.map(k => {
-    const desc = k.desc || ("Koleksi " + k.nama + " pilihan dari N.Elora.");
-    return `
-      <div class="cat-slide-card" tabindex="0" aria-label="${esc(k.nama)}. Ketuk untuk melihat detail." data-filter="${esc(k.slug)}">
-        <div class="cat-card-inner">
-          <div class="cat-card-face cat-card-front">
-            <img src="${coverKategori(k)}" alt="${esc(k.nama)}" loading="lazy">
-            <div class="cat-slide-overlay">
-              <h3>${esc(k.nama)}</h3>
-              <span class="hint">Ketuk untuk lihat detail</span>
-            </div>
-          </div>
-          <div class="cat-card-face cat-card-back">
-            <h3>${esc(k.nama)}</h3>
-            <p>${esc(desc)}</p>
-            <button type="button" class="btn btn-primary btn-sm btn-lihat" data-filter="${esc(k.slug)}">Lihat Koleksi</button>
-          </div>
-        </div>
-      </div>`;
-  }).join("");
-  catTrack.innerHTML =
-    `<div class="cat-group">${set}</div>` +
-    `<div class="cat-group">${set}</div>`;
-  catBuka = false;
-  catGeserTerjadi = false;
-  if (catWrap) catWrap.scrollLeft = 0;
-  catPosisi = 0;
-  ukurCat();
+function terapkanKategori(){
+  const kartu = kartuKategori();
+  if (!kartu.length) return;
+
+  catAktif = Math.max(0, Math.min(kartu.length - 1, catAktif));
+
+  kartu.forEach((el, i) => {
+    const jarak = i - catAktif;
+    const jauh = Math.min(Math.abs(jarak), 3);
+    const aktif = jarak === 0;
+    el.classList.toggle("aktif", aktif);
+    el.setAttribute("aria-hidden", aktif ? "false" : "true");
+    el.style.zIndex = String(30 - jauh);
+    el.style.setProperty("--cat-x", (Math.sign(jarak) * jauh * 16) + "px");
+    el.style.setProperty("--cat-y", (jauh * 12) + "px");
+    el.style.setProperty("--cat-s", String(1 - jauh * 0.045));
+    el.style.setProperty("--cat-o", String(aktif ? 1 : Math.max(0.14, 0.34 - jauh * 0.07)));
+    el.style.transform = "";
+    const img = el.querySelector("img");
+    if (img && jauh <= 1) img.loading = "eager";
+  });
+
+  if (catPrev) catPrev.disabled = catAktif === 0;
+  if (catNext) catNext.disabled = catAktif === kartu.length - 1;
+  if (catTitik){
+    Array.from(catTitik.children).forEach((btn, i) => {
+      const aktif = i === catAktif;
+      btn.setAttribute("aria-current", aktif ? "true" : "false");
+      btn.tabIndex = aktif ? 0 : -1;
+    });
+  }
 }
 
-function geserKategori(){
-  if (!catWrap || !catTrack) return;
-  const tenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  ukurCat();
-  if (window.ResizeObserver) new ResizeObserver(ukurCat).observe(catTrack);
-  window.addEventListener("resize", ukurCat);
-
-  catWrap.addEventListener("pointerenter", e => {
-    if (e.pointerType === "mouse") catHover = true;
-  });
-  catWrap.addEventListener("pointerleave", () => { catHover = false; });
-
-  catWrap.addEventListener("pointerdown", e => {
-    catGeserTerjadi = false;
-    if (e.pointerType !== "mouse"){
-      catSentuh = true;
-      clearTimeout(catTimerSentuh);
+function jadwalkanKategori(){
+  clearTimeout(catTimer);
+  if (catTenang) return;
+  if (kartuKategori().length < 2) return;
+  catTimer = setTimeout(() => {
+    if (docHidden() || catTahan || catGeser){
+      jadwalkanKategori();
       return;
     }
-    if (e.button !== 0) return;
-    catGeser = true;
-    catMomentum = 0;
-    catDorong = 0;
-    catLaju = 0;
-    catX = e.clientX;
-    catScroll = catWrap.scrollLeft;
-    catScrollGerak = catWrap.scrollLeft;
-    catWaktuGerak = performance.now();
-    catWrap.classList.add("dragging");
-    try { catWrap.setPointerCapture(e.pointerId); } catch(err){}
-  });
+    const akhir = kartuKategori().length - 1;
+    let tujuan = catAktif + catArah;
+    if (tujuan > akhir){ catArah = -1; tujuan = catAktif - 1; }
+    else if (tujuan < 0){ catArah = 1; tujuan = catAktif + 1; }
+    pindahKategori(tujuan);
+  }, CAT_JEDA);
+}
 
-  catWrap.addEventListener("pointermove", e => {
-    if (!catGeser) return;
-    const geser = e.clientX - catX;
-    if (Math.abs(geser) > 6) catGeserTerjadi = true;
-    catWrap.scrollLeft = catScroll - geser;
+function docHidden(){
+  return typeof document !== "undefined" && document.hidden;
+}
 
-    const sekarang = performance.now();
-    const selang = sekarang - catWaktuGerak;
-    if (selang > 0){
-      const dorong = (catWrap.scrollLeft - catScrollGerak) / selang;
-      catDorong = catDorong * 0.68 + dorong * 0.32;
-      catDorong = Math.max(-2.2, Math.min(2.2, catDorong));
-    }
-    catWaktuGerak = sekarang;
-    catScrollGerak = catWrap.scrollLeft;
-  });
-
-  function lepas(e){
-    if (catGeser){
-      catGeser = false;
-      catWrap.classList.remove("dragging");
-      if (performance.now() - catWaktuGerak > 140) catMomentum = 0;
-      else catMomentum = Math.max(-2, Math.min(2, catDorong));
-      try { catWrap.releasePointerCapture(e.pointerId); } catch(err){}
-    }
-    if (e.pointerType !== "mouse"){
-      clearTimeout(catTimerSentuh);
-      catTimerSentuh = setTimeout(() => { catSentuh = false; }, 260);
-    }
+function pindahKategori(tujuan){
+  const kartu = kartuKategori();
+  if (!kartu.length) return;
+  const baru = Math.max(0, Math.min(kartu.length - 1, tujuan));
+  clearTimeout(catTimer);
+  if (baru !== catAktif){
+    catArah = baru > catAktif ? 1 : -1;
+    catAktif = baru;
+    terapkanKategori();
   }
-  catWrap.addEventListener("pointerup", lepas);
-  catWrap.addEventListener("pointercancel", lepas);
+  jadwalkanKategori();
+}
 
-  catWrap.addEventListener("scroll", () => {
-    if (Math.abs(catWrap.scrollLeft - catPosisi) > 2) catPosisi = catWrap.scrollLeft;
-    if (catSentuh){
-      clearTimeout(catTimerSentuh);
-      catTimerSentuh = setTimeout(() => { catSentuh = false; }, 260);
-    }
-  }, { passive: true });
+function renderKategori(){
+  if (!catStack) return;
+  const ada = KATEGORI.length > 0;
+  if (catKosong) catKosong.hidden = ada;
+  if (catPrev) catPrev.disabled = !ada;
+  if (catNext) catNext.disabled = !ada;
+  if (catTitik) catTitik.innerHTML = "";
 
-  let terakhir = 0;
-  function langkah(waktu){
-    const dt = terakhir ? Math.min(64, waktu - terakhir) : 16;
-    terakhir = waktu;
-    if (catSetengah > 1){
-      const menahan = catHover || catBuka || catGeser || catSentuh || tenang;
-      catLaju += ((menahan ? 0 : 0.022) - catLaju) * Math.min(1, dt / 280);
-
-      if (catGeser || catSentuh){
-        catPosisi = catWrap.scrollLeft;
-        catMomentum = 0;
-      } else if (catBuka){
-        catPosisi = catWrap.scrollLeft;
-      } else {
-        catPosisi += catLaju * dt;
-        if (Math.abs(catMomentum) > 0.003){
-          catPosisi += catMomentum * dt;
-          catMomentum *= Math.pow(0.9, dt / 16);
-        } else {
-          catMomentum = 0;
-        }
-        while (catPosisi >= catSetengah) catPosisi -= catSetengah;
-        while (catPosisi < 0) catPosisi += catSetengah;
-        catWrap.scrollLeft = catPosisi;
-      }
-      if (catWrap.scrollLeft >= catSetengah) catWrap.scrollLeft -= catSetengah;
-      else if (catWrap.scrollLeft < 0) catWrap.scrollLeft += catSetengah;
-    }
-    requestAnimationFrame(langkah);
+  if (!ada){
+    catStack.innerHTML = "";
+    clearTimeout(catTimer);
+    return;
   }
-  requestAnimationFrame(langkah);
+
+  catStack.innerHTML = KATEGORI.map((k, i) => {
+    const desc = k.desc || ("Koleksi " + k.nama + " pilihan dari N.Elora.");
+    return `
+      <article class="cat-kartu" data-filter="${esc(k.slug)}"
+               aria-roledescription="kartu" aria-label="${i + 1} dari ${KATEGORI.length}: ${esc(k.nama)}">
+        <div class="cat-foto">
+          <img src="${coverKategori(k)}" alt="${esc(k.nama)}" loading="lazy" decoding="async">
+        </div>
+        <div class="cat-isi">
+          <h3>${esc(k.nama)}</h3>
+          <p>${esc(desc)}</p>
+          <button type="button" class="btn btn-primary btn-sm cat-lihat" data-filter="${esc(k.slug)}">Lihat Koleksi</button>
+        </div>
+      </article>`;
+  }).join("");
+
+  if (catTitik){
+    catTitik.innerHTML = KATEGORI.map((k, i) =>
+      `<button type="button" data-ke="${i}" aria-label="Tampilkan kategori ${esc(k.nama)}"
+               aria-current="${i === 0 ? "true" : "false"}" tabindex="${i === 0 ? 0 : -1}"><span></span></button>`
+    ).join("");
+  }
+
+  catAktif = 0;
+  catArah = 1;
+  terapkanKategori();
+  jadwalkanKategori();
 }
 
 function bindKategori(){
-  if (!catTrack) return;
-  catTrack.addEventListener("click", e => {
-    if (catGeserTerjadi) return;
-    const card = e.target.closest(".cat-slide-card");
-    if (!card) return;
-    const lihat = e.target.closest(".btn-lihat");
-    if (lihat){
-      const f = lihat.dataset.filter;
-      const btn = filtersWrap ? filtersWrap.querySelector('.filter-btn[data-filter="' + f + '"]') : null;
-      terapkanFilter(f, btn);
-      setTimeout(() => {
-        catTrack.querySelectorAll(".cat-slide-card.flipped").forEach(c => c.classList.remove("flipped"));
-        catBuka = false;
-      }, 700);
-      return;
-    }
-    const sudahTerbuka = card.classList.contains("flipped");
-    catTrack.querySelectorAll(".cat-slide-card.flipped").forEach(c => {
-      if (c !== card) c.classList.remove("flipped");
-    });
-    card.classList.toggle("flipped");
-    catBuka = !sudahTerbuka;
+  if (!catStack) return;
+
+  const tahanSebentar = () => {
+    catTahan = true;
+    clearTimeout(catTimer);
+  };
+  const lanjutkan = () => {
+    catTahan = false;
+    jadwalkanKategori();
+  };
+
+  catStack.addEventListener("pointerenter", e => {
+    if (e.pointerType === "mouse") tahanSebentar();
   });
-  catTrack.addEventListener("keydown", e => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    const card = e.target.closest(".cat-slide-card");
-    if (!card || e.target.closest(".btn-lihat")) return;
-    e.preventDefault();
-    card.click();
+  catStack.addEventListener("pointerleave", e => {
+    if (e.pointerType === "mouse" && !catGeser) lanjutkan();
+  });
+  catStack.addEventListener("focusin", tahanSebentar);
+  catStack.addEventListener("focusout", e => {
+    if (!catStack.contains(e.relatedTarget)) lanjutkan();
+  });
+
+  catStack.addEventListener("pointerdown", e => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.target.closest("button, a")) return;
+    catPointer = e.pointerId;
+    catMulaiX = e.clientX;
+    catMulaiY = e.clientY;
+    catGeserX = 0;
+    catGeser = true;
+    catGeserTerjadi = false;
+    tahanSebentar();
+    try { catStack.setPointerCapture(e.pointerId); } catch(err){}
+  });
+
+  catStack.addEventListener("pointermove", e => {
+    if (!catGeser || e.pointerId !== catPointer) return;
+    const dx = e.clientX - catMulaiX;
+    const dy = e.clientY - catMulaiY;
+    if (!catGeserTerjadi){
+      if (Math.abs(dx) < 10) return;
+      if (Math.abs(dx) <= Math.abs(dy)) return;
+      catGeserTerjadi = true;
+      catBlokirKlik = true;
+      catStack.classList.add("menarik");
+    }
+    catGeserX = dx;
+    const kartu = catStack.querySelector(".cat-kartu.aktif");
+    if (kartu){
+      const geser = Math.max(-110, Math.min(110, dx * 0.5));
+      kartu.style.transform = "translate3d(" + geser.toFixed(1) + "px, 0, 0) scale(1)";
+    }
+  });
+
+  function lepas(e){
+    if (!catGeser) return;
+    catGeser = false;
+    catPointer = null;
+    catStack.classList.remove("menarik");
+    const kartu = catStack.querySelector(".cat-kartu.aktif");
+    if (kartu) kartu.style.transform = "";
+    try { catStack.releasePointerCapture(e.pointerId); } catch(err){}
+
+    if (catGeserTerjadi && Math.abs(catGeserX) >= CAT_AMBANG){
+      pindahKategori(catAktif + (catGeserX < 0 ? 1 : -1));
+    } else {
+      jadwalkanKategori();
+    }
+    catGeserX = 0;
+    catGeserTerjadi = false;
+    catTahan = false;
+    if (catBlokirKlik) setTimeout(() => { catBlokirKlik = false; }, 80);
+  }
+
+  catStack.addEventListener("pointerup", lepas);
+  catStack.addEventListener("pointercancel", lepas);
+
+  if (catPrev) catPrev.addEventListener("click", () => pindahKategori(catAktif - 1));
+  if (catNext) catNext.addEventListener("click", () => pindahKategori(catAktif + 1));
+
+  if (catTitik){
+    catTitik.addEventListener("click", e => {
+      const btn = e.target.closest("button[data-ke]");
+      if (!btn) return;
+      pindahKategori(Number(btn.dataset.ke));
+    });
+  }
+
+  catStack.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft"){ e.preventDefault(); pindahKategori(catAktif - 1); }
+    else if (e.key === "ArrowRight"){ e.preventDefault(); pindahKategori(catAktif + 1); }
+    else if (e.key === "Home"){ e.preventDefault(); pindahKategori(0); }
+    else if (e.key === "End"){ e.preventDefault(); pindahKategori(kartuKategori().length - 1); }
+  });
+
+  catStack.addEventListener("click", e => {
+    const lihat = e.target.closest(".cat-lihat");
+    if (!lihat) return;
+    if (catBlokirKlik){ e.preventDefault(); return; }
+    lanjutkan();
+    const f = lihat.dataset.filter;
+    const btn = filtersWrap ? filtersWrap.querySelector('.filter-btn[data-filter="' + f + '"]') : null;
+    terapkanFilter(f, btn);
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) clearTimeout(catTimer);
+    else jadwalkanKategori();
   });
 }
 
 renderFilter();
 renderKategori();
-geserKategori();
+bindKategori();
 
 /* ============================================================
    GSAP SETUP
@@ -1809,7 +1866,6 @@ function terapkanFilter(kategori, btn){
    START
    ============================================================ */
 async function mulai(){
-  bindKategori();
   bindFilter();
   initAnimasi();
   initCardAnimations();

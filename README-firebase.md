@@ -54,27 +54,28 @@ Isi `firestore.rules`:
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function admin() {
-      return request.auth != null && request.auth.uid in [
-        'Q18p1ELC8CffcoHrQUzDAtZCaV73',
-        'YVQ4eHwB61hPkUCSDp4WepcVsXt2'
-      ];
-    }
     match /produk/{docId} {
       allow read: if true;
-      allow write: if admin();
+      allow write: if request.auth != null;
     }
     match /kategori/{docId} {
       allow read: if true;
-      allow write: if admin();
+      allow write: if request.auth != null;
     }
   }
 }
 ```
 
-Artinya pengunjung boleh melihat katalog dan daftar jenis produk, tetapi hanya dua akun admin yang UID-nya terdaftar yang boleh menambah, mengubah, atau menghapus. Akun lain, walaupun berhasil login, tetap ditolak.
+Artinya pengunjung boleh melihat katalog dan daftar jenis produk, tetapi hanya akun yang ada di Firebase Authentication dan berhasil login yang boleh menambah, mengubah, atau menghapus.
 
-Bila ada admin baru, tambahkan UID-nya ke daftar tersebut. UID terlihat di Firebase Console pada halaman Authentication, kolom User UID.
+Konsekuensinya, setiap akun yang Tuan tambahkan di Firebase Authentication otomatis bisa menulis, termasuk menghapus seluruh katalog. Karena itu:
+
+- Hanya tambahkan akun yang benar-benar dipercaya.
+- Hapus akun yang tidak dipakai. Akun lama tetap bisa menulis selama masih ada.
+- Jangan aktifkan pendaftaran mandiri. Buka Authentication, Sign-in method, lalu pastikan hanya Email/Password yang aktif tanpa alur pendaftaran di halaman admin.
+- Pakai kata sandi panjang dan unik untuk setiap akun admin.
+
+Bila nanti ingin lebih ketat, ganti `request.auth != null` menjadi daftar UID atau daftar email admin, misalnya `request.auth.token.email in ['email1', 'email2']`.
 
 Untuk menerbitkan aturan setelah diubah:
 

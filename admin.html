@@ -68,6 +68,30 @@ td input.num{text-align:right}
 .profit-pos{color:#2E8B57;font-weight:700}
 .profit-neg{color:#B33A5A;font-weight:700}
 
+/* KALKULATOR MODAL PER PCS */
+.calc-card{background:linear-gradient(135deg,#FFF8F0 0%,#FFEAF3 100%);border:1.5px solid #FFD8E6}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.calc-field label{display:block;font-size:11.5px;font-weight:800;color:var(--rose-dark);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.calc-field input{width:100%;padding:11px 13px;border:1.5px solid var(--pink-200);border-radius:12px;font-family:inherit;font-size:14px;background:#fff;transition:border-color .2s,box-shadow .2s}
+.calc-field input:focus{outline:none;border-color:var(--soft-pink);box-shadow:0 0 0 3px rgba(244,163,192,.2)}
+.calc-result-box{background:#fff;border:1.5px dashed var(--soft-pink);border-radius:14px;padding:16px;text-align:center}
+.calc-result-label{font-size:11.5px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.calc-result-value{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--rose);line-height:1.1}
+.calc-result-breakdown{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--pink-200);line-height:1.5}
+.calc-result-breakdown b{color:var(--rose-dark)}
+.cost-label-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.cost-label-row label{margin-bottom:0}
+.calc-mini-btn{padding:4px 10px;font-size:11px;font-weight:800;background:var(--pink-50);border:1.5px solid var(--pink-200);border-radius:8px;color:var(--rose);cursor:pointer;transition:all .2s;font-family:inherit}
+.calc-mini-btn:hover{background:var(--soft-pink);color:#fff;border-color:var(--soft-pink)}
+.calc-modal-panel{margin-top:10px;padding:14px;background:linear-gradient(135deg,#FFF8F0,#FFEAF3);border:1.5px dashed var(--soft-pink);border-radius:12px}
+.calc-mini-title{font-size:11.5px;font-weight:800;color:var(--rose-dark);margin-bottom:10px}
+.calc-mini-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.calc-mini-row label{flex:1.4;font-size:11.5px;font-weight:700;color:var(--muted);margin:0;line-height:1.3}
+.calc-mini-row input{flex:1;width:auto;padding:8px 10px;border:1.5px solid var(--pink-200);border-radius:8px;font-size:13px;font-family:inherit;text-align:right}
+.calc-mini-row input:focus{outline:none;border-color:var(--soft-pink)}
+.calc-mini-result{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fff;border-radius:10px;margin:10px 0;font-size:11.5px;color:var(--muted);font-weight:700}
+.calc-mini-result b{color:var(--rose);font-size:16px;font-family:'Playfair Display',serif}
+
 .login-box{max-width:420px;margin:60px auto;background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow-md);text-align:center}
 .login-box h1{margin-bottom:6px}
 .login-box .sub{margin-bottom:18px}
@@ -89,7 +113,7 @@ td input.num{text-align:right}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--rose-dark);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s;z-index:300}
 .toast.show{opacity:1}
 
-@media (max-width:640px){.form-grid{grid-template-columns:1fr}}
+@media (max-width:640px){.form-grid{grid-template-columns:1fr}.calc-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -135,6 +159,33 @@ td input.num{text-align:right}
     <p class="sub" id="dashSub">Atur harga jual, harga modal, dan jumlah terjual. Data tersimpan di browser ini dan langsung dipakai halaman utama.</p>
 
     <div class="stats" id="stats"></div>
+
+    <!-- Kalkulator modal per pcs -->
+    <div class="card calc-card">
+      <div style="margin-bottom:14px">
+        <h2 style="margin:0">Kalkulator Modal per Pcs</h2>
+        <p class="sub" style="margin:4px 0 0">Hitung modal satuan dari harga satu bungkus. Hasilnya bisa langsung dipakai saat mengisi harga modal produk.</p>
+      </div>
+      <div class="calc-grid">
+        <div class="calc-field">
+          <label for="calcTotal">Total 1 bungkus (Rp)</label>
+          <input type="text" id="calcTotal" inputmode="numeric" placeholder="50000">
+        </div>
+        <div class="calc-field">
+          <label for="calcIsi">Isi per bungkus (pcs)</label>
+          <input type="number" id="calcIsi" placeholder="10" min="1">
+        </div>
+        <div class="calc-field">
+          <label for="calcExtra">Biaya tambahan (Rp)</label>
+          <input type="text" id="calcExtra" inputmode="numeric" placeholder="0">
+        </div>
+      </div>
+      <div class="calc-result-box">
+        <div class="calc-result-label">Modal per pcs</div>
+        <div class="calc-result-value" id="calcResult">Rp 0</div>
+        <div class="calc-result-breakdown" id="calcBreakdown">Masukkan harga bungkus dan isinya untuk melihat hasil.</div>
+      </div>
+    </div>
 
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
@@ -245,8 +296,31 @@ td input.num{text-align:right}
           <input type="text" id="fHarga" inputmode="numeric" required>
         </div>
         <div class="field">
-          <label for="fCost">Harga Modal (Rp)</label>
+          <div class="cost-label-row">
+            <label for="fCost">Harga Modal (Rp)</label>
+            <button type="button" id="calcModalToggle" class="calc-mini-btn">Hitung dari bungkus</button>
+          </div>
           <input type="text" id="fCost" inputmode="numeric">
+          <div id="calcModalPanel" class="calc-modal-panel" style="display:none">
+            <div class="calc-mini-title">Hitung modal per pcs</div>
+            <div class="calc-mini-row">
+              <label for="cmTotal">Total 1 bungkus (Rp)</label>
+              <input type="text" id="cmTotal" inputmode="numeric" placeholder="50000">
+            </div>
+            <div class="calc-mini-row">
+              <label for="cmIsi">Isi per bungkus (pcs)</label>
+              <input type="number" id="cmIsi" placeholder="10" min="1">
+            </div>
+            <div class="calc-mini-row">
+              <label for="cmExtra">Biaya tambahan (Rp)</label>
+              <input type="text" id="cmExtra" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="calc-mini-result">
+              <span>Modal per pcs</span>
+              <b id="cmResult">Rp 0</b>
+            </div>
+            <button type="button" id="cmUse" class="btn btn-primary btn-sm" style="width:100%">Pakai Nilai Ini</button>
+          </div>
         </div>
         <div class="field">
           <label for="fSold">Terjual (pcs)</label>
@@ -866,6 +940,11 @@ function openModal(i){
   fotoTemp = p.foto || "";
   document.getElementById("fFoto").value = "";
   setPreview();
+  document.getElementById("calcModalPanel").style.display = "none";
+  document.getElementById("cmTotal").value = "";
+  document.getElementById("cmIsi").value = "";
+  document.getElementById("cmExtra").value = "";
+  document.getElementById("cmResult").textContent = "Rp 0";
   modalBack.classList.add("show");
 }
 function closeModal(){ modalBack.classList.remove("show"); editingIndex = -1; }
@@ -1017,6 +1096,81 @@ document.getElementById("resetBtn").addEventListener("click", async ()=>{
     await batch.commit();
     toast("Reset ke default");
   }catch(e){ toast("Gagal reset: " + e.message); }
+});
+
+/* ============================================================
+   KALKULATOR MODAL PER PCS
+   ============================================================ */
+function bindRupiahInput(el){
+  if (!el) return;
+  el.addEventListener("input", ()=>{
+    const v = el.value.replace(/[^\d]/g, "");
+    if (v === ""){ el.value = ""; return; }
+    el.value = parseInt(v,10).toLocaleString("id-ID");
+  });
+}
+
+function hitungCalcDashboard(){
+  const total = parseNum(document.getElementById("calcTotal").value);
+  const isi = parseInt(document.getElementById("calcIsi").value, 10) || 0;
+  const extra = parseNum(document.getElementById("calcExtra").value);
+  const hasil = document.getElementById("calcResult");
+  const rinci = document.getElementById("calcBreakdown");
+
+  if (isi <= 0 && total <= 0){
+    hasil.textContent = "Rp 0";
+    rinci.textContent = "Masukkan harga bungkus dan isinya untuk melihat hasil.";
+    return;
+  }
+  if (isi <= 0){
+    hasil.textContent = "Rp 0";
+    rinci.textContent = "Isi per bungkus harus lebih dari 0.";
+    return;
+  }
+  if (total <= 0){
+    hasil.textContent = "Rp 0";
+    rinci.textContent = "Masukkan total harga satu bungkus.";
+    return;
+  }
+
+  const perPcs = Math.ceil((total + extra) / isi);
+  hasil.textContent = "Rp " + fmtNum(perPcs);
+  rinci.innerHTML = "(Rp <b>" + fmtNum(total) + "</b>" +
+    (extra > 0 ? " + Rp <b>" + fmtNum(extra) + "</b> biaya tambahan" : "") +
+    ") dibagi <b>" + isi + "</b> pcs = <b>Rp " + fmtNum(perPcs) + "</b>";
+}
+
+function hitungCalcModal(){
+  const total = parseNum(document.getElementById("cmTotal").value);
+  const isi = parseInt(document.getElementById("cmIsi").value, 10) || 0;
+  const extra = parseNum(document.getElementById("cmExtra").value);
+  const hasil = document.getElementById("cmResult");
+  if (isi <= 0 || total <= 0){ hasil.textContent = "Rp 0"; return; }
+  hasil.textContent = "Rp " + fmtNum(Math.ceil((total + extra) / isi));
+}
+
+bindRupiahInput(document.getElementById("calcTotal"));
+bindRupiahInput(document.getElementById("calcExtra"));
+bindRupiahInput(document.getElementById("cmTotal"));
+bindRupiahInput(document.getElementById("cmExtra"));
+["calcTotal","calcIsi","calcExtra"].forEach(id=>{
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("input", hitungCalcDashboard);
+});
+["cmTotal","cmIsi","cmExtra"].forEach(id=>{
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("input", hitungCalcModal);
+});
+document.getElementById("calcModalToggle").addEventListener("click", ()=>{
+  const panel = document.getElementById("calcModalPanel");
+  panel.style.display = (panel.style.display === "none") ? "block" : "none";
+});
+document.getElementById("cmUse").addEventListener("click", ()=>{
+  const angka = parseInt(document.getElementById("cmResult").textContent.replace(/[^\d]/g, ""), 10) || 0;
+  if (!angka){ toast("Hitung dulu modal per pcs"); return; }
+  document.getElementById("fCost").value = fmtNum(angka);
+  document.getElementById("calcModalPanel").style.display = "none";
+  toast("Modal per pcs terisi otomatis");
 });
 
 /* init */

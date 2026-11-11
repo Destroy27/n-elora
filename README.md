@@ -22,6 +22,7 @@ n-elora/
 ├── firebase.json
 ├── firestore.rules
 ├── logo-nelora.png
+├── gerbera.png
 ├── README.md
 ├── README-firebase.md
 └── .gitignore

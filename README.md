@@ -6,7 +6,7 @@ Landing page untuk **N.Elora**, toko bunga kawat bulu handmade. Dibuat dengan HT
 
 - Hero dengan animasi GSAP dan hiasan bunga
 - Katalog produk (Buket, Bunga Tunggal, Custom) dengan filter
-- Foto produk yang bisa diunggah dari halaman admin
+- Foto produk yang diunggah dari halaman admin
 - Integrasi WhatsApp untuk pemesanan
 - Tombol WhatsApp melayang
 - Tampilan responsif untuk HP dan desktop
@@ -19,6 +19,8 @@ n-elora/
 ├── index.html
 ├── admin.html
 ├── firebase-config.js
+├── firebase.json
+├── firestore.rules
 ├── logo-nelora.png
 ├── README.md
 ├── README-firebase.md
@@ -29,31 +31,23 @@ n-elora/
 
 Alamat: `https://destroy27.github.io/n-elora/admin.html`, atau klik tautan **Admin** di bagian bawah halaman utama.
 
-Mode lokal (tanpa Firebase): kata sandi bawaan `findi`. Data tersimpan di browser yang dipakai mengedit saja.
-
-Mode server (dengan Firebase): masuk memakai email dan kata sandi akun admin yang dibuat di Firebase Authentication. Data tersimpan di Firestore, foto di Storage, dan halaman utama membaca data yang sama.
+Admin memakai akun Firebase Authentication. Akun dibuat oleh pemilik proyek lewat konsol Firebase, bukan lewat halaman web. Jangan pernah menaruh kata sandi di dalam kode atau di repositori.
 
 Fitur admin:
 
 - Ubah harga jual, harga modal, dan jumlah terjual langsung dari tabel
 - Tambah, edit, dan hapus produk
-- Unggah foto produk (otomatis diperkecil menjadi JPEG 900 px)
+- Unggah foto produk, otomatis diperkecil menjadi JPEG 640 px
 - Lihat total omzet dan total keuntungan
 - Reset ke data default
 
 Rumus keuntungan: `(harga jual - harga modal) x jumlah terjual`.
 
-## Mengaktifkan Sinkronisasi Server
+## Data
 
-Ikuti `README-firebase.md`. Ringkasnya:
+Data produk disimpan di **Cloud Firestore**, koleksi `produk`. Foto disimpan langsung di dalam dokumen sebagai teks `data:image/jpeg;base64,...` yang sudah diperkecil, sehingga tidak memerlukan Cloud Storage yang berbayar.
 
-1. Buat proyek Firebase dan aplikasi web.
-2. Salin `firebaseConfig` ke `firebase-config.js`.
-3. Aktifkan Authentication (Email/Password), Firestore, dan Storage.
-4. Pasang aturan keamanan yang disediakan.
-5. Buat satu akun admin untuk Findi.
-
-Selama `apiKey` dan `projectId` di `firebase-config.js` masih kosong, situs otomatis berjalan pada mode lokal dan tetap bisa dipakai.
+Aturan keamanan ada di `firestore.rules`: semua orang boleh membaca, hanya pengguna yang sudah login yang boleh menulis.
 
 ## Cara Menjalankan Lokal
 

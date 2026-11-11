@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "nelora-b735c"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

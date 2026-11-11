@@ -35,7 +35,7 @@
   --radius-md: 24px;
   --radius-lg: 32px;
   
-  --nav-h: 60px; /* Top nav lebih tipis di HP */
+  --nav-h: 60px; 
   --bottom-nav-h: 80px;
 }
 
@@ -62,7 +62,6 @@ a{text-decoration:none;color:inherit}
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
 ::selection{background:var(--soft-pink);color:var(--white)}
 
-/* Lebar container lebih maksimal di HP (94%) */
 .container{width:min(1140px, 94%);margin-inline:auto}
 section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 
@@ -98,7 +97,7 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 /* ==================== LIQUID GLASS BOTTOM NAV ==================== */
 .bottom-nav-container {
   position: fixed;
-  bottom: 16px; /* Lebih merapat ke bawah */
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
@@ -125,7 +124,7 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  height: 46px; /* Sedikit lebih pendek agar compact */
+  height: 46px;
   border-radius: 999px;
   background: rgba(244, 163, 192, 0.3);
   backdrop-filter: blur(10px);
@@ -175,7 +174,6 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 /* ==================== HERO ==================== */
 .hero{
   padding:calc(var(--nav-h) + 20px) 0 30px;
-  min-height: auto; /* Hapus min-height 90vh agar compact */
   display: flex;
   align-items: center;
   position: relative;
@@ -192,12 +190,12 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .hero-title-wrapper {
   position: relative;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 24px; /* Jarak ditambah agar tidak tabrakan */
 }
 
 .hero-title {
   font-family: 'Fredoka', sans-serif;
-  font-size: clamp(3rem, 14vw, 8.5rem); /* Ukuran disesuaikan untuk HP */
+  font-size: clamp(3rem, 14vw, 8.5rem); 
   font-weight: 700;
   color: var(--rose-ink);
   line-height: 1;
@@ -206,36 +204,40 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   align-items: center;
   flex-wrap: nowrap;
   letter-spacing: -1px;
+  position: relative;
+  z-index: 2; 
 }
 
 .letter {
   display: inline-block;
   will-change: transform;
   text-shadow: 0 6px 16px rgba(244, 163, 192, 0.3);
+  position: relative;
+  z-index: 2;
 }
 
-/* ====== FLOWER DOT ====== */
+/* ====== FLOWER DOT (gerbera) ====== */
 .letter-dot {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 4px;
-  width: clamp(2.8rem, 11vw, 6.5rem);
-  height: clamp(2.8rem, 11vw, 6.5rem);
+  margin: 0 8px;
+  width: clamp(3.5rem, 15vw, 7.5rem); 
+  height: clamp(3.5rem, 15vw, 7.5rem);
   vertical-align: middle;
   cursor: pointer;
   transform-origin: center;
+  z-index: 1; 
 }
 
 .flower-wrap {
-  position: relative;
-  z-index: 2;
+  position: absolute; 
+  inset: -20%; /* Sedikit dikurangi agar tidak terlalu meluber ke bawah */
+  z-index: -1; 
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
   will-change: transform;
 }
 
@@ -244,7 +246,7 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   height: 100%;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 8px 16px rgba(244, 163, 192, 0.55)) drop-shadow(0 3px 5px rgba(74, 42, 58, 0.15));
+  filter: drop-shadow(0 10px 20px rgba(244, 163, 192, 0.6)) drop-shadow(0 4px 6px rgba(74, 42, 58, 0.15));
   will-change: transform;
 }
 
@@ -254,7 +256,7 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   inset: 8%;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(244,163,192,0.45) 0%, rgba(244,163,192,0) 70%);
-  z-index: 0;
+  z-index: -1;
   animation: haloPulse 3s ease-in-out infinite;
   pointer-events: none;
 }
@@ -263,53 +265,35 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   50%      { transform: scale(1.15); opacity: 0.85; }
 }
 
-/* ====== SPARKLE + HEART LAYER ====== */
+/* ====== SPARKLE LAYER (Bling-bling) ====== */
 .sparkle-layer {
   position: absolute;
-  inset: -45%;
+  inset: -60%;
   pointer-events: none;
-  z-index: 3;
+  z-index: 3; 
 }
 
 .sparkle {
   position: absolute;
-  font-size: 0.18em;
+  font-size: 0.22em;
   line-height: 1;
   color: var(--soft-pink);
-  text-shadow: 0 0 8px rgba(244, 163, 192, 0.9), 0 0 14px rgba(244, 163, 192, 0.5);
+  text-shadow: 0 0 10px rgba(244, 163, 192, 1), 0 0 20px rgba(244, 163, 192, 0.8);
   animation: sparkleTwinkle 2.6s ease-in-out infinite;
   will-change: transform, opacity;
 }
-.sparkle.s1 { top: 8%;  left: 6%;  animation-delay: 0s;   }
-.sparkle.s2 { top: 4%;  right: 8%; animation-delay: 0.55s; color: var(--butter); }
-.sparkle.s3 { bottom: 12%; left: 3%;  animation-delay: 1.1s; }
-.sparkle.s4 { bottom: 6%;  right: 5%; animation-delay: 1.65s; color: var(--mint-leaf); }
+.sparkle.s1 { top: 5%;  left: 5%;  animation-delay: 0s;   }
+.sparkle.s2 { top: 10%; right: 10%; animation-delay: 0.4s; color: var(--butter); }
+.sparkle.s3 { bottom: 10%; left: 10%;  animation-delay: 0.8s; }
+.sparkle.s4 { bottom: 5%;  right: 5%;  animation-delay: 1.2s; color: var(--mint-leaf); }
+.sparkle.s5 { top: 40%;  left: -5%; animation-delay: 1.6s; }
+.sparkle.s6 { top: 30%; right: -5%; animation-delay: 2.0s; color: var(--butter); }
+.sparkle.s7 { bottom: 30%; left: -5%; animation-delay: 0.6s; color: var(--mint-leaf); }
+.sparkle.s8 { bottom: 40%; right: -5%; animation-delay: 1.0s; }
 
 @keyframes sparkleTwinkle {
   0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
-  45%      { opacity: 1; transform: scale(1.15) rotate(180deg); }
-  55%      { opacity: 1; transform: scale(1) rotate(200deg); }
-}
-
-.heart {
-  position: absolute;
-  font-size: 0.14em;
-  line-height: 1;
-  color: #FF8FB8;
-  opacity: 0;
-  text-shadow: 0 0 6px rgba(255, 143, 184, 0.6);
-  animation: heartFloat 4.5s ease-out infinite;
-  will-change: transform, opacity;
-}
-.heart.h1 { bottom: 18%; left: 12%;  animation-delay: 1s;   --dx: -10px; --dy: -28px; }
-.heart.h2 { bottom: 14%; right: 15%; animation-delay: 2.4s; --dx:   8px; --dy: -32px; }
-.heart.h3 { bottom: 22%; left: 50%;  animation-delay: 3.6s; --dx:  -3px; --dy: -26px; }
-
-@keyframes heartFloat {
-  0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
-  20%  { opacity: 1; transform: translate(0, -6px) scale(1); }
-  80%  { opacity: 0.6; }
-  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.4) rotate(180deg); }
 }
 
 /* ====== 3D BLOOM FLOWERS ====== */
@@ -365,6 +349,8 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   font-size: clamp(13px, 3vw, 18px);
   max-width: 90%;
   line-height: 1.5;
+  position: relative;
+  z-index: 3;
 }
 
 .hero-actions {
@@ -373,6 +359,8 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
   gap: 10px;
   justify-content: center;
   margin-bottom: 0;
+  position: relative;
+  z-index: 3;
 }
 
 /* MARQUEE */
@@ -390,23 +378,42 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .cat-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
 .cat-card p{font-size:11px;color:var(--text-muted);line-height:1.4}
 
-/* ETALASE */
+/* ETALASE - DIPERBARUI UNTUK BG PUTIH */
 .filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
 .filter-btn{padding:6px 14px;border-radius:999px;background:transparent;border:1.5px solid rgba(244, 163, 192, 0.3);font-weight:600;font-size:11px;color:var(--text-muted);transition:background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;will-change: transform;}
 .filter-btn:hover{border-color:var(--soft-pink);color:var(--rose-ink)}
 .filter-btn.active{background:var(--soft-pink);border-color:var(--soft-pink);color:var(--white);box-shadow:0 3px 8px rgba(244, 163, 192, 0.3);}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:12px;}
-.card{background:var(--white);border:1px solid rgba(244, 163, 192, 0.15);border-radius:var(--radius-sm);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:box-shadow 0.4s ease;will-change: transform;}
+.card{background:var(--white);border:1px solid rgba(244, 163, 192, 0.2);border-radius:var(--radius-sm);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);transition:box-shadow 0.4s ease;will-change: transform;}
 .card:hover{box-shadow:var(--shadow-md);}
-.card-img{position:relative;aspect-ratio:4/3.5;display:grid;place-items:center;background:var(--blush);overflow:hidden;}
-.card-watercolor{width: 85%;max-height: 85%;object-fit: contain;filter: drop-shadow(0 8px 14px rgba(74, 42, 58, 0.12));will-change: transform;}
-.card-photo{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;will-change: transform;}
-.card-badge{position:absolute;top:8px;left:8px;z-index:2;background:var(--white);color:var(--rose-ink);font-size:8px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:0.5px;text-transform:uppercase;box-shadow:var(--shadow-sm);}
+
+/* Wadah gambar diubah menjadi putih bersih */
+.card-img{
+  position:relative;
+  aspect-ratio:4/3.5;
+  display:grid;
+  place-items:center;
+  background:#FFFFFF; /* Putih bersih untuk gambar user */
+  overflow:hidden;
+}
+
+/* Mengatur gambar agar pas di dalam wadah putih */
+.card-watercolor,
+.card-photo{
+  width:100%;
+  height:100%;
+  object-fit:contain; /* Gambar tidak terpotong, utuh di tengah */
+  padding: 8px; /* Sedikit ruang agar tidak menempel ke pinggir */
+  filter: none; /* Hapus bayangan drop-shadow agar gambar bersih menyatu dengan bg putih */
+  will-change: transform;
+}
+
+.card-badge{position:absolute;top:8px;left:8px;z-index:2;background:var(--blush);color:var(--rose-ink);font-size:8px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:0.5px;text-transform:uppercase;box-shadow:var(--shadow-sm);border:1px solid rgba(244,163,192,0.3);}
 .card-body{padding:10px;display:flex;flex-direction:column;gap:4px;flex:1}
 .card-cat{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--soft-pink);}
 .card-title{font-size:12px;font-weight:700;line-height:1.3}
-.card-desc{display:none;} /* Disembunyikan di HP untuk menghemat tempat */
+.card-desc{display:none;}
 .card-foot{margin-top:auto;padding-top:8px;display:flex;flex-direction:column;align-items:stretch;gap:8px;}
 .price{font-weight:700;color:var(--rose-ink);font-size:13px}
 .price small{font-size:10px;color:var(--text-muted);font-weight:600}
@@ -434,10 +441,11 @@ section{padding:clamp(30px, 5vw, 80px) 0;position:relative}
 .cta p{color:var(--text-muted);font-size:clamp(12px, 3vw, 14px);max-width:50ch;margin:0 auto 16px;position:relative;z-index:1;}
 .cta .btn{position:relative;z-index:1}
 
-/* FOOTER */
+/* FOOTER (2 BARIS) */
 footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
-.foot-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:24px;text-align:center;}
+.foot-grid{display:flex;flex-direction:column;gap:30px;margin-bottom:24px;text-align:center;align-items:center;}
 .foot-brand p{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;margin-inline:auto;max-width:36ch}
+.foot-links-row{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;text-align:center;width:100%;}
 .foot-col h4{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose-ink);margin-bottom:12px;}
 .foot-col a,.foot-col span{display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;transition:color 0.2s;}
 .foot-col a:hover{color:var(--soft-pink)}
@@ -464,9 +472,10 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   section { padding: clamp(60px, 8vw, 100px) 0; }
   .sec-head { margin-bottom: clamp(30px, 5vw, 50px); }
   .sec-title { font-size: clamp(2rem, 4vw, 3rem); }
-  .hero { padding: calc(var(--nav-h) + 40px) 0 60px; min-height: 85vh; }
+  .hero { padding: calc(var(--nav-h) + 40px) 0 60px; }
   .hero-title { font-size: clamp(5rem, 12vw, 8.5rem); }
   .letter-dot { width: clamp(4.5rem, 10vw, 6.5rem); height: clamp(4.5rem, 10vw, 6.5rem); }
+  .flower-wrap { inset: -25%; }
   .hero-sub { margin-bottom: 32px; font-size: 18px; }
   .hero-actions { gap: 16px; margin-bottom: 40px; }
   .btn { padding: 14px 28px; font-size: 14px; }
@@ -486,6 +495,7 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .card-foot { flex-direction: row; align-items: center; justify-content: space-between; padding-top: 16px; }
   .btn-buy { padding: 10px 18px; font-size: 13px; }
   .card-badge { top: 16px; left: 16px; font-size: 10px; padding: 6px 14px; }
+  .card-watercolor, .card-photo { padding: 12px; } /* Padding lebih lega di desktop */
   
   .steps { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
   .step { display: block; padding: 24px 20px; }
@@ -498,11 +508,11 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .cta p { font-size: clamp(14px, 2vw, 16px); margin-bottom: 32px; }
   
   footer { padding: clamp(48px, 6vw, 72px) 0 32px; }
-  .foot-grid { grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; text-align: left; margin-bottom: 40px; }
-  .foot-brand .brand { justify-content: flex-start !important; }
+  .foot-grid { gap: 40px; margin-bottom: 40px; }
+  .foot-links-row { gap: 80px; }
   .foot-col h4 { font-size: 12px; margin-bottom: 16px; }
   .foot-col a, .foot-col span { font-size: 13px; margin-bottom: 8px; }
-  .foot-bottom { justify-content: space-between; text-align: left; padding-top: 24px; font-size: 12px; }
+  .foot-bottom { padding-top: 24px; font-size: 12px; }
   
   .bottom-nav-container { max-width: 380px; bottom: 24px; padding: 6px 8px; }
   .nav-indicator { height: 52px; }
@@ -517,7 +527,7 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   .bloom-slot .bloom-petal{ transform: scale(1); }
   .bloom-slot .bloom-center{ transform: scale(1); }
   .letter-dot::before { animation: none; opacity: 0.6; }
-  .sparkle, .heart { animation: none !important; }
+  .sparkle { animation: none !important; }
   .nav-indicator { transition: none !important; }
 }
 </style>
@@ -576,9 +586,10 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
                 <span class="sparkle s2">✧</span>
                 <span class="sparkle s3">✦</span>
                 <span class="sparkle s4">✧</span>
-                <span class="heart h1">♥</span>
-                <span class="heart h2">♥</span>
-                <span class="heart h3">♥</span>
+                <span class="sparkle s5">✦</span>
+                <span class="sparkle s6">✧</span>
+                <span class="sparkle s7">✦</span>
+                <span class="sparkle s8">✧</span>
               </span>
             </span>
             <span class="letter">E</span>
@@ -718,9 +729,11 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
 </section>
 </main>
 
+<!-- FOOTER 2 BARIS -->
 <footer id="kontak">
   <div class="container">
     <div class="foot-grid">
+      <!-- Baris 1: Brand -->
       <div class="foot-brand">
         <div class="brand" style="justify-content:center; margin-bottom:8px;">
           <div class="logo-box">
@@ -731,17 +744,21 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
         </div>
         <p>Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket bunga elegan yang dibuat khusus untukmu.</p>
       </div>
-      <div class="foot-col">
-        <h4>Navigasi</h4>
-        <a href="#jenis">Kategori</a>
-        <a href="#etalase">Etalase</a>
-        <a href="#cara">Cara Pesan</a>
-      </div>
-      <div class="foot-col">
-        <h4>Hubungi Kami</h4>
-        <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya.">+62 821-4607-1595</a>
-        <span>Senin - Sabtu</span>
-        <span>09.00 - 20.00 WIB</span>
+      
+      <!-- Baris 2: Navigasi & Kontak Berdampingan -->
+      <div class="foot-links-row">
+        <div class="foot-col">
+          <h4>Navigasi</h4>
+          <a href="#jenis">Kategori</a>
+          <a href="#etalase">Etalase</a>
+          <a href="#cara">Cara Pesan</a>
+        </div>
+        <div class="foot-col">
+          <h4>Hubungi Kami</h4>
+          <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya.">+62 821-4607-1595</a>
+          <span>Senin - Sabtu</span>
+          <span>09.00 - 20.00 WIB</span>
+        </div>
       </div>
     </div>
     <div class="foot-bottom">
@@ -751,7 +768,7 @@ footer{padding:30px 0 20px;border-top:1px solid rgba(244, 163, 192, 0.2);}
   </div>
 </footer>
 
-<!-- LIQUID GLASS BOTTOM NAVIGATION (3 ITEMS) -->
+<!-- BOTTOM NAV -->
 <div class="bottom-nav-container">
   <div class="nav-indicator" id="navIndicator"></div>
   
@@ -851,6 +868,7 @@ function renderProduk(){
   grid.innerHTML = PRODUK.map(p => {
     const pesan = `Halo N.Elora 🌸%0A%0ASaya mau pesan:%0A• Produk: ${p.nama}%0A• Harga: Rp ${p.harga}%0A%0AApakah masih tersedia?`;
     const link  = `https://wa.me/${WA_NUMBER}?text=${pesan}`;
+    // Menggunakan card-photo jika ada foto, card-watercolor jika gambar ilustrasi
     const media = p.foto
       ? `<img class="card-photo" src="${p.foto}" alt="${p.nama}" loading="lazy">`
       : `<img class="card-watercolor" src="${p.img || IMG.bouquetPink}" alt="${p.nama}" loading="lazy">`;
@@ -931,9 +949,9 @@ function initBloomFlowers(){
 initBloomFlowers();
 
 /* ============================================================
-   BUNGA SVG CADANGAN
+   GERBERA SVG FALLBACK
    ============================================================ */
-function createBungaSVG(){
+function createGerberaSVG(){
   const CX = 60, CY = 60;
 
   function petal(angle, length, width, fill){
@@ -1024,7 +1042,7 @@ function createBungaSVG(){
 }
 
 /* ============================================================
-   INIT BUNGA TITIK JUDUL
+   INIT BUNGA GERBERA
    ============================================================ */
 function initBunga(){
   const wrap = document.querySelector('#heroBunga .flower-wrap');
@@ -1032,7 +1050,7 @@ function initBunga(){
 
   const img = new Image();
   img.onload  = () => { wrap.innerHTML = `<img src="gerbera.png" alt="Hiasan bunga" class="title-flower-img" draggable="false">`; };
-  img.onerror = () => { wrap.innerHTML = createBungaSVG(); };
+  img.onerror = () => { wrap.innerHTML = createGerberaSVG(); };
   img.src = "gerbera.png";
 }
 initBunga();
@@ -1072,7 +1090,7 @@ function animateBloomFlowers(){
         scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 } });
 
     gsap.to(slot, {
-      y: i % 2 === 0 ? -12 : -18,
+      y: i % 2 === 0 ? -6 : -10, 
       duration: 3.2 + i * 0.4,
       repeat: -1, yoyo: true, ease: "sine.inOut"
     });
@@ -1087,7 +1105,9 @@ function initMicroAnimations(){
 
   const flower = document.querySelector('#heroBunga .title-flower-img');
   if (flower){
+    // Rotasi lambat
     gsap.to(flower, { rotation: 360, duration: 30, repeat: -1, ease: "none", transformOrigin: "center center" });
+    // Breathing scale
     gsap.to(flower, { scale: 1.08, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
 
     const outer = document.querySelector('.gerb-layer-outer');
@@ -1163,13 +1183,20 @@ function playIntro(){
     .from(".hero-sub",     { y: 20, opacity: 0, duration: 0.7 }, "-=0.5")
     .from(".hero-actions .btn", { y: 20, opacity: 0, duration: 0.7, stagger: 0.1 }, "-=0.5");
 
-  gsap.to(".letter:not(.letter-dot)", {
-    y: -4,
-    duration: 2.2,
+  /* 
+   * ANIMASI HERO BARU: 
+   * - Tidak hanya naik turun, tapi juga bergeser sedikit ke samping (x) dan berotasi.
+   * - Nilai y hanya negatif (ke atas) agar tidak menabrak teks bawah.
+   */
+  gsap.to(".letter", {
+    y: -10, // Hanya bergerak ke atas
+    x: (i) => i % 2 === 0 ? 3 : -3, // Geser kiri-kanan halus
+    rotation: (i) => i % 2 === 0 ? 2 : -2, // Miring sedikit
+    duration: 2.8,
     repeat: -1,
     yoyo: true,
     ease: "sine.inOut",
-    stagger: { each: 0.08, from: "center" },
+    stagger: { each: 0.1, from: "center" },
     delay: 1.4
   });
 
@@ -1363,7 +1390,7 @@ function initAnimasi(){
   gsap.from(".cta h2, .cta p, .cta .btn", { opacity: 0, y: 30, stagger: 0.15, duration: 0.9, ease: "power3.out",
     scrollTrigger: { trigger: ".cta", start: "top 80%", once: true } });
 
-  gsap.from(".foot-brand, .foot-col", { opacity: 0, y: 40, stagger: 0.1, duration: 0.8, ease: "power3.out",
+  gsap.from(".foot-brand, .foot-links-row", { opacity: 0, y: 40, stagger: 0.1, duration: 0.8, ease: "power3.out",
     scrollTrigger: { trigger: "footer", start: "top 90%", once: true } });
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -1419,7 +1446,7 @@ function initCardAnimations(){
   cards.forEach(card => {
     const media = card.querySelector(".card-watercolor, .card-photo");
     if (!media) return;
-    card.addEventListener("mouseenter", () => gsap.to(media, { scale: 1.12, y: -6, duration: 0.5, ease: "power2.out" }));
+    card.addEventListener("mouseenter", () => gsap.to(media, { scale: 1.08, y: -4, duration: 0.5, ease: "power2.out" }));
     card.addEventListener("mouseleave", () => gsap.to(media, { scale: 1, y: 0, duration: 0.5, ease: "power2.out" }));
   });
 }
@@ -1467,7 +1494,6 @@ async function mulai(){
   initCardAnimations();
   bindFilter();
   initMagnetic();
-  initBottomNav(); 
 
   if (MODE === "cloud"){
     try {

@@ -1087,10 +1087,11 @@ function openWarnaModal(idx) {
   warnaModalNoteEl.hidden = bolehWarna;
   if (bolehWarna) {
     stripBungaEl.dataset.idx = idx;
-    stripBungaEl.innerHTML = PALET_WARNA.map(w => {
+    stripBungaEl.innerHTML = warnaList(p).filter(w => w.tersedia !== false).map(w => {
       const active = pilihanWarna[idx] === w.nama ? " active" : "";
+      if (w.img) return `<button type="button" class="color-dot${active}" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"><img src="${w.img}" alt="${w.nama}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></button>`;
       return `<button type="button" class="color-dot${active}" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"></button>`;
-    }).join("");
+    }).join("") || `<p style="font-size:12px;color:var(--text-muted)">Tidak ada pilihan warna untuk produk ini.</p>`;
     stripWrapEl.dataset.idx = idx;
     stripWrapEl.innerHTML = WRAP_WARNA.map(w => {
       const active = pilihanWrap[idx] === w.nama ? " active" : "";
@@ -2096,7 +2097,15 @@ function openProductModal(idx) {
   const boleh = bolehPilihWarna(p.kategori);
   section.style.display = boleh ? "" : "none";
   if (boleh) {
-    strip.innerHTML = PALET_WARNA.map(w => '<button type="button" class="color-dot" style="--c:' + w.hex + '" data-hex="' + w.hex + '" data-warna="' + w.nama + '" title="' + w.nama + '"></button>').join("");
+    const warnaTersedia = warnaList(p).filter(w => w.tersedia !== false);
+    if (!warnaTersedia.length) {
+      strip.innerHTML = `<p style="font-size:12px;color:var(--text-muted)">Tidak ada pilihan warna untuk produk ini.</p>`;
+    } else {
+      strip.innerHTML = warnaTersedia.map(w => {
+        if (w.img) return `<button type="button" class="color-dot" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"><img src="${w.img}" alt="${w.nama}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></button>`;
+        return `<button type="button" class="color-dot" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"></button>`;
+      }).join("");
+    }
   } else {
     strip.innerHTML = "";
   }

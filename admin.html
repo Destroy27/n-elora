@@ -258,6 +258,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
     <span class="brand-name">N.Elora Admin</span>
   </div>
   <div class="topbar-actions">
+    <a href="keuangan.html" class="btn btn-ghost btn-sm">Keuangan</a>
     <a href="index.html" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">Lihat Situs</a>
     <button class="btn btn-danger btn-sm" id="logoutBtn" type="button">Keluar</button>
   </div>
@@ -538,8 +539,29 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
         <div class="cost-label-row">
           <label>Warna tersedia</label>
         </div>
-        <div id="fWarnaStrip" class="warna-modal-strip" style="gap:6px"></div>
-        <p class="hint-text">Pilih warna yang bisa dipilih pembeli di halaman etalase. Kosongkan jika tidak ada pilihan warna.</p>
+        <div id="fWarnaList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="fWarnaTambah">+ Tambah warna</button>
+        <div id="fWarnaForm" style="display:none;margin-top:10px;padding:12px;border:1px dashed var(--pink-200);border-radius:12px;background:var(--pink-50)">
+          <div class="form-grid">
+            <div class="field">
+              <label for="fWarnaPilih">Warna</label>
+              <select id="fWarnaPilih"></select>
+            </div>
+            <div class="field">
+              <label for="fWarnaFile">Gambar (wajib)</label>
+              <input type="file" id="fWarnaFile" accept="image/*">
+            </div>
+          </div>
+          <div id="fWarnaPreview" style="display:none;align-items:center;gap:10px;margin-top:8px">
+            <img id="fWarnaImg" alt="Pratinjau warna" width="64" height="64" style="width:64px;height:64px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid var(--pink-200)">
+            <button type="button" class="btn btn-danger btn-sm" id="fWarnaHapusGambar">Hapus gambar</button>
+          </div>
+          <div class="head-actions" style="margin-top:10px">
+            <button type="button" class="btn btn-primary btn-sm" id="fWarnaSimpan">Simpan warna</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="fWarnaBatal">Batal</button>
+          </div>
+        </div>
+        <p class="hint-text">Setiap warna wajib memiliki gambar. Warna yang tidak tersedia bisa disembunyikan dari tampilan web lewat tombol nonaktifkan.</p>
       </div>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="cancelBtn">Batal</button>
@@ -606,12 +628,12 @@ const gsap = window.gsap || null;
 const kurangiGerak = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const DEFAULT_PRODUK = [
-  { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png", desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0, foto:"", warna:["Pink","Blush"], promo: { tipe:"diskon", nilai:15, label:"Hemat 15%", event:"Demo Promo", mulai:"2024-01-01", selesai:"2030-12-31" } },
-  { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png", desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0, foto:"", warna:["Pink","Mint","Butter"] },
-  { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/blush-peony-rose-eucalyptus-arrangement-0d1f8c58.png", desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0, foto:"", warna:["Putih","Blush"] },
-  { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  img:"https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png", desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0, foto:"", warna:["Pink","Mint"] },
-  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:"https://images.pexels.com/photos/31805485/pexels-photo-31805485.jpeg?auto=compress&cs=tinysrgb&w=800", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0, foto:"", warna:["Peach","Lilac"] },
-  { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:"https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png", desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0, foto:"", warna:["Pink","Rose"] }
+  { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png", desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Blush",img:"",tersedia:true}], promo: { tipe:"diskon", nilai:15, label:"Hemat 15%", event:"Demo Promo", mulai:"2024-01-01", selesai:"2030-12-31" } },
+  { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png", desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Mint",img:"",tersedia:true},{nama:"Butter",img:"",tersedia:true}] },
+  { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/blush-peony-rose-eucalyptus-arrangement-0d1f8c58.png", desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0, foto:"", warna:[{nama:"Putih",img:"",tersedia:true},{nama:"Blush",img:"",tersedia:true}] },
+  { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  img:"https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png", desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Mint",img:"",tersedia:true}] },
+  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:"https://images.pexels.com/photos/31805485/pexels-photo-31805485.jpeg?auto=compress&cs=tinysrgb&w=800", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0, foto:"", warna:[{nama:"Peach",img:"",tersedia:true},{nama:"Lilac",img:"",tersedia:true}] },
+  { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:"https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png", desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Rose",img:"",tersedia:true}] }
 ];
 
 const DEFAULT_KATEGORI = [
@@ -673,6 +695,7 @@ let produk = [];
 let kategori = [];
 let editingIndex = -1;
 let fotoTemp = "";
+let warnaTemp = [];
 let katEditingId = null;
 let katFotoTemp = "";
 let auth = null, db = null, unsub = null, unsubKat = null, seedKategori = false;
@@ -689,7 +712,7 @@ function bacaLokal(){
         ...p,
         foto: p.foto || "",
         img: p.img || p.foto || "",
-        warna: Array.isArray(p.warna) ? p.warna : [],
+        warna: Array.isArray(p.warna) ? p.warna.map(w => (typeof w === "string" ? { nama: w, img: "", tersedia: true } : { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false })) : [],
         promo: p.promo || null
       }));
     }
@@ -778,7 +801,7 @@ function pantau(){
         sold: parseInt(v.sold,10) || 0,
         foto: v.foto || "",
         img: v.img || v.foto || "",
-        warna: Array.isArray(v.warna) ? v.warna : [],
+        warna: Array.isArray(v.warna) ? v.warna.map(w => (typeof w === "string" ? { nama: w, img: "", tersedia: true } : { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false })) : [],
         promo: v.promo || null
       };
     });
@@ -1594,6 +1617,15 @@ function openModal(i){
   fotoTemp = p.foto || "";
   document.getElementById("fFoto").value = "";
   setPreview();
+  // warna
+  warnaTemp = (Array.isArray(p.warna) ? p.warna : []).map(w => {
+    if (typeof w === "string") return { nama: w, img: "", tersedia: true };
+    return { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false };
+  }).filter(w => w.nama);
+  renderWarnaListAdmin();
+  document.getElementById("fWarnaForm").style.display = "none";
+  document.getElementById("fWarnaFile").value = "";
+  document.getElementById("fWarnaPreview").style.display = "none";
   document.getElementById("calcModalPanel").style.display = "none";
   document.getElementById("cmTotal").value = "";
   document.getElementById("cmIsi").value = "";
@@ -1610,18 +1642,107 @@ function openModal(i){
   document.getElementById("fPromoSelesai").value = pr.selesai || "";
 
   // warna
-  const strip = document.getElementById("fWarnaStrip");
-  const terpilih = Array.isArray(p.warna) ? p.warna : [];
-  strip.innerHTML = PALET_WARNA.map(w => {
-    const active = terpilih.includes(w.nama) ? " active" : "";
-    return `<button type="button" class="color-dot${active}" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}" aria-label="Warna ${w.nama}"></button>`;
-  }).join("");
+  warnaTemp = (Array.isArray(p.warna) ? p.warna : []).map(w => {
+    if (typeof w === "string") return { nama: w, img: "", tersedia: true };
+    return { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false };
+  }).filter(w => w.nama);
+  renderWarnaListAdmin();
+  document.getElementById("fWarnaForm").style.display = "none";
+  document.getElementById("fWarnaFile").value = "";
+  document.getElementById("fWarnaPreview").style.display = "none";
 
   bukaModal(modalBack);
 }
 function closeModal(){
   tutupModal(modalBack, ()=>{ editingIndex = -1; });
 }
+
+function renderWarnaListAdmin(){
+  const el = document.getElementById("fWarnaList");
+  if (!el) return;
+  if (!warnaTemp.length){
+    el.innerHTML = `<p class="hint-text" style="margin:0">Belum ada warna. Klik "+ Tambah warna" untuk menambah.</p>`;
+    return;
+  }
+  el.innerHTML = warnaTemp.map((w,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--pink-100);border-radius:12px;background:#fff">
+      ${w.img ? `<img src="${escapeHtml(w.img)}" alt="${escapeHtml(w.nama)}" width="48" height="48" style="width:48px;height:48px;object-fit:contain;border-radius:8px;background:#fff;border:1px solid var(--pink-200)">` : `<div style="width:48px;height:48px;border-radius:8px;background:var(--pink-50);display:grid;place-items:center;font-size:10px;color:var(--muted)">no img</div>`}
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:13px;color:var(--rose-dark)">${escapeHtml(w.nama)}</div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:2px">
+          <input type="checkbox" data-warna-idx="${i}" data-field="tersedia" ${w.tersedia !== false ? "checked" : ""}> Tersedia di web
+        </label>
+      </div>
+      <button type="button" class="btn btn-danger btn-sm" data-warna-hapus="${i}">Hapus</button>
+    </div>`).join("");
+  el.querySelectorAll("[data-warna-hapus]").forEach(b=>{
+    b.addEventListener("click", ()=>{ warnaTemp.splice(parseInt(b.dataset.warnaHapus,10),1); renderWarnaListAdmin(); });
+  });
+  el.querySelectorAll("[data-field='tersedia']").forEach(cb=>{
+    cb.addEventListener("change", ()=>{ warnaTemp[parseInt(cb.dataset.warnaIdx,10)].tersedia = cb.checked; });
+  });
+}
+
+// populate warna select
+function isiPilihanWarnaSelect(){
+  const sel = document.getElementById("fWarnaPilih");
+  if (!sel) return;
+  const terpakai = warnaTemp.map(w=>w.nama);
+  sel.innerHTML = PALET_WARNA.map(w =>
+    `<option value="${escapeHtml(w.nama)}" ${terpakai.includes(w.nama) ? "disabled" : ""}>${escapeHtml(w.nama)}${terpakai.includes(w.nama) ? " (sudah ada)" : ""}</option>`
+  ).join("");
+}
+
+// tambah warna
+document.getElementById("fWarnaTambah").addEventListener("click", ()=>{
+  isiPilihanWarnaSelect();
+  document.getElementById("fWarnaForm").style.display = "block";
+  document.getElementById("fWarnaFile").value = "";
+  document.getElementById("fWarnaPreview").style.display = "none";
+  document.getElementById("fWarnaImg").removeAttribute("src");
+});
+
+document.getElementById("fWarnaBatal").addEventListener("click", ()=>{
+  document.getElementById("fWarnaForm").style.display = "none";
+});
+
+document.getElementById("fWarnaFile").addEventListener("change", e=>{
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")){ toast("Berkas harus gambar"); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 480;
+      let w = img.width, h = img.height;
+      if (w > max || h > max){ const r = Math.min(max/w, max/h); w = Math.round(w*r); h = Math.round(h*r); }
+      const c = document.createElement("canvas"); c.width = w; c.height = h;
+      const ctx = c.getContext("2d"); ctx.drawImage(img,0,0,w,h);
+      document.getElementById("fWarnaImg").src = c.toDataURL("image/jpeg", 0.8);
+      document.getElementById("fWarnaPreview").style.display = "flex";
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("fWarnaHapusGambar").addEventListener("click", ()=>{
+  document.getElementById("fWarnaImg").removeAttribute("src");
+  document.getElementById("fWarnaFile").value = "";
+  document.getElementById("fWarnaPreview").style.display = "none";
+});
+
+document.getElementById("fWarnaSimpan").addEventListener("click", ()=>{
+  const nama = document.getElementById("fWarnaPilih").value;
+  const imgSrc = document.getElementById("fWarnaImg").getAttribute("src");
+  if (!imgSrc){ toast("Gambar wajib diisi untuk warna baru"); return; }
+  if (warnaTemp.some(w=>w.nama === nama)){ toast("Warna sudah ada"); return; }
+  warnaTemp.push({ nama: nama, img: imgSrc, tersedia: true });
+  renderWarnaListAdmin();
+  document.getElementById("fWarnaForm").style.display = "none";
+  toast("Warna ditambahkan");
+});
 
 document.getElementById("cancelBtn").addEventListener("click", closeModal);
 modalBack.addEventListener("click", e=>{ if (e.target === modalBack) closeModal(); });
@@ -1730,7 +1851,7 @@ document.getElementById("prodForm").addEventListener("submit", async e=>{
     sold: Math.max(0, parseInt(document.getElementById("fSold").value,10) || 0),
     foto: fotoTemp || "",
     img: (editingIndex >= 0 && produk[editingIndex].img) ? produk[editingIndex].img : "",
-    warna: [...fWarnaStrip.querySelectorAll(".color-dot.active")].map(d => d.dataset.warna),
+    warna: warnaTemp.map(w => ({ nama: w.nama, img: w.img || "", tersedia: w.tersedia !== false })),
     promo: (function(){
       const tipe = document.getElementById("fPromoTipe").value;
       if (!tipe) return null;

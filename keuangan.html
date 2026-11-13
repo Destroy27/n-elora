@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N.Elora - Keuangan</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blush:#FFF0F5;--soft-pink:#F4A3C0;--pink-50:#FFF7FA;--pink-100:#FFEBF2;--pink-200:#FFD8E6;--rose:#D85A87;--rose-teks:#A63A5E;--rose-dark:#4A2A3A;--plum:#4A2A3A;--muted:#8A6A7A;--white:#FFFFFF;--ok:#2E7D52;--err:#A22B4A;--shadow-sm:0 6px 18px rgba(74,42,58,.08);--shadow-md:0 16px 40px rgba(74,42,58,.12);--radius:18px}
+html{scroll-behavior:smooth}body{font-family:'Quicksand',system-ui,-apple-system,sans-serif;background:var(--pink-50);color:var(--plum);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(620px 620px at 8% -5%,var(--blush) 0%,transparent 62%),radial-gradient(760px 760px at 95% 15%,#FFEAF3 0%,transparent 62%)}
+a{text-decoration:none;color:inherit}button{font-family:inherit;cursor:pointer}img{max-width:100%;display:block}
+::placeholder{color:#7A5A6A;opacity:1}:focus-visible{outline:3px solid var(--rose-teks);outline-offset:2px;border-radius:6px}
+.container{width:min(1180px,94%);margin-inline:auto;padding:24px 0 60px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--pink-100);position:sticky;top:0;z-index:50;box-shadow:0 2px 20px rgba(216,90,135,.06)}
+.brand{display:flex;align-items:center;gap:10px}.logo-box{width:38px;height:38px;display:grid;place-items:center;overflow:hidden;border-radius:50%;background:linear-gradient(135deg,var(--blush),var(--pink-200))}.logo-box img{width:100%;height:100%;object-fit:contain}
+.brand-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--rose-dark)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:10px 18px;border-radius:999px;font-weight:700;font-size:13.5px;border:2px solid transparent;transition:background .2s,box-shadow .2s,border-color .2s,transform .12s;font-family:inherit;user-select:none}
+.btn:active{transform:translateY(1px)}.btn-primary{background:linear-gradient(135deg,var(--rose-btn-1,#C24A72),var(--rose-btn-2,#A63A5E));color:#fff;box-shadow:0 8px 20px rgba(166,58,94,.28)}
+.btn-ghost{background:#fff;color:var(--rose-dark);border-color:var(--pink-200);box-shadow:var(--shadow-sm)}.btn-ghost:hover{border-color:var(--soft-pink);background:var(--pink-50)}
+.btn-sm{padding:8px 14px;font-size:12.5px}
+.page-title{display:flex;align-items:center;gap:12px;margin-bottom:6px}.icon-bubble{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--soft-pink),var(--rose));display:grid;place-items:center;font-size:22px;box-shadow:0 8px 18px rgba(166,58,94,.28);flex-shrink:0}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margin:0}.sub{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:20px 0 24px}
+.stat{position:relative;border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow-sm);overflow:hidden;border:1px solid rgba(255,255,255,.6)}
+.stat::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.35);pointer-events:none}
+.stat .stat-icon{font-size:24px;margin-bottom:8px;display:inline-block;line-height:1}
+.stat .label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px}
+.stat .value{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-top:4px;line-height:1.1}
+.stat .hint{font-size:11px;margin-top:4px}
+.stat.s1{background:linear-gradient(135deg,#FFE4EE 0%,#FFD1E0 100%);color:#8A2F53}
+.stat.s2{background:linear-gradient(135deg,#E8F5EE 0%,#C8EBD8 100%);color:#2E6F4D}
+.stat.s3{background:linear-gradient(135deg,#FFF4D6 0%,#FFE4A8 100%);color:#7A5417}
+.stat.s4{background:linear-gradient(135deg,#EAF0FF 0%,#D5E0FF 100%);color:#3B4B8A}
+.card{background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.card-head h2{font-size:16px;font-weight:800;color:var(--rose-dark);display:flex;align-items:center;gap:8px;margin:0}
+.status-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:12px}
+.status-line.galat{color:var(--err)}
+.skel{background:#fff;border:1.5px solid var(--pink-100);border-radius:16px;padding:18px}
+.skel-line{height:14px;border-radius:7px;background:linear-gradient(90deg,#FFEBF2,#FFF7FA,#FFEBF2);background-size:200% 100%;animation:geser 1.4s linear infinite;margin-bottom:10px}
+.skel-line.pendek{width:55%}
+@keyframes geser{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.table-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--pink-100);background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--pink-100)}
+th{background:var(--pink-50);font-weight:800;color:var(--rose-dark);font-size:11px;text-transform:uppercase;letter-spacing:.8px}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--pink-50)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.login-view{max-width:420px;margin:40px auto;background:#fff;border:1px solid var(--pink-100);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-md)}
+.login-view h1{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px;color:var(--rose-dark)}
+.login-view .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--rose-dark)}
+.field input{padding:11px 14px;border-radius:12px;border:1.5px solid var(--pink-200);background:#fff;font-family:inherit;font-size:14px;color:var(--plum);outline:none;transition:border-color .2s,box-shadow .2s}
+.field input:focus{border-color:var(--soft-pink);box-shadow:0 0 0 3px rgba(244,163,192,.2)}
+.err{color:var(--err);font-size:12.5px;margin-top:4px;display:none}.err.show{display:block}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo-box"><img src="logo-nelora.png" alt="Logo N.Elora" width="40" height="40" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><text x=\'50\' y=\'50\' font-size=\'50\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'%23F4A3C0\'>N</text></svg>'"></div>
+    <span class="brand-name">N.Elora Keuangan</span>
+  </div>
+  <div class="topbar-actions">
+    <a href="admin.html" class="btn btn-ghost btn-sm">Edit Produk</a>
+    <button class="btn btn-danger btn-sm" id="logoutBtn" type="button">Keluar</button>
+  </div>
+</div>
+
+<main class="container">
+  <div id="loginView" class="login-view">
+    <h1>Keuangan N.Elora</h1>
+    <p class="sub">Masuk untuk melihat ringkasan penjualan dan keuntungan.</p>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email Admin</label>
+        <input type="email" id="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="pwd">Kata Sandi</label>
+        <input type="password" id="pwd" autocomplete="current-password" required>
+      </div>
+      <p class="err" id="loginErr" role="alert">Email atau kata sandi salah.</p>
+      <button type="submit" class="btn btn-primary" style="width:100%">Masuk</button>
+    </form>
+    <p style="margin-top:12px;font-size:12px;color:var(--muted)">Masuk memakai email dan kata sandi admin yang dibuat di Firebase Authentication.</p>
+  </div>
+
+  <div id="dashView" style="display:none">
+    <div class="page-title">
+      <div class="icon-bubble">💰</div>
+      <div><h1>Ringkasan Keuangan</h1><div class="sub" id="dashSub">Data tersimpan di server Firebase.</div></div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Penjualan per Produk</h2>
+        <p class="sub">Harga jual, harga modal, terjual, profit per unit, dan profit total.</p>
+      </div>
+      <div class="status-line" id="statusProduk" role="status" hidden></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Produk</th>
+              <th>Kategori</th>
+              <th class="num">Harga Jual</th>
+              <th class="num">Harga Modal</th>
+              <th class="num">Terjual</th>
+              <th class="num">Profit / Unit</th>
+              <th class="num">Profit Total</th>
+            </tr>
+          </thead>
+          <tbody id="produkBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="firebase-config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const CFG = window.NELORA_FIREBASE_CONFIG || null;
+const MODE = (CFG && CFG.apiKey && CFG.projectId) ? "cloud" : "lokal";
+let modeAktif = MODE;
+
+function parseNum(str){ return parseInt(String(str||"").replace(/\./g,"").replace(/[^\d]/g,""),10) || 0; }
+function fmtNum(n){ return (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
+function rupiah(n){ return "Rp " + fmtNum(n); }
+
+let produk = [];
+let auth = null, db = null;
+
+const loginView = document.getElementById("loginView");
+const dashView = document.getElementById("dashView");
+const topbar = document.querySelector(".topbar");
+const loginErr = document.getElementById("loginErr");
+
+function showDash(){ loginView.style.display="none"; dashView.style.display="block"; topbar.style.display="flex"; render(); }
+function showLogin(){ loginView.style.display="block"; dashView.style.display="none"; topbar.style.display="none"; }
+
+document.getElementById("loginForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const pwd = document.getElementById("pwd").value;
+  loginErr.classList.remove("show");
+  if (MODE === "lokal"){
+    if (pwd === "findi"){ sessionStorage.setItem("nelora_admin","1"); showDash(); }
+    else { loginErr.textContent="Kata sandi salah. Coba lagi."; loginErr.classList.add("show"); }
+    return;
+  }
+  const email = document.getElementById("email").value.trim();
+  if (!email){ loginErr.textContent="Email admin belum diisi."; loginErr.classList.add("show"); return; }
+  auth.signInWithEmailAndPassword(email, pwd).catch(err=>{
+    loginErr.textContent = (err && err.code && err.code.indexOf("wrong-password")>=0) ? "Email atau kata sandi salah." : "Gagal masuk: " + (err.message || "kesalahan tidak dikenal");
+    loginErr.classList.add("show");
+  });
+});
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  if (MODE === "cloud" && auth){ auth.signOut(); return; }
+  sessionStorage.removeItem("nelora_admin");
+  showLogin();
+});
+
+async function siapkanCloud(){
+  const dasar = "https://www.gstatic.com/firebasejs/10.12.2/";
+  await muatSkrip(dasar + "firebase-app-compat.js");
+  await muatSkrip(dasar + "firebase-auth-compat.js");
+  await muatSkrip(dasar + "firebase-firestore-compat.js");
+  if (!firebase.apps.length) firebase.initializeApp(CFG);
+  auth = firebase.auth();
+  db = firebase.firestore();
+  auth.onAuthStateChanged(user=>{
+    if (user){ showDash(); pantau(); }
+    else { showLogin(); }
+  });
+}
+function muatSkrip(src){
+  return new Promise((ok,gagal)=>{
+    const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=()=>gagal(new Error("Gagal memuat "+src)); document.head.appendChild(s);
+  });
+}
+function pantau(){
+  db.collection("produk").orderBy("urutan").onSnapshot(snap=>{
+    produk = snap.docs.map(d=>{
+      const v=d.data();
+      return { _id:d.id, nama:v.nama||"", kategori:v.kategori||"buket", harga:fmtNum(v.harga), cost:fmtNum(v.cost), sold:parseInt(v.sold,10)||0, promo:v.promo||null };
+    });
+    render();
+  }, err=>{ toast("Gagal memuat data: " + (err.message||"kesalahan tidak dikenal")); });
+}
+
+function renderStats(){
+  const el = document.getElementById("stats");
+  if (!el) return;
+  let totalSold=0, omzet=0, profit=0;
+  produk.forEach(p=>{
+    const sell=parseNum(p.harga), cost=parseNum(p.cost), sold=parseInt(p.sold,10)||0;
+    totalSold+=sold; omzet+=sell*sold; profit+=(sell-cost)*sold;
+  });
+  const kartu=[
+    {kelas:"s1",ikon:"🌸",label:"Produk",nilai:produk.length,awalan:"",petunjuk:"varian aktif"},
+    {kelas:"s2",ikon:"📦",label:"Terjual",nilai:totalSold,awalan:"",petunjuk:"pcs"},
+    {kelas:"s3",ikon:"💰",label:"Omzet",nilai:omzet,awalan:"Rp ",petunjuk:"harga jual x terjual"},
+    {kelas:"s4",ikon:"✨",label:"Keuntungan",nilai:profit,awalan:"Rp ",petunjuk:"omzet dikurangi modal"}
+  ];
+  el.innerHTML = kartu.map(k=>`
+    <div class="stat ${k.kelas}"><span class="stat-icon" aria-hidden="true">${k.ikon}</span><div class="label">${k.label}</div><div class="value">${k.awalan}${fmtNum(k.nilai)}</div><div class="hint">${k.petunjuk}</div></div>`).join("");
+}
+
+function render(){
+  renderStats();
+  const body = document.getElementById("produkBody");
+  const status = document.getElementById("statusProduk");
+  if (!body) return;
+  if (MODE === "cloud" && !produk.length){ status.hidden=false; status.className="status-line"; status.textContent="Memuat produk dari server..."; return; }
+  status.hidden=true;
+  body.innerHTML = produk.map(p=>{
+    const sell=parseNum(p.harga), cost=parseNum(p.cost), sold=parseInt(p.sold,10)||0;
+    const perUnit=sell-cost, total=perUnit*sold;
+    return `<tr><td>${p.nama}</td><td>${p.kategori}</td><td class="num">${rupiah(sell)}</td><td class="num">${rupiah(cost)}</td><td class="num">${sold}</td><td class="num">${rupiah(perUnit)}</td><td class="num">${rupiah(total)}</td></tr>`;
+  }).join("");
+}
+
+function toast(msg){ const t=document.createElement("div"); t.textContent=msg; t.style.cssText="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#4A2A3A;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2)"; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
+
+if (MODE === "cloud"){
+  siapkanCloud().catch(err=>{ modeAktif="lokal"; showLogin(); toast("Gagal memuat Firebase: " + err.message); });
+} else {
+  showLogin();
+}
+
+if (MODE === "lokal" && sessionStorage.getItem("nelora_admin")==="1") showDash();
+</script>
+</body>
+</html>

@@ -237,13 +237,12 @@ section{padding:clamp(20px, 3.5vw, 56px) 0;position:relative}
 .preview-card::before {content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 30px,rgba(255,255,255,.06) 30px 31px);pointer-events:none;opacity:.6;}
 .preview-topbar {display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding:0 4px;position:relative;z-index:5;}
 .preview-title {font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:5px;}
-.preview-title::before {content:"✨";font-size:12px;}
 .preview-qty-badge {background:linear-gradient(135deg,#FF4D8F 0%,#F4A3C0 100%);color:#fff;font-size:10px;font-weight:800;padding:5px 11px;border-radius:999px;box-shadow:0 4px 10px rgba(255,77,143,.4),0 0 0 1.5px rgba(255,255,255,.85);display:flex;align-items:center;gap:4px;letter-spacing:.3px;animation:qtyPop .35s cubic-bezier(.34,1.56,.64,1);}
 @keyframes qtyPop {from{transform:scale(0.6);opacity:0;}to{transform:scale(1);opacity:1;}}
 
 .bouquet-display {position:relative;width:100%;max-width:320px;height:460px;margin:0 auto;flex:1;display:flex;flex-direction:column;justify-content:flex-end;}
 .preview-empty {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--text-muted);font-size:11px;text-align:center;padding:30px 20px;flex:1;position:relative;z-index:2;}
-.preview-empty svg {width:48px;height:48px;opacity:.35;animation:emptyFloat 3s ease-in-out infinite;}
+.preview-empty svg {width:48px;height:48px;opacity:.35;}
 @keyframes emptyFloat {0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 
 .bouquet-group {--fs:1;--ws:1;position:relative;width:100%;transition:--fs .45s cubic-bezier(.34,1.56,.64,1),--ws .45s cubic-bezier(.34,1.56,.64,1);will-change:transform;}
@@ -1231,7 +1230,7 @@ function renderStudioFlowers() {
     const sudah = bouquetState.find(b => b.idx === p._idx);
     const media = `<img src="${p.foto || p.img || IMG.bouquetPink}" alt="${p.nama}" loading="lazy">`;
     const dots = PALET_WARNA.map(w => {
-      const active = sudah && sudah.warna === w.nama ? " active" : "";
+      const active = bouquetState.some(b => b.idx === p._idx && b.warna === w.nama) ? " active" : "";
       return `<button type="button" class="color-dot${active}" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"></button>`;
     }).join("");
     return `
@@ -1332,6 +1331,14 @@ function renderBouquetPreview() {
   const positions = layoutBouquet(shown.length, sp);
   const leaves = layoutLeaves(shown.length);
   let html = "";
+  // tangkai (stem) per bunga
+  shown.forEach((item, i) => {
+    const pos = positions[i];
+    if (!pos) return;
+    const stemH = Math.max(24, Math.round(-pos.y + 10));
+    html += `<div class="bouquet-stem" style="left: calc(50% + ${pos.x}px); bottom: ${Math.max(0, Math.round(-pos.y + 8))}px; height: ${stemH}px; transform: translateX(-50%) rotate(${pos.rot * 0.25}deg); z-index: 0;"></div>`;
+  });
+  // daun
   leaves.forEach(l => {
     html += `<div class="bouquet-leaf" style="transform: translate(calc(-50% + ${l.x}px), ${l.y}px) rotate(${l.rot}deg) scale(${l.scale}); z-index: 1;"></div>`;
   });
@@ -1462,9 +1469,8 @@ function bindStudio() {
       if (dot) {
         const warna = dot.dataset.warna;
         const produk = PRODUK[pidx];
-        // hapus entri warna lama, ganti dengan warna baru
-        const idxLama = bouquetState.findIndex(b => b.idx === pidx);
-        if (idxLama >= 0) bouquetState[idxLama].warna = warna;
+        const existing = bouquetState.find(b => b.idx === pidx && b.warna === warna);
+        if (existing) existing.qty++;
         else bouquetState.push({ idx: pidx, warna, qty: 1 });
         refreshStudio();
         flyFlowerToPreview(dot, warna, produk);

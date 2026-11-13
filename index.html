@@ -200,7 +200,6 @@ section{padding:clamp(20px, 3.5vw, 56px) 0;position:relative}
 .price.promo {color:#E84A7F;font-size:14px;}
 .price-cashback-note {font-size:9px;color:#5FBC9A;font-weight:800;margin-top:2px;padding:2px 6px;background:rgba(143,209,181,.15);border-radius:999px;display:inline-block;width:max-content;}
 
-#custom-bungamu {background:radial-gradient(circle at 15% 20%,rgba(255,217,138,.12) 0%,transparent 40%),radial-gradient(circle at 85% 80%,rgba(244,163,192,.15) 0%,transparent 40%),linear-gradient(180deg,transparent 0%,rgba(255,240,245,.3) 100%);position:relative;}
 .studio-steps {display:flex;justify-content:center;align-items:center;gap:0;margin:0 auto 20px;max-width:420px;position:relative;}
 .studio-step {display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto;position:relative;z-index:2;}
 .studio-step-num {width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid rgba(244,163,192,.4);color:var(--text-muted);display:grid;place-items:center;font-weight:800;font-size:13px;transition:background .3s,color .3s,border-color .3s,box-shadow .3s;}
@@ -1749,7 +1748,10 @@ setTimeout(playIntro, 3000);
 function initBottomNav() {
   const items = document.querySelectorAll('.bottom-nav-item');
   const indicator = document.getElementById('navIndicator');
-  const sections = [document.getElementById('home'), document.getElementById('etalase'), document.getElementById('custom-bungamu')].filter(Boolean);
+  const sections = [
+    document.getElementById('home'),
+    document.getElementById('etalase')
+  ].filter(Boolean);
   if (!items.length || !indicator) return;
   const moveIndicator = (targetItem) => {
     const container = targetItem.parentElement;

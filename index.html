@@ -233,7 +233,7 @@ section{padding:clamp(20px, 3.5vw, 56px) 0;position:relative}
 
 .studio-side {display:flex;flex-direction:column;gap:12px;}
 
-.preview-card {position:relative;background:linear-gradient(180deg,#FFF7FA 0%,#FFEAF2 100%);border-radius:var(--radius-md);padding:16px 12px 18px;border:1px solid rgba(244,163,192,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 16px 40px rgba(244,163,192,.18),0 4px 12px rgba(74,42,58,.06);overflow:hidden;min-height:460px;display:flex;flex-direction:column;}
+.preview-card {display: none;}
 .preview-card::before {content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 30px,rgba(255,255,255,.06) 30px 31px);pointer-events:none;opacity:.6;}
 .preview-topbar {display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding:0 4px;position:relative;z-index:5;}
 .preview-title {font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:5px;}
@@ -761,7 +761,6 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
       <span class="cta-flower br"><img src="https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png" alt=""></span>
       <h2>Buat Hari Spesialnya Lebih Berkesan</h2>
       <p>Bunga kawat bulu N.Elora adalah hadiah sempurna yang tak akan pernah layu.</p>
-      <a href="#" class="btn btn-primary magnetic js-wa" data-pesan="Halo N.Elora 🌸, saya mau pesan bunga kawat bulu. Boleh info katalog & harganya?">Pesan Sekarang</a>
     </div>
   </div>
 </section>
@@ -869,15 +868,15 @@ const IMG = {
 };
 
 const PALET_WARNA = [
-  { nama: "Pink",   hex: "#F4A3C0" },
-  { nama: "Blush",  hex: "#F8B7C8" },
-  { nama: "Mint",   hex: "#8FD1B5" },
-  { nama: "Butter", hex: "#FFD98A" },
-  { nama: "Lilac",  hex: "#C8A2E0" },
-  { nama: "Peach",  hex: "#FFB48A" },
-  { nama: "Sky",    hex: "#9BC4E2" },
-  { nama: "Putih",  hex: "#FFFFFF" },
-  { nama: "Rose",   hex: "#E89AB8" }
+  { nama: "Merah",   hex: "#E53935" },
+  { nama: "Biru",    hex: "#1E88E5" },
+  { nama: "Hijau",   hex: "#43A047" },
+  { nama: "Kuning",  hex: "#FDD835" },
+  { nama: "Ungu",    hex: "#8E24AA" },
+  { nama: "Orange",  hex: "#FB8C00" },
+  { nama: "Pink",    hex: "#EC407A" },
+  { nama: "Putih",   hex: "#FFFFFF" },
+  { nama: "Hitam",   hex: "#212121" }
 ];
 
 const WRAP_WARNA = [
@@ -1038,7 +1037,7 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 function bolehPilihWarna(kategori) {
-  return kategori === "tunggal" || kategori === "buket";
+  return kategori === "tunggal";
 }
 
 /* ============================
@@ -1229,16 +1228,16 @@ function renderStudioFlowers() {
   studioFlowersEl.innerHTML = items.map(p => {
     const sudah = bouquetState.find(b => b.idx === p._idx);
     const media = `<img src="${p.foto || p.img || IMG.bouquetPink}" alt="${p.nama}" loading="lazy">`;
-    const dots = PALET_WARNA.map(w => {
+    const dots = p.kategori === "tunggal" ? PALET_WARNA.map(w => {
       const active = bouquetState.some(b => b.idx === p._idx && b.warna === w.nama) ? " active" : "";
       return `<button type="button" class="color-dot${active}" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"></button>`;
-    }).join("");
+    }).join("") : "";
     return `
       <div class="flower-card${sudah ? " selected" : ""}" data-pidx="${p._idx}">
         ${media}
         <h4>${p.nama}</h4>
         <span class="flower-price">${rupiah(hargaNum(p))}</span>
-        <div class="flower-card-warna">${dots}</div>
+        ${dots ? `<div class="flower-card-warna">${dots}</div>` : ""}
       </div>`;
   }).join("");
 }

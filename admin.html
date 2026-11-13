@@ -245,6 +245,9 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
 .color-dot[data-hex="#FFFFFF"]{border-color:#e5e5e5}
 .color-dot[data-hex="#FFFFFF"].active::after{color:var(--rose-teks);text-shadow:none}
 .warna-modal-strip{display:flex;gap:8px;flex-wrap:wrap}
+.ev-prod-chip{padding:8px 12px;border-radius:999px;border:1.5px solid var(--pink-200);background:#fff;color:var(--plum);font-size:12.5px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,color .2s,box-shadow .2s;white-space:nowrap}
+.ev-prod-chip:hover{border-color:var(--soft-pink);background:var(--pink-50)}
+.ev-prod-chip.active{background:linear-gradient(135deg,#5FBC9A,#8FD1B5);border-color:#5FBC9A;color:#fff;box-shadow:0 4px 10px rgba(95,188,154,.35)}
 </style>
 </head>
 <body>
@@ -1219,7 +1222,7 @@ function renderPromoEventProduk(){
   if (!el) return;
   el.innerHTML = produk.map((p,i)=>{
     const aktif = p.promo && p.promo.tipe ? " active" : "";
-    return `<button type="button" class="color-dot${aktif}" data-evprod="${i}" title="${escapeHtml(p.nama)}" aria-label="${escapeHtml(p.nama)}" style="--c:${aktif ? "#5FBC9A" : "#F4A3C0"};width:28px;height:28px;font-size:10px;font-weight:800;color:#fff">${i+1}</button>`;
+    return `<button type="button" class="ev-prod-chip${aktif}" data-evprod="${i}" title="${escapeHtml(p.nama)}" aria-pressed="${aktif ? "true" : "false"}">${escapeHtml(p.nama)}</button>`;
   }).join("");
 }
 

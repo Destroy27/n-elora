@@ -402,8 +402,8 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
   .preview-card {min-height: 480px; padding: 20px 16px 22px;}
   .preview-title {font-size: 11px;}
   .preview-qty-badge {font-size: 11px; padding: 6px 13px;}
-  .bouquet-display {max-width: 340px; height: 380px;}
-  .bouquet-head {height: 220px; margin-bottom: -38px;}
+  .bouquet-display {max-width: 360px; height: 420px;}
+  .bouquet-head {height: 300px; margin-bottom: -45px;}
   .bouquet-flower {width: calc(56px * var(--fs, 1)); height: calc(56px * var(--fs, 1)); border-width: 4px;}
   .bouquet-leaf {width: calc(28px * var(--fs, 1)); height: calc(42px * var(--fs, 1));}
   .bouquet-wrap {width: calc(210px * var(--ws, 1)); height: calc(130px * var(--ws, 1));}
@@ -1247,29 +1247,23 @@ function renderStudioFlowers() {
 function layoutBouquet(n, spreadMul = 1) {
   if (n === 0) return [];
   const positions = [];
-  const rings = [
-    { r: 0,   cap: 1, scale: 1.2,  yShift: 0 },
-    { r: 34,  cap: 6, scale: 1.06, yShift: -10 },
-    { r: 58,  cap: 8, scale: 0.94, yShift: -26 },
-    { r: 78,  cap: 10, scale: 0.84, yShift: -46 },
-  ];
-  let remaining = n;
-  for (let ri = 0; ri < rings.length && remaining > 0; ri++) {
-    const ring = rings[ri];
-    const count = Math.min(remaining, ring.cap);
-    for (let i = 0; i < count; i++) {
-      const angle = count === 1 ? 0 : (i / count) * Math.PI * 2 + (ri * 0.7);
-      const spreadX = ring.r * spreadMul * (0.95 + Math.random() * 0.15);
-      const spreadY = ring.r * 0.55 * spreadMul * (0.9 + Math.random() * 0.2);
-      positions.push({
-        x: Math.cos(angle) * spreadX,
-        y: Math.sin(angle) * spreadY + ring.yShift * spreadMul,
-        scale: ring.scale,
-        z: Math.round(30 - ri * 6),
-        rot: (Math.random() - 0.5) * 22
-      });
-    }
-    remaining -= count;
+  const golden = 137.50776405003785; // derajat, sudut emas
+  const baseR = 14;
+  const stepR = 32;
+  for (let i = 0; i < n; i++) {
+    const angleDeg = (i * golden) % 360;
+    const angle = angleDeg * Math.PI / 180;
+    const r = (baseR + Math.sqrt(i + 1) * stepR) * spreadMul;
+    const x = Math.cos(angle) * r;
+    const y = Math.sin(angle) * r * 0.58 - Math.sqrt(i + 1) * 1.5;
+    const scale = Math.max(0.72, 1.12 - i * 0.025);
+    positions.push({
+      x,
+      y,
+      scale,
+      z: Math.round(20 - (i % 7)),
+      rot: (Math.random() - 0.5) * 16
+    });
   }
   return positions.sort((a, b) => a.z - b.z);
 }
@@ -1305,17 +1299,34 @@ function renderBouquetPreview() {
   previewEmptyEl.hidden = true;
   bouquetGroupEl.hidden = false;
   previewSubEl.hidden = false;
+  if (!bouquetGroupEl.dataset.floatInit) {
+    bouquetGroupEl.dataset.floatInit = "1";
+    if (window.gsap) {
+      window.gsap.to(bouquetGroupEl, { y: -6, duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+    }
+  }
   ["bs1","bs2","bs3","bs4"].forEach(id => { const el = document.getElementById(id); if (el) el.hidden = false; });
   if (previewQtyEl) {
     previewQtyEl.hidden = false;
     const jenis = bouquetState.length;
     previewQtyEl.textContent = `🌸 ${total} bunga` + (jenis > 1 ? ` · ${jenis} jenis` : "");
   }
-  const fs = Math.min(1.55, 0.85 + total * 0.045);
-  const ws = Math.min(1.35, 0.85 + total * 0.03);
-  const sp = Math.min(1.4, 0.85 + total * 0.04);
+  const fs = Math.min(1.15, Math.max(0.72, 1.05 - total * 0.025));
+  const ws = Math.min(1.2, Math.max(0.85, 0.9 + total * 0.02));
+  const sp = Math.min(1.7, 0.95 + total * 0.07);
   bouquetGroupEl.style.setProperty("--fs", fs);
   bouquetGroupEl.style.setProperty("--ws", ws);
+
+  // perbesar area preview seiring jumlah bunga
+  const disp = document.getElementById("bouquetDisplay");
+  if (disp) {
+    const w = Math.min(420, 280 + total * 16);
+    const h = Math.min(560, 320 + total * 18);
+    disp.style.maxWidth = w + "px";
+    disp.style.height = h + "px";
+  }
+  const head = document.getElementById("bouquetHead");
+  if (head) head.style.height = Math.min(400, 220 + total * 16) + "px";
   const maxShow = 22;
   const shown = all.slice(0, maxShow);
   const positions = layoutBouquet(shown.length, sp);
@@ -1383,15 +1394,13 @@ function renderCart() {
 
 let lastBouquetTotal = 0;
 function refreshStudio() {
-  const prevTotal = lastBouquetTotal;
   const all = [];
   bouquetState.forEach(b => { for (let i = 0; i < b.qty; i++) all.push(b); });
-  lastBouquetTotal = all.length;
   renderStudioFlowers();
   renderBouquetPreview();
   renderCart();
-  if (hasGsap && all.length > 0 && all.length !== prevTotal && bouquetGroupEl) {
-    gsap.fromTo(bouquetGroupEl, { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "back.out(1.6)" });
+  if (window.gsap && all.length > 0 && bouquetGroupEl) {
+    window.gsap.fromTo(bouquetGroupEl, { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "back.out(1.6)" });
   }
 }
 

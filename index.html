@@ -633,105 +633,6 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
   </div>
 </section>
 
-<section id="custom-bungamu">
-  <div class="container">
-    <div class="sec-head">
-      <span class="eyebrow reveal">Custom Bungamu</span>
-      <h2 class="sec-title reveal">Rangkai di <em>Studio Kami</em></h2>
-      <p class="sec-sub reveal">Pilih bunga, atur warna & jumlah, lihat hasilnya langsung. Kami yang rangkai!</p>
-    </div>
-
-    <div class="studio-steps reveal">
-      <div class="studio-step done" id="step1">
-        <div class="studio-step-num">1</div>
-        <div class="studio-step-label">Pilih</div>
-      </div>
-      <div class="studio-step-line"></div>
-      <div class="studio-step" id="step2">
-        <div class="studio-step-num">2</div>
-        <div class="studio-step-label">Rangkai</div>
-      </div>
-      <div class="studio-step-line"></div>
-      <div class="studio-step" id="step3">
-        <div class="studio-step-num">3</div>
-        <div class="studio-step-label">Kirim</div>
-      </div>
-    </div>
-
-    <div class="studio-grid reveal">
-      <div class="studio-panel">
-        <div class="studio-panel-head">
-          <h3>🌸 Bunga Tunggal</h3>
-          <span class="studio-count" id="studioCount">0 dipilih</span>
-        </div>
-        <div class="studio-panel-body">
-          <div class="studio-flowers" id="studioFlowers"></div>
-        </div>
-      </div>
-
-      <div class="studio-side">
-        <div class="preview-card">
-          <div class="preview-topbar">
-            <span class="preview-title">Preview Buketmu</span>
-            <span class="preview-qty-badge" id="previewQtyBadge" hidden>🌸 0 bunga</span>
-          </div>
-
-          <div class="bouquet-display" id="bouquetDisplay">
-            <div class="preview-empty" id="previewEmpty">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 0a3 3 0 013 3v6a3 3 0 11-6 0V9a3 3 0 013-3z"/>
-                <circle cx="12" cy="18" r="3"/>
-              </svg>
-              <p>Pilih bunga untuk<br>melihat preview buketmu</p>
-            </div>
-
-            <div class="bouquet-group" id="bouquetGroup" hidden>
-              <div class="bouquet-head" id="bouquetHead"></div>
-              <div class="bouquet-wrap" id="bouquetWrap">
-                <div class="bouquet-wrap-inner"></div>
-                <div class="bouquet-ribbon">
-                  <span class="bouquet-ribbon-tail left"></span>
-                  <span class="bouquet-ribbon-tail right"></span>
-                  <span class="bouquet-ribbon-loop left"></span>
-                  <span class="bouquet-ribbon-loop right"></span>
-                  <span class="bouquet-ribbon-knot"></span>
-                </div>
-              </div>
-              <div class="bouquet-shadow" id="bouquetShadow"></div>
-            </div>
-
-            <span class="bouquet-sparkle s1" id="bs1" hidden>✦</span>
-            <span class="bouquet-sparkle s2" id="bs2" hidden>✧</span>
-            <span class="bouquet-sparkle s3" id="bs3" hidden>✦</span>
-            <span class="bouquet-sparkle s4" id="bs4" hidden>✧</span>
-          </div>
-
-          <div class="preview-subtotal" id="previewSubtotal" hidden>
-            <strong>Rp 0</strong>
-          </div>
-        </div>
-
-        <div class="cart-card">
-          <div class="cart-list" id="cartList">
-            <div class="cart-empty">Keranjang masih kosong 🌷</div>
-          </div>
-          <div class="cart-checkout">
-            <div class="cart-total-row">
-              <span>Total</span>
-              <span class="cart-total-val" id="cartTotal">Rp 0 <small>+ nama 5rb</small></span>
-            </div>
-            <input type="text" class="input-nama-custom" id="customNameInput"
-                   placeholder="🎀 Nama / quote untuk gift card (opsional)">
-            <button type="button" class="btn-pesan-bouquet" id="btnPesanBouquet" disabled>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2z"/></svg>
-              Pesan via WhatsApp
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section id="cara">
   <div class="container">
@@ -1332,6 +1233,7 @@ function layoutLeaves(n) {
 }
 
 function renderBouquetPreview() {
+  if (!previewEmptyEl || !bouquetGroupEl || !bouquetHeadEl) return;
   const all = [];
   bouquetState.forEach(b => { for (let i = 0; i < b.qty; i++) all.push(b); });
   const total = all.length;

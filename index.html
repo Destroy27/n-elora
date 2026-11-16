@@ -510,6 +510,35 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
   .flying-flower { display: none !important; }
   .flower-card.color-pop { animation: none !important; }
 }
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+  .g-ready .reveal, .g-ready .card{opacity:1}
+}
+
+/* ===== DISKON RIBBON ===== */
+@keyframes flashShine { 0% { background-position: 220% 0; } 100% { background-position: -220% 0; } }
+.discount-ribbon { position: absolute; top: 0; right: 0; width: 96px; height: 96px; overflow: hidden; z-index: 4; pointer-events: none; }
+.discount-ribbon-inner { position: absolute; top: 22px; right: -34px; width: 140px; height: 28px; transform: rotate(45deg); transform-origin: center; background: linear-gradient(135deg, #FF4D8F 0%, #E84A7F 60%, #C43A68 100%); display: flex; align-items: center; justify-content: center; gap: 4px; color: #fff; font-family: 'Fredoka', sans-serif; box-shadow: 0 4px 14px rgba(232,74,127,.55), inset 0 1px 0 rgba(255,255,255,.4); text-shadow: 0 1px 2px rgba(0,0,0,.25); animation: ribbonShine 3s ease-in-out infinite; }
+.discount-ribbon-inner::before { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,.35) 50%, transparent 60%); background-size: 250% 100%; animation: flashShine 3.5s linear infinite; }
+.discount-ribbon-inner .ribbon-pct { font-size: 15px; font-weight: 700; letter-spacing: -.5px; position: relative; z-index: 1; }
+.discount-ribbon-inner .ribbon-label { font-size: 8px; font-weight: 800; letter-spacing: 1.2px; opacity: .95; position: relative; z-index: 1; }
+@keyframes ribbonShine { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.1); } }
+.price-savings { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; background: linear-gradient(135deg, rgba(95,188,154,.18) 0%, rgba(143,209,181,.28) 100%); border: 1px dashed rgba(95,188,154,.7); color: #3A8B6E; font-size: 10px; font-weight: 800; margin-top: 4px; width: max-content; letter-spacing: .2px; box-shadow: 0 1px 3px rgba(95,188,154,.15); }
+.price-savings::before { content: "💸"; font-size: 10px; line-height: 1; }
+.card.discounted { border-color: rgba(232,74,127,.28); background: linear-gradient(180deg, #fff 0%, #FFFAFC 100%); }
+.card.discounted:hover { box-shadow: 0 12px 32px rgba(74,42,58,.1), 0 0 28px rgba(232,74,127,.22), inset 0 0 0 1px rgba(232,74,127,.15); }
+.card.discounted .price.promo { font-size: 15px; font-weight: 800; color: #E84A7F; }
+@media (min-width: 768px) {
+  .discount-ribbon { width: 130px; height: 130px; }
+  .discount-ribbon-inner { top: 28px; right: -38px; width: 175px; height: 34px; }
+  .discount-ribbon-inner .ribbon-pct { font-size: 19px; }
+  .discount-ribbon-inner .ribbon-label { font-size: 10px; }
+  .price-savings { font-size: 11px; padding: 4px 11px; }
+  .card.discounted .price.promo { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .discount-ribbon-inner, .discount-ribbon-inner::before { animation: none !important; }
+}
 </style>
 </head>
 <body>
@@ -1016,17 +1045,40 @@ function renderProduk() {
       );
       promoBadge = `<span class="card-promo-badge ${cls}">${esc(label)}</span>`;
     }
-    let priceBlock;
-    if (promo && akhir < original) {
-      priceBlock = `<div class="price-block"><span class="price-original">${rupiah(original)}</span><span class="price promo">${rupiah(akhir)}</span></div>`;
+    const isDiskon = !!(promo && akhir < original);
+
+    const cardClass = isDiskon ? "card discounted" : "card";
+
+    let ribbonHTML = "";
+    if (isDiskon) {
+      const pct = Math.round((1 - akhir / original) * 100);
+      ribbonHTML = `
+        <div class="discount-ribbon" aria-hidden="true">
+          <div class="discount-ribbon-inner">
+            <span class="ribbon-pct">${pct}%</span>
+            <span class="ribbon-label">OFF</span>
+          </div>
+        </div>`;
+    }
+
+    let priceBlock, savingsHTML = "";
+    if (isDiskon) {
+      const saved = original - akhir;
+      priceBlock = `
+        <div class="price-block">
+          <span class="price-original">${rupiah(original)}</span>
+          <span class="price promo">${rupiah(akhir)}</span>
+        </div>`;
+      savingsHTML = `<span class="price-savings">Hemat ${rupiah(saved)}</span>`;
     } else if (promo && cashback > 0) {
       priceBlock = `<div class="price-block"><span class="price">${rupiah(original)}</span><span class="price-cashback-note">💰 Cashback ${rupiah(cashback)}</span></div>`;
     } else {
       priceBlock = `<span class="price">Rp ${p.harga}</span>`;
     }
     return `
-      <article class="card" data-kategori="${p.kategori}" data-idx="${idx}">
+      <article class="${cardClass}" data-kategori="${p.kategori}" data-idx="${idx}">
         <div class="card-img">
+          ${ribbonHTML}
           ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
           ${promoBadge}
           ${media}
@@ -1036,7 +1088,10 @@ function renderProduk() {
           <h3 class="card-title">${p.nama}</h3>
           <p class="card-desc">${p.desc}</p>
           <div class="card-foot">
-            ${priceBlock}
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              ${priceBlock}
+              ${savingsHTML}
+            </div>
             <button type="button" class="btn-buy" data-open-warna="${idx}">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2z"/></svg>
               Pre Order

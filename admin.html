@@ -361,7 +361,6 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
       <div class="kat-grid" id="katGrid"></div>
       <p class="hint-text" style="margin-top:14px">Slug dipakai untuk mencocokkan produk dengan jenisnya dan tidak bisa diubah setelah dibuat. Jenis yang masih dipakai produk tidak dapat dihapus.</p>
     </section>
-  </section>
 
   <section class="card" aria-labelledby="judulPromo">
     <div class="card-head">
@@ -412,6 +411,8 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
     </div>
     <div id="evRingkasan" class="status-line" style="margin-top:12px"></div>
   </section>
+  </section>
+
 </main>
 
 <!-- MODAL PRODUK -->
@@ -1640,16 +1641,6 @@ function openModal(i){
   document.getElementById("fPromoEvent").value = pr.event || "";
   document.getElementById("fPromoMulai").value = pr.mulai || "";
   document.getElementById("fPromoSelesai").value = pr.selesai || "";
-
-  // warna
-  warnaTemp = (Array.isArray(p.warna) ? p.warna : []).map(w => {
-    if (typeof w === "string") return { nama: w, img: "", tersedia: true };
-    return { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false };
-  }).filter(w => w.nama);
-  renderWarnaListAdmin();
-  document.getElementById("fWarnaForm").style.display = "none";
-  document.getElementById("fWarnaFile").value = "";
-  document.getElementById("fWarnaPreview").style.display = "none";
 
   bukaModal(modalBack);
 }

@@ -640,7 +640,6 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
       <span class="eyebrow reveal">Etalase</span>
       <h2 class="sec-title reveal">Koleksi <em>N.Elora</em></h2>
     </div>
-    <div id="promoBanner" style="margin-bottom:14px"></div>
     <div class="filters reveal" id="filters"></div>
     <div class="grid" id="productGrid"></div>
     <p class="grid-kosong" id="gridKosong" hidden>Belum ada produk untuk jenis ini.</p>
@@ -1156,30 +1155,6 @@ function renderProduk() {
   }).join("");
   const kosong = document.getElementById("gridKosong");
   if (kosong) kosong.hidden = PRODUK.length > 0;
-
-  // banner event promo
-  const banner = document.getElementById("promoBanner");
-  if (banner) {
-    const events = {};
-    PRODUK.forEach(p => {
-      const pr = promoAktif(p);
-      if (pr && pr.event) {
-        if (!events[pr.event]) events[pr.event] = { tipe: pr.tipe, nilai: pr.nilai, label: pr.label, mulai: pr.mulai, selesai: pr.selesai, img: pr.img, count: 0 };
-        events[pr.event].count++;
-      }
-    });
-    const daftar = Object.keys(events);
-    if (daftar.length) {
-      banner.innerHTML = daftar.map(e => {
-        const ev = events[e];
-        const label = labelPromo(ev) || "Promo";
-        const imgTag = ev.img ? `<img src="${ev.img}" alt="${esc(e)}" style="height:36px;width:auto;object-fit:contain;border-radius:6px">` : `<span aria-hidden="true" style="display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.22);font-size:13px;font-weight:800">%</span>`;
-        return `<div style="background:linear-gradient(135deg,#FF4D8F,#F4A3C0);color:#fff;padding:10px 16px;border-radius:12px;margin-bottom:8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(255,77,143,.3)">${imgTag}<span>${esc(e)}  -  ${esc(label)} untuk ${ev.count} produk${ev.selesai ? " (s/d " + esc(ev.selesai) + ")" : ""}</span></div>`;
-      }).join("");
-    } else {
-      banner.innerHTML = "";
-    }
-  }
 }
 
 let warnaBound = false;

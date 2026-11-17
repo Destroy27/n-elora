@@ -362,7 +362,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
       <p class="hint-text" style="margin-top:14px">Slug dipakai untuk mencocokkan produk dengan jenisnya dan tidak bisa diubah setelah dibuat. Jenis yang masih dipakai produk tidak dapat dihapus.</p>
     </section>
 
-  <section class="card" aria-labelledby="judulPromo">
+  <section class="card" aria-labelledby="judulPromo" id="promoSection" style="display:none">
     <div class="card-head">
       <div>
         <h2 id="judulPromo"><span class="icon-bubble">🎉</span> Promo & Event</h2>
@@ -906,6 +906,8 @@ function showDash(){
   loginView.style.display = "none";
   dashView.style.display = "block";
   topbar.style.display = "flex";
+  const ps = document.getElementById("promoSection");
+  if (ps) ps.style.display = "block";
   isiPilihanKategori();
   render();
 }
@@ -913,6 +915,8 @@ function showLogin(){
   loginView.style.display = "block";
   dashView.style.display = "none";
   topbar.style.display = "none";
+  const ps = document.getElementById("promoSection");
+  if (ps) ps.style.display = "none";
 }
 
 document.getElementById("loginForm").addEventListener("submit", e=>{

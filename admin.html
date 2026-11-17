@@ -387,6 +387,9 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
         <label for="evNilai">Nilai</label>
         <input type="text" id="evNilai" inputmode="numeric" placeholder="15 atau 5000">
       </div>
+      <div class="field full">
+        <p class="hint-text" id="evHint" style="margin:0">Isi persen (≤100) atau nominal. Persentase akan dihitung otomatis dari harga produk.</p>
+      </div>
       <div class="field">
         <label for="evLabel">Label tampil</label>
         <input type="text" id="evLabel" placeholder="Hemat 15%">
@@ -545,11 +548,15 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
         <div id="fWarnaForm" style="display:none;margin-top:10px;padding:12px;border:1px dashed var(--pink-200);border-radius:12px;background:var(--pink-50)">
           <div class="form-grid">
             <div class="field">
-              <label for="fWarnaPilih">Warna</label>
-              <select id="fWarnaPilih"></select>
+              <label for="fWarnaNama">Nama warna</label>
+              <input type="text" id="fWarnaNama" placeholder="Merah, Biru, ...">
             </div>
             <div class="field">
-              <label for="fWarnaFile">Gambar (wajib)</label>
+              <label for="fWarnaHex">Kode warna (hex)</label>
+              <input type="text" id="fWarnaHex" placeholder="#E53935" maxlength="7">
+            </div>
+            <div class="field">
+              <label for="fWarnaFile">Gambar (opsional)</label>
               <input type="file" id="fWarnaFile" accept="image/*">
             </div>
           </div>
@@ -562,7 +569,18 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
             <button type="button" class="btn btn-ghost btn-sm" id="fWarnaBatal">Batal</button>
           </div>
         </div>
-        <p class="hint-text">Setiap warna wajib memiliki gambar. Warna yang tidak tersedia bisa disembunyikan dari tampilan web lewat tombol nonaktifkan.</p>
+        <p class="hint-text">Isi nama warna dan kode hex (misalnya #E53935). Gambar bersifat opsional, tetapi disarankan agar pembeli bisa melihat warnanya.</p>
+      </div>
+      <div class="field full">
+        <div class="cost-label-row">
+          <label>Ukuran tersedia</label>
+        </div>
+        <div id="fSizeList" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="text" id="fSizeInput" placeholder="S, M, L, XL, Custom..." style="flex:1;padding:8px 12px;border-radius:10px;border:1.5px solid var(--pink-200);font-family:inherit;font-size:13px">
+          <button type="button" class="btn btn-ghost btn-sm" id="fSizeTambah">+ Tambah</button>
+        </div>
+        <p class="hint-text">Ukuran yang tidak tersedia bisa disembunyikan dari tampilan web.</p>
       </div>
       <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="cancelBtn">Batal</button>
@@ -629,12 +647,12 @@ const gsap = window.gsap || null;
 const kurangiGerak = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const DEFAULT_PRODUK = [
-  { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png", desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Blush",img:"",tersedia:true}], promo: { tipe:"diskon", nilai:15, label:"Hemat 15%", event:"Demo Promo", mulai:"2024-01-01", selesai:"2030-12-31" } },
-  { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png", desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Mint",img:"",tersedia:true},{nama:"Butter",img:"",tersedia:true}] },
-  { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/blush-peony-rose-eucalyptus-arrangement-0d1f8c58.png", desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0, foto:"", warna:[{nama:"Putih",img:"",tersedia:true},{nama:"Blush",img:"",tersedia:true}] },
-  { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  img:"https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png", desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Mint",img:"",tersedia:true}] },
-  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:"https://images.pexels.com/photos/31805485/pexels-photo-31805485.jpeg?auto=compress&cs=tinysrgb&w=800", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0, foto:"", warna:[{nama:"Peach",img:"",tersedia:true},{nama:"Lilac",img:"",tersedia:true}] },
-  { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:"https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png", desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Rose",img:"",tersedia:true}] }
+  { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/peony-and-rose-bouquet-in-bowl-b909c48b.png", desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Blush",img:"",tersedia:true}], size:[{nama:"Small",tersedia:true},{nama:"Medium",tersedia:true},{nama:"Large",tersedia:true}], promo: { tipe:"diskon", nilai:15, label:"Hemat 15%", event:"Demo Promo", mulai:"2024-01-01", selesai:"2030-12-31" } },
+  { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/spring-wildflower-bouquet-d1ee280f.png", desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Mint",img:"",tersedia:true},{nama:"Butter",img:"",tersedia:true}], size:[{nama:"Medium",tersedia:true},{nama:"Large",tersedia:true}] },
+  { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    img:"https://cdn.budgetpixel.com/image-library/blush-peony-rose-eucalyptus-arrangement-0d1f8c58.png", desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0, foto:"", warna:[{nama:"Putih",img:"",tersedia:true},{nama:"Blush",img:"",tersedia:true}], size:[{nama:"Small",tersedia:true},{nama:"Medium",tersedia:true}] },
+  { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  img:"https://cdn.budgetpixel.com/image-library/cherry-blossom-branches-acc5d96b.png", desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Mint",img:"",tersedia:true}], size:[{nama:"One Size",tersedia:true}] },
+  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:"https://images.pexels.com/photos/31805485/pexels-photo-31805485.jpeg?auto=compress&cs=tinysrgb&w=800", desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0, foto:"", warna:[{nama:"Peach",img:"",tersedia:true},{nama:"Lilac",img:"",tersedia:true}], size:[{nama:"One Size",tersedia:true}] },
+  { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:"https://cdn.budgetpixel.com/image-library/lush-rose-and-ranunculus-bouquet-5a368eda.png", desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0, foto:"", warna:[{nama:"Pink",img:"",tersedia:true},{nama:"Rose",img:"",tersedia:true}], size:[{nama:"Custom",tersedia:true}] }
 ];
 
 const DEFAULT_KATEGORI = [
@@ -697,6 +715,7 @@ let kategori = [];
 let editingIndex = -1;
 let fotoTemp = "";
 let warnaTemp = [];
+let sizeTemp = [];
 let katEditingId = null;
 let katFotoTemp = "";
 let auth = null, db = null, unsub = null, unsubKat = null, seedKategori = false;
@@ -714,6 +733,7 @@ function bacaLokal(){
         foto: p.foto || "",
         img: p.img || p.foto || "",
         warna: Array.isArray(p.warna) ? p.warna.map(w => (typeof w === "string" ? { nama: w, img: "", tersedia: true } : { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false })) : [],
+        size: Array.isArray(p.size) ? p.size.map(sz => (typeof sz === "string" ? { nama: sz, tersedia: true } : { nama: sz.nama || "", tersedia: sz.tersedia !== false })) : [],
         promo: p.promo || null
       }));
     }
@@ -803,6 +823,7 @@ function pantau(){
         foto: v.foto || "",
         img: v.img || v.foto || "",
         warna: Array.isArray(v.warna) ? v.warna.map(w => (typeof w === "string" ? { nama: w, img: "", tersedia: true } : { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false })) : [],
+        size: Array.isArray(v.size) ? v.size.map(sz => (typeof sz === "string" ? { nama: sz, tersedia: true } : { nama: sz.nama || "", tersedia: sz.tersedia !== false })) : [],
         promo: v.promo || null
       };
     });
@@ -1273,6 +1294,41 @@ document.getElementById("evProdukList").addEventListener("click", e=>{
   btn.classList.toggle("active");
 });
 
+function updatePromoHint(){
+  const hint = document.getElementById("evHint");
+  if (!hint) return;
+  const tipe = document.getElementById("evTipe").value;
+  const nilaiRaw = document.getElementById("evNilai").value.trim();
+  const nilai = Number(nilaiRaw);
+  if (!nilaiRaw || isNaN(nilai)){ hint.textContent = "Isi persen (≤100) atau nominal. Persentase akan dihitung otomatis dari harga produk."; return; }
+  if (tipe === "diskon"){
+    if (nilai <= 100){
+      hint.textContent = "Diskon " + nilai + "% dari harga produk.";
+    } else {
+      // nominal: hitung persen rata-rata dari produk terpilih
+      const dipilih = [...document.querySelectorAll("#evProdukList [data-evprod].active")].map(b => parseInt(b.dataset.evprod,10));
+      if (dipilih.length){
+        const p = produk[dipilih[0]];
+        const harga = parseNum(p ? p.harga : 0);
+        if (harga > 0) hint.textContent = "Diskon Rp " + fmtNum(nilai) + " = " + Math.round(nilai/harga*100) + "% dari harga " + rupiah(harga) + ".";
+        else hint.textContent = "Diskon nominal Rp " + fmtNum(nilai) + ".";
+      } else {
+        hint.textContent = "Diskon nominal Rp " + fmtNum(nilai) + ". Pilih produk untuk melihat persentase.";
+      }
+    }
+  } else if (tipe === "diskon_fixed"){
+    hint.textContent = "Potongan tetap Rp " + fmtNum(nilai) + " dari harga produk.";
+  } else if (tipe === "cashback"){
+    hint.textContent = "Cashback Rp " + fmtNum(nilai) + " untuk pembeli.";
+  } else if (tipe === "promo"){
+    hint.textContent = "Label promo tanpa perubahan harga.";
+  }
+}
+
+document.getElementById("evTipe").addEventListener("change", updatePromoHint);
+document.getElementById("evNilai").addEventListener("input", updatePromoHint);
+document.getElementById("evProdukList").addEventListener("click", ()=> setTimeout(updatePromoHint, 50));
+
 document.getElementById("evTerapkan").addEventListener("click", async ()=>{
   const tipe = document.getElementById("evTipe").value;
   const nilaiRaw = document.getElementById("evNilai").value.trim();
@@ -1624,6 +1680,9 @@ function openModal(i){
     return { nama: w.nama || "", img: w.img || "", tersedia: w.tersedia !== false };
   }).filter(w => w.nama);
   renderWarnaListAdmin();
+  // size
+  sizeTemp = (Array.isArray(p.size) ? p.size : []).map(s => (typeof s === "string" ? { nama: s, tersedia: true } : { nama: s.nama || "", tersedia: s.tersedia !== false })).filter(s => s.nama);
+  renderSizeListAdmin();
   document.getElementById("fWarnaForm").style.display = "none";
   document.getElementById("fWarnaFile").value = "";
   document.getElementById("fWarnaPreview").style.display = "none";
@@ -1660,6 +1719,7 @@ function renderWarnaListAdmin(){
       ${w.img ? `<img src="${escapeHtml(w.img)}" alt="${escapeHtml(w.nama)}" width="48" height="48" style="width:48px;height:48px;object-fit:contain;border-radius:8px;background:#fff;border:1px solid var(--pink-200)">` : `<div style="width:48px;height:48px;border-radius:8px;background:var(--pink-50);display:grid;place-items:center;font-size:10px;color:var(--muted)">no img</div>`}
       <div style="flex:1">
         <div style="font-weight:700;font-size:13px;color:var(--rose-dark)">${escapeHtml(w.nama)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${escapeHtml(w.hex || "")}</div>
         <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:2px">
           <input type="checkbox" data-warna-idx="${i}" data-field="tersedia" ${w.tersedia !== false ? "checked" : ""}> Tersedia di web
         </label>
@@ -1675,22 +1735,14 @@ function renderWarnaListAdmin(){
 }
 
 // populate warna select
-function isiPilihanWarnaSelect(){
-  const sel = document.getElementById("fWarnaPilih");
-  if (!sel) return;
-  const terpakai = warnaTemp.map(w=>w.nama);
-  sel.innerHTML = PALET_WARNA.map(w =>
-    `<option value="${escapeHtml(w.nama)}" ${terpakai.includes(w.nama) ? "disabled" : ""}>${escapeHtml(w.nama)}${terpakai.includes(w.nama) ? " (sudah ada)" : ""}</option>`
-  ).join("");
-}
-
-// tambah warna
 document.getElementById("fWarnaTambah").addEventListener("click", ()=>{
-  isiPilihanWarnaSelect();
   document.getElementById("fWarnaForm").style.display = "block";
+  document.getElementById("fWarnaNama").value = "";
+  document.getElementById("fWarnaHex").value = "";
   document.getElementById("fWarnaFile").value = "";
   document.getElementById("fWarnaPreview").style.display = "none";
-  document.getElementById("fWarnaImg").removeAttribute("src");
+  const img = document.getElementById("fWarnaImg");
+  if (img) img.removeAttribute("src");
 });
 
 document.getElementById("fWarnaBatal").addEventListener("click", ()=>{
@@ -1725,14 +1777,50 @@ document.getElementById("fWarnaHapusGambar").addEventListener("click", ()=>{
 });
 
 document.getElementById("fWarnaSimpan").addEventListener("click", ()=>{
-  const nama = document.getElementById("fWarnaPilih").value;
+  const nama = document.getElementById("fWarnaNama").value.trim();
+  const hex = document.getElementById("fWarnaHex").value.trim();
+  if (!nama){ toast("Nama warna belum diisi"); return; }
+  const hexVal = hex && /^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : null;
+  if (hex && !hexVal){ toast("Kode warna harus format #RRGGBB"); return; }
+  if (warnaTemp.some(w => w.nama.toLowerCase() === nama.toLowerCase())){ toast("Warna sudah ada"); return; }
   const imgSrc = document.getElementById("fWarnaImg").getAttribute("src");
-  if (!imgSrc){ toast("Gambar wajib diisi untuk warna baru"); return; }
-  if (warnaTemp.some(w=>w.nama === nama)){ toast("Warna sudah ada"); return; }
-  warnaTemp.push({ nama: nama, img: imgSrc, tersedia: true });
+  warnaTemp.push({ nama: nama, hex: hexVal || "#F4A3C0", img: imgSrc || "", tersedia: true });
   renderWarnaListAdmin();
   document.getElementById("fWarnaForm").style.display = "none";
   toast("Warna ditambahkan");
+});
+
+function renderSizeListAdmin(){
+  const el = document.getElementById("fSizeList");
+  if (!el) return;
+  if (!sizeTemp.length){
+    el.innerHTML = `<span class="hint-text" style="margin:0">Belum ada ukuran.</span>`;
+    return;
+  }
+  el.innerHTML = sizeTemp.map((s,i)=>`
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1.5px solid ${s.tersedia !== false ? "var(--ok,#2E7D52)" : "var(--pink-200)"};background:${s.tersedia !== false ? "rgba(46,125,82,.08)" : "var(--pink-50)"};font-size:12px;font-weight:700;color:var(--plum)">
+      ${escapeHtml(s.nama)}
+      <label style="display:flex;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--muted)">
+        <input type="checkbox" data-size-idx="${i}" ${s.tersedia !== false ? "checked" : ""}> on/off
+      </label>
+      <button type="button" style="background:none;border:none;color:var(--err);font-weight:900;cursor:pointer;padding:0 2px" data-size-hapus="${i}">×</button>
+    </span>`).join("");
+  el.querySelectorAll("[data-size-hapus]").forEach(b=>{
+    b.addEventListener("click", ()=>{ sizeTemp.splice(parseInt(b.dataset.sizeHapus,10),1); renderSizeListAdmin(); });
+  });
+  el.querySelectorAll("[data-size-idx]").forEach(cb=>{
+    cb.addEventListener("change", ()=>{ sizeTemp[parseInt(cb.dataset.sizeIdx,10)].tersedia = cb.checked; });
+  });
+}
+
+document.getElementById("fSizeTambah").addEventListener("click", ()=>{
+  const inp = document.getElementById("fSizeInput");
+  const val = inp.value.trim();
+  if (!val){ toast("Ukuran belum diisi"); return; }
+  if (sizeTemp.some(s => s.nama.toLowerCase() === val.toLowerCase())){ toast("Ukuran sudah ada"); return; }
+  sizeTemp.push({ nama: val, tersedia: true });
+  inp.value = "";
+  renderSizeListAdmin();
 });
 
 document.getElementById("cancelBtn").addEventListener("click", closeModal);
@@ -1843,6 +1931,7 @@ document.getElementById("prodForm").addEventListener("submit", async e=>{
     foto: fotoTemp || "",
     img: (editingIndex >= 0 && produk[editingIndex].img) ? produk[editingIndex].img : "",
     warna: warnaTemp.map(w => ({ nama: w.nama, img: w.img || "", tersedia: w.tersedia !== false })),
+    size: sizeTemp.map(s => ({ nama: s.nama, tersedia: s.tersedia !== false })),
     promo: (function(){
       const tipe = document.getElementById("fPromoTipe").value;
       if (!tipe) return null;
@@ -1869,7 +1958,7 @@ document.getElementById("prodForm").addEventListener("submit", async e=>{
         desc: data.desc, badge: data.badge,
         harga: fmtNum(data.harga), cost: fmtNum(data.cost),
         sold: data.sold, foto: data.foto, img: data.img,
-        warna: data.warna, promo: data.promo
+        warna: data.warna, size: data.size, promo: data.promo
       };
       if (editingIndex >= 0) produk[editingIndex] = obj;
       else produk.push(obj);
@@ -1883,7 +1972,7 @@ document.getElementById("prodForm").addEventListener("submit", async e=>{
         desc: data.desc, badge: data.badge,
         harga: data.harga, cost: data.cost, sold: data.sold,
         foto: data.foto, img: data.img,
-        warna: data.warna, promo: data.promo
+        warna: data.warna, size: data.size, promo: data.promo
       };
       if (editingIndex >= 0){
         await db.collection("produk").doc(produk[editingIndex]._id).update(isi);

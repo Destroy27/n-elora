@@ -643,6 +643,7 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
       <span class="eyebrow reveal">Etalase</span>
       <h2 class="sec-title reveal">Koleksi <em>N.Elora</em></h2>
     </div>
+    <div id="promoBanner" style="margin-bottom:14px"></div>
     <div class="filters reveal" id="filters"></div>
     <div class="grid" id="productGrid"></div>
     <p class="grid-kosong" id="gridKosong" hidden>Belum ada produk untuk jenis ini.</p>
@@ -705,6 +706,10 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
     <div class="warna-modal-section" id="pmWarnaSection">
       <label>Warna (opsional)</label>
       <div class="warna-modal-strip" id="pmWarnaStrip"></div>
+    </div>
+    <div class="warna-modal-section" id="pmSizeSection">
+      <label>Ukuran (opsional)</label>
+      <div class="warna-modal-strip" id="pmSizeStrip"></div>
     </div>
     <div class="warna-modal-section">
       <label>Jumlah</label>
@@ -1029,7 +1034,16 @@ function warnaList(p) {
 const grid = document.getElementById("productGrid");
 
 function renderProduk() {
-  grid.innerHTML = PRODUK.map((p, idx) => {
+  // diskon tampil paling atas
+  const urutan = [...PRODUK].map((p, idx) => ({ p, idx })).sort((a, b) => {
+    const pa = promoAktif(a.p), pb = promoAktif(b.p);
+    const da = !!(pa && hitungPromo(a.p.harga, pa).akhir < hitungPromo(a.p.harga, pa).original);
+    const db = !!(pb && hitungPromo(b.p.harga, pb).akhir < hitungPromo(b.p.harga, pb).original);
+    if (da && !db) return -1;
+    if (!da && db) return 1;
+    return a.idx - b.idx;
+  });
+  grid.innerHTML = urutan.map(({ p, idx }) => {
     const promo = promoAktif(p);
     const { original, akhir, cashback } = hitungPromo(p.harga, promo);
     const media = p.foto
@@ -1069,7 +1083,7 @@ function renderProduk() {
           <span class="price-original">${rupiah(original)}</span>
           <span class="price promo">${rupiah(akhir)}</span>
         </div>`;
-      savingsHTML = `<span class="price-savings">Hemat ${rupiah(saved)}</span>`;
+      savingsHTML = `<span class="price-savings">${rupiah(saved)}</span>`;
     } else if (promo && cashback > 0) {
       priceBlock = `<div class="price-block"><span class="price">${rupiah(original)}</span><span class="price-cashback-note">💰 Cashback ${rupiah(cashback)}</span></div>`;
     } else {
@@ -1102,6 +1116,29 @@ function renderProduk() {
   }).join("");
   const kosong = document.getElementById("gridKosong");
   if (kosong) kosong.hidden = PRODUK.length > 0;
+
+  // banner event promo
+  const banner = document.getElementById("promoBanner");
+  if (banner) {
+    const events = {};
+    PRODUK.forEach(p => {
+      const pr = promoAktif(p);
+      if (pr && pr.event) {
+        if (!events[pr.event]) events[pr.event] = { tipe: pr.tipe, nilai: pr.nilai, label: pr.label, mulai: pr.mulai, selesai: pr.selesai, count: 0 };
+        events[pr.event].count++;
+      }
+    });
+    const daftar = Object.keys(events);
+    if (daftar.length) {
+      banner.innerHTML = daftar.map(e => {
+        const ev = events[e];
+        const label = ev.label || (ev.tipe === "diskon" ? `Diskon ${ev.nilai}%` : ev.tipe === "cashback" ? `Cashback ${rupiah(ev.nilai)}` : "Promo");
+        return `<div style="background:linear-gradient(135deg,#FF4D8F,#F4A3C0);color:#fff;padding:10px 16px;border-radius:12px;margin-bottom:8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(255,77,143,.3)"><span>🎉</span><span>${esc(e)} - ${esc(label)} untuk ${ev.count} produk${ev.selesai ? " (s/d " + esc(ev.selesai) + ")" : ""}</span></div>`;
+      }).join("");
+    } else {
+      banner.innerHTML = "";
+    }
+  }
 }
 
 let warnaBound = false;
@@ -1138,7 +1175,7 @@ function openWarnaModal(idx) {
   else priceEl.innerHTML = `Rp ${p.harga}`;
   const bolehWarna = bolehPilihWarna(p.kategori);
   warnaModalSectionB.style.display = bolehWarna ? "" : "none";
-  warnaModalSectionW.style.display = bolehWarna ? "" : "none";
+  warnaModalSectionW.style.display = "none";
   warnaModalNoteEl.hidden = bolehWarna;
   if (bolehWarna) {
     stripBungaEl.dataset.idx = idx;
@@ -2052,13 +2089,13 @@ try { const raw = localStorage.getItem(CART_KEY); if (raw) { const p = JSON.pars
 function simpanCart(){ try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch(e){} }
 function cartCount(){ return cart.reduce((s,c) => s + (c.qty||0), 0); }
 
-function addToCart(idx, warna, qty) {
+function addToCart(idx, warna, size, qty) {
   qty = Math.max(1, qty || 1);
   const p = PRODUK[idx];
   if (!p) return;
-  const existing = cart.find(c => c.idx === idx && c.warna === (warna || ""));
+  const existing = cart.find(c => c.idx === idx && c.warna === (warna || "") && c.size === (size || ""));
   if (existing) existing.qty += qty;
-  else cart.push({ idx, warna: warna || "", qty });
+  else cart.push({ idx, warna: warna || "", size: size || "", qty });
   simpanCart();
   renderCartBadge();
   renderCartDrawer();
@@ -2112,7 +2149,8 @@ function renderCartDrawer() {
     total += h;
     const img = p.foto || p.img || IMG.bouquetPink;
     const warnaTxt = c.warna ? " - " + c.warna : "";
-    return '<div class="cart-item" data-ci="' + i + '"><img src="' + img + '" alt=""><div class="cart-info"><h5>' + p.nama + '</h5><span class="meta">' + rupiah(akhir) + warnaTxt + '</span></div><div class="qty-ctrl"><button type="button" data-cqty="-" data-ci="' + i + '">-</button><span>' + c.qty + '</span><button type="button" data-cqty="+" data-ci="' + i + '">+</button></div><button type="button" class="btn-remove-item" data-crm="' + i + '" aria-label="Hapus">x</button></div>';
+    const sizeTxt = c.size ? " - " + c.size : "";
+    return '<div class="cart-item" data-ci="' + i + '"><img src="' + img + '" alt=""><div class="cart-info"><h5>' + p.nama + '</h5><span class="meta">' + rupiah(akhir) + warnaTxt + sizeTxt + '</span></div><div class="qty-ctrl"><button type="button" data-cqty="-" data-ci="' + i + '">-</button><span>' + c.qty + '</span><button type="button" data-cqty="+" data-ci="' + i + '">+</button></div><button type="button" class="btn-remove-item" data-crm="' + i + '" aria-label="Hapus">x</button></div>';
   }).join("");
   if (totalEl) totalEl.textContent = rupiah(total);
 }
@@ -2132,7 +2170,7 @@ function closeCartDrawer() {
   setTimeout(() => { el.hidden = true; }, 400);
 }
 
-let pmIdx = null, pmQty = 1, pmWarna = "";
+let pmIdx = null, pmQty = 1, pmWarna = "", pmSize = "";
 function openProductModal(idx) {
   const p = PRODUK[idx];
   if (!p) return;
@@ -2164,6 +2202,18 @@ function openProductModal(idx) {
   } else {
     strip.innerHTML = "";
   }
+
+  // size
+  const sizeSection = document.getElementById("pmSizeSection");
+  const sizeStrip = document.getElementById("pmSizeStrip");
+  const sizes = (Array.isArray(p.size) ? p.size : []).filter(s => s.tersedia !== false);
+  if (sizes.length) {
+    sizeSection.style.display = "";
+    sizeStrip.innerHTML = sizes.map(s => `<button type="button" class="color-dot" data-size="${esc(s.nama)}" title="${esc(s.nama)}" style="width:auto;height:28px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--blush);color:var(--rose-ink)">${esc(s.nama)}</button>`).join("");
+  } else {
+    sizeSection.style.display = "none";
+    sizeStrip.innerHTML = "";
+  }
   const modal = document.getElementById("productModal");
   modal.hidden = false;
   requestAnimationFrame(() => modal.classList.add("open"));
@@ -2189,17 +2239,25 @@ if (productModalEl) {
     dot.classList.add("active");
     pmWarna = dot.dataset.warna;
   });
+  document.getElementById("pmSizeStrip").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-size]");
+    if (!btn) return;
+    const strip = e.currentTarget;
+    strip.querySelectorAll("[data-size]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    pmSize = btn.dataset.size;
+  });
   document.getElementById("pmQtyMinus").addEventListener("click", () => { if (pmQty > 1) { pmQty--; document.getElementById("pmQty").textContent = pmQty; } });
   document.getElementById("pmQtyPlus").addEventListener("click", () => { pmQty++; document.getElementById("pmQty").textContent = pmQty; });
   document.getElementById("pmAddCart").addEventListener("click", () => {
     if (pmIdx == null) return;
-    addToCart(pmIdx, pmWarna, pmQty);
+    addToCart(pmIdx, pmWarna, pmSize, pmQty);
     closeProductModal();
     openCartDrawer();
   });
   document.getElementById("pmBuyNow").addEventListener("click", () => {
     if (pmIdx == null) return;
-    addToCart(pmIdx, pmWarna, pmQty);
+    addToCart(pmIdx, pmWarna, pmSize, pmQty);
     closeProductModal();
     checkoutCart();
   });
@@ -2240,6 +2298,7 @@ function checkoutCart() {
     total += h;
     let line = "• " + p.nama + " x" + c.qty + " = " + rupiah(h);
     if (c.warna) line += " (Warna: " + c.warna + ")";
+    if (c.size) line += " (Ukuran: " + c.size + ")";
     return line;
   }).join("%0A");
   const pesan = "Halo N.Elora 🌸%0A%0ASaya mau pesan:%0A%0A" + list + "%0A%0A" +

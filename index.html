@@ -190,6 +190,7 @@ section{padding:clamp(20px, 3.5vw, 56px) 0;position:relative}
 .card-promo-badge {position:absolute;bottom:8px;right:8px;z-index:3;background:linear-gradient(135deg,#FF4D8F 0%,#F4A3C0 100%);color:#fff;font-size:9px;font-weight:800;padding:5px 10px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 4px 12px rgba(255,77,143,.5),0 0 0 1.5px rgba(255,255,255,.85);display:flex;align-items:center;gap:3px;animation:promoWobble 2.4s ease-in-out infinite;}
 .card-promo-badge.cashback {background:linear-gradient(135deg,#5FBC9A 0%,#8FD1B5 100%);box-shadow:0 4px 12px rgba(95,188,154,.5),0 0 0 1.5px rgba(255,255,255,.85);}
 .card-promo-badge.promo {background:linear-gradient(135deg,#FFB84D 0%,#FFD98A 100%);color:#4A2A3A;box-shadow:0 4px 12px rgba(255,184,77,.5),0 0 0 1.5px rgba(255,255,255,.85);}
+.card-promo-badge.event {background:#1B263B;color:#fff;box-shadow:0 4px 12px rgba(27,38,59,.45),0 0 0 1.5px rgba(255,255,255,.85);}
 .card-promo-img {position:absolute;top:8px;right:8px;z-index:5;max-width:86px;max-height:46px;object-fit:contain;pointer-events:none;filter:drop-shadow(0 3px 8px rgba(0,0,0,.18));}
 @keyframes promoWobble {0%,100%{transform:rotate(-3deg) scale(1);}50%{transform:rotate(3deg) scale(1.06);}}
 
@@ -1086,8 +1087,10 @@ function renderProduk() {
     let promoBadge = "";
     if (promo) {
       const cls = promo.tipe === "cashback" ? "cashback" : (promo.tipe === "promo" ? "promo" : "");
-      const label = labelPromo(promo);
-      promoBadge = `<span class="card-promo-badge ${cls}">${esc(label)}</span>`;
+      const eventText = String(promo.event || "").trim();
+      const eventCls = eventText ? " event" : "";
+      const text = eventText || labelPromo(promo);
+      promoBadge = `<span class="card-promo-badge ${cls}${eventCls}">${esc(text)}</span>`;
     }
     const isDiskon = !!(promo && akhir < original);
 
@@ -1115,8 +1118,7 @@ function renderProduk() {
           <span class="price-original">${rupiah(original)}</span>
           <span class="price promo">${rupiah(akhir)}</span>
         </div>`;
-      const namaEvent = String(promo.event || "").trim();
-      savingsHTML = namaEvent ? `<span class="price-savings">${esc(namaEvent)}</span>` : "";
+      savingsHTML = "";
     } else if (promo && cashback > 0) {
       priceBlock = `<div class="price-block"><span class="price">${rupiah(original)}</span><span class="price-cashback-note">💰 Cashback ${rupiah(cashback)}</span></div>`;
     } else {

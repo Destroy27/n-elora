@@ -479,7 +479,8 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
 .color-dot.active::after {content: "✓";position: absolute;inset: 0;display: grid;place-items: center;font-size: 12px;font-weight: 900;color: #fff;text-shadow: 0 1px 3px rgba(0,0,0,.5);line-height: 1;}
 .color-dot[data-hex="#FFFFFF"] { border-color: #e5e5e5; }
 .color-dot[data-hex="#FFFFFF"].active::after {color: var(--rose-ink);text-shadow: none;}
-.warna-modal-strip .color-dot { width: 32px; height: 32px; }
+.warna-modal-strip .color-dot { width: 48px; height: 48px; }
+.warna-modal-strip .color-dot.active::after { font-size: 16px; }
 .warna-modal-strip .color-dot.active::after { font-size: 14px; }
 #warnaModalStripWrap .color-dot[data-hex="#2A2A2A"],
 #warnaModalStripWrap .color-dot[data-hex="#2C3E50"] {border-color: rgba(255,255,255,.7);}
@@ -489,7 +490,7 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
 @media (min-width: 768px) {
   .warna-modal-overlay { align-items: center; }
   .warna-modal { border-radius: 24px; max-width: 440px; padding: 24px; }
-  .warna-modal-strip .color-dot { width: 36px; height: 36px; }
+  .warna-modal-strip .color-dot { width: 52px; height: 52px; }
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
@@ -2182,8 +2183,10 @@ function openProductModal(idx) {
   const p = PRODUK[idx];
   if (!p) return;
   pmIdx = idx; pmQty = 1; pmWarna = "";
-  document.getElementById("pmImg").src = p.foto || p.img || IMG.bouquetPink;
-  document.getElementById("pmImg").alt = p.nama;
+  const pmImgEl = document.getElementById("pmImg");
+  pmImgEl.src = p.foto || p.img || IMG.bouquetPink;
+  pmImgEl.alt = p.nama;
+  pmImgEl.dataset.original = pmImgEl.src;
   document.getElementById("pmTitle").textContent = p.nama;
   const promo = promoAktif(p);
   const { original, akhir } = hitungPromo(p.harga, promo);
@@ -2211,7 +2214,7 @@ function openProductModal(idx) {
       strip.innerHTML = `<p style="font-size:12px;color:var(--text-muted)">Tidak ada pilihan warna untuk produk ini.</p>`;
     } else {
       strip.innerHTML = warnaTersedia.map(w => {
-        if (w.img) return `<button type="button" class="color-dot" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"><img src="${w.img}" alt="${w.nama}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></button>`;
+        if (w.img) return `<button type="button" class="color-dot" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" data-img="${w.img}" title="${w.nama}"><img src="${w.img}" alt="${w.nama}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></button>`;
         return `<button type="button" class="color-dot" style="--c:${w.hex}" data-hex="${w.hex}" data-warna="${w.nama}" title="${w.nama}"></button>`;
       }).join("");
     }
@@ -2254,6 +2257,9 @@ if (productModalEl) {
     strip.querySelectorAll(".color-dot").forEach(d => d.classList.remove("active"));
     dot.classList.add("active");
     pmWarna = dot.dataset.warna;
+    const pmImgEl = document.getElementById("pmImg");
+    if (dot.dataset.img) pmImgEl.src = dot.dataset.img;
+    else if (pmImgEl.dataset.original) pmImgEl.src = pmImgEl.dataset.original;
   });
   document.getElementById("pmSizeStrip").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-size]");

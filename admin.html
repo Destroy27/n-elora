@@ -566,9 +566,17 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
               <label for="cmExtra">Biaya tambahan (Rp)</label>
               <input type="text" id="cmExtra" inputmode="numeric" placeholder="0">
             </div>
+            <div class="calc-mini-row">
+              <label for="cmPcsProduk">Pcs per produk (yang dipakai)</label>
+              <input type="number" id="cmPcsProduk" placeholder="1" min="1" value="1">
+            </div>
             <div class="calc-mini-result">
               <span>Modal per pcs</span>
               <b id="cmResult">Rp 0</b>
+            </div>
+            <div class="calc-mini-result">
+              <span>Modal per produk</span>
+              <b id="cmResultProduk">Rp 0</b>
             </div>
             <button type="button" id="cmUse" class="btn btn-primary btn-sm" style="width:100%">Pakai Nilai Ini</button>
           </div>
@@ -2492,9 +2500,13 @@ function hitungCalcModal(){
   const total = parseNum(document.getElementById("cmTotal").value);
   const isi = parseInt(document.getElementById("cmIsi").value, 10) || 0;
   const extra = parseNum(document.getElementById("cmExtra").value);
+  const pcsProduk = parseInt(document.getElementById("cmPcsProduk").value, 10) || 1;
   const hasil = document.getElementById("cmResult");
-  if (isi <= 0 || total <= 0){ hasil.textContent = "Rp 0"; return; }
-  hasil.textContent = "Rp " + fmtNum(Math.ceil((total + extra) / isi));
+  const hasilProduk = document.getElementById("cmResultProduk");
+  if (isi <= 0 || total <= 0){ hasil.textContent = "Rp 0"; hasilProduk.textContent = "Rp 0"; return; }
+  const perPcs = Math.ceil((total + extra) / isi);
+  hasil.textContent = "Rp " + fmtNum(perPcs);
+  hasilProduk.textContent = "Rp " + fmtNum(perPcs * Math.max(1, pcsProduk));
 }
 
 bindRupiahInput(document.getElementById("calcTotal"));
@@ -2505,7 +2517,7 @@ bindRupiahInput(document.getElementById("cmExtra"));
   const el = document.getElementById(id);
   if (el) el.addEventListener("input", hitungCalcDashboard);
 });
-["cmTotal","cmIsi","cmExtra"].forEach(id=>{
+["cmTotal","cmIsi","cmExtra","cmPcsProduk"].forEach(id=>{
   const el = document.getElementById(id);
   if (el) el.addEventListener("input", hitungCalcModal);
 });
@@ -2514,15 +2526,15 @@ document.getElementById("calcModalToggle").addEventListener("click", ()=>{
   panel.style.display = (panel.style.display === "none") ? "block" : "none";
 });
 document.getElementById("cmUse").addEventListener("click", ()=>{
-  const angka = parseInt(document.getElementById("cmResult").textContent.replace(/[^\d]/g, ""), 10) || 0;
+  const angka = parseInt(document.getElementById("cmResultProduk").textContent.replace(/[^\d]/g, ""), 10) || 0;
   if (!angka){
     document.getElementById("cmTotal").focus();
-    toast("Hitung dulu modal per pcs");
+    toast("Hitung dulu modal per produk");
     return;
   }
   document.getElementById("fCost").value = fmtNum(angka);
   document.getElementById("calcModalPanel").style.display = "none";
-  toast("Modal per pcs terisi otomatis");
+  toast("Modal per produk terisi otomatis");
 });
 
 /* ============================================================

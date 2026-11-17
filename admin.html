@@ -250,9 +250,21 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
 .switch-row input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--rose);flex-shrink:0;cursor:pointer}
 .switch-row .switch-text{font-size:12px;color:var(--muted);line-height:1.5}
 .switch-row .switch-text b{display:block;font-size:12.5px;color:var(--rose-dark);margin-bottom:2px}
-.slider-row{display:flex;align-items:center;gap:12px}
-.slider-row input[type="range"]{flex:1;accent-color:var(--rose);cursor:pointer}
-.slider-row output{min-width:56px;text-align:right;font-weight:800;color:var(--rose-dark);font-size:13px}
+.promo-box{border:1.5px solid var(--pink-100);border-radius:14px;background:#fff;padding:12px}
+.promo-box-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.promo-box-head .switch-row{border:0;background:transparent;padding:0;margin:0;align-items:center;gap:8px;cursor:pointer}
+.promo-box-head .switch-row input[type="checkbox"]{margin-top:0}
+.promo-box-head .switch-text{font-size:13px;font-weight:800;color:var(--rose-dark)}
+.promo-badge-preview{font-size:11.5px;font-weight:800;color:var(--rose-dark);background:var(--pink-50);border:1px solid var(--pink-200);border-radius:999px;padding:4px 10px}
+.promo-input{display:flex;align-items:stretch;gap:8px}
+.promo-input input{flex:1;min-width:0}
+.unit-switch{display:inline-flex;border:1.5px solid var(--pink-200);border-radius:12px;overflow:hidden;flex-shrink:0}
+.unit-switch button{border:0;background:#fff;color:var(--muted);font-family:inherit;font-weight:800;font-size:13px;padding:0 16px;min-height:44px;cursor:pointer;transition:background .2s,color .2s}
+.unit-switch button[aria-pressed="true"]{background:var(--rose);color:#fff}
+.unit-switch button:focus-visible{outline:2px solid var(--rose-dark);outline-offset:-3px}
+.promo-readout{font-size:12px;line-height:1.55;color:var(--rose-dark);background:var(--pink-50);border-radius:10px;padding:9px 11px;margin-top:8px}
+.promo-readout b{font-weight:800}
+.promo-readout span{display:block;color:var(--muted);font-size:11.5px}
 .prod-group{margin-bottom:18px}
 .prod-group-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 2px 8px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--rose-teks)}
 .prod-group-head .prod-group-count{font-size:11px;font-weight:700;color:var(--muted);text-transform:none;letter-spacing:0;background:var(--pink-50);border:1px solid var(--pink-100);border-radius:999px;padding:2px 9px}
@@ -376,66 +388,44 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
   <section class="card" aria-labelledby="judulPromo" id="promoSection" style="display:none">
     <div class="card-head">
       <div>
-        <h2 id="judulPromo"><span class="icon-bubble">🎉</span> Promo & Event</h2>
-        <p class="sub">Buat event promo, lalu pilih produk yang mendapat diskon, diskon nominal, cashback, atau label promo.</p>
+        <h2 id="judulPromo">Promo Massal</h2>
+        <p class="sub">Pilih produk, isi potongannya sekali. Persen, harga akhir, dan label kartu dihitung otomatis.</p>
       </div>
     </div>
     <div class="form-grid">
       <div class="field full">
-        <label for="evNama">Nama event</label>
-        <input type="text" id="evNama" placeholder="Hari Ibu, Lebaran, ...">
-      </div>
-      <div class="field">
-        <label for="evTipe">Tipe promo</label>
-        <select id="evTipe">
-          <option value="diskon">Diskon persen</option>
-          <option value="diskon_fixed">Diskon nominal</option>
-          <option value="cashback">Cashback</option>
-          <option value="promo">Label promo</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="evNilai">Nilai</label>
-        <input type="text" id="evNilai" inputmode="numeric" placeholder="15 atau 5000">
-      </div>
-      <div class="field full">
-        <label for="evSlider">Geser potongan dari harga produk</label>
-        <div class="slider-row">
-          <input type="range" id="evSlider" min="0" max="100" step="1" value="0">
-          <output id="evSliderVal" for="evSlider">0%</output>
+        <label for="evNilai">Potongan</label>
+        <div class="promo-input">
+          <input type="text" id="evNilai" inputmode="numeric" placeholder="5000">
+          <div class="unit-switch" role="group" aria-label="Satuan potongan">
+            <button type="button" data-evunit="rp" aria-pressed="true">Rp</button>
+            <button type="button" data-evunit="persen" aria-pressed="false">%</button>
+          </div>
         </div>
-        <p class="hint-text" id="evHint">Geser untuk mengatur persentase. Untuk diskon nominal, nilai rupiah dihitung dari harga produk terpilih.</p>
+        <p class="promo-readout" id="evHint">Pilih produk dulu untuk melihat perhitungan.</p>
       </div>
       <div class="field">
-        <label for="evLabel">Label tampil</label>
-        <input type="text" id="evLabel" placeholder="Diskon 15%">
-      </div>
-      <div class="field">
-        <label for="evMulai">Mulai</label>
-        <input type="date" id="evMulai">
-      </div>
-      <div class="field">
-        <label for="evSelesai">Selesai</label>
+        <label for="evSelesai">Berlaku sampai (opsional)</label>
         <input type="date" id="evSelesai">
       </div>
-      <div class="field full">
-        <label for="evImg">Gambar promo event (opsional)</label>
+      <div class="field">
+        <label for="evImg">Gambar promo (opsional)</label>
         <input type="file" id="evImg" accept="image/*">
         <div id="evImgPreview" style="display:none;align-items:center;gap:10px;margin-top:8px">
           <img id="evImgShow" alt="Pratinjau gambar promo" width="96" height="56" style="width:96px;height:56px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid var(--pink-200)">
           <button type="button" class="btn btn-danger btn-sm" id="evImgHapus">Hapus gambar</button>
         </div>
-        <p class="hint-text">Gambar ini tampil di kartu produk, menggantikan tulisan persen diskon.</p>
+        <p class="hint-text">Gambar tampil di kartu produk menggantikan tulisan diskon.</p>
       </div>
       <div class="field full">
-        <label>Pilih produk yang dapat promo</label>
-        <div id="evProdukList" class="warna-modal-strip" style="flex-wrap:wrap;gap:6px"></div>
-        <p class="hint-text">Centang produk yang ikut event ini. Produk yang dicentang akan mendapat promo di etalase.</p>
+        <label>Pilih produk</label>
+        <div id="evProdukList" class="warna-modal-strip" style="gap:6px"></div>
+        <p class="hint-text">Ketuk produk untuk memilih. Semua produk terpilih mendapat promo yang sama.</p>
       </div>
     </div>
     <div class="head-actions" style="margin-top:12px">
-      <button type="button" class="btn btn-primary btn-sm" id="evTerapkan">Terapkan ke produk terpilih</button>
-      <button type="button" class="btn btn-ghost btn-sm" id="evHapusSemua">Hapus promo dari semua produk</button>
+      <button type="button" class="btn btn-primary btn-sm" id="evTerapkan">Terapkan promo</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="evHapusSemua">Hapus semua promo</button>
     </div>
     <div id="evRingkasan" class="status-line" style="margin-top:12px"></div>
   </section>
@@ -527,57 +517,42 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
         </div>
       </div>
       <div class="field full">
-        <div class="cost-label-row">
-          <label>Promo / Diskon / Cashback</label>
-        </div>
-        <div class="form-grid">
-          <div class="field">
-            <label for="fPromoTipe">Tipe</label>
-            <select id="fPromoTipe">
-              <option value="">Tanpa promo</option>
-              <option value="diskon">Diskon persen</option>
-              <option value="diskon_fixed">Diskon nominal</option>
-              <option value="cashback">Cashback</option>
-              <option value="promo">Label promo</option>
-            </select>
+        <div class="promo-box">
+          <div class="promo-box-head">
+            <label class="switch-row" for="fPromoAktif">
+              <input type="checkbox" id="fPromoAktif">
+              <span class="switch-text"><b>Promo</b>Aktifkan diskon untuk produk ini</span>
+            </label>
+            <span class="promo-badge-preview" id="fPromoBadgePreview" hidden></span>
           </div>
-          <div class="field">
-            <label for="fPromoNilai">Nilai</label>
-            <input type="text" id="fPromoNilai" inputmode="numeric" placeholder="15 atau 5000">
-          </div>
-          <div class="field full">
-            <label for="fPromoSlider">Geser potongan dari harga produk</label>
-            <div class="slider-row">
-              <input type="range" id="fPromoSlider" min="0" max="100" step="1" value="0">
-              <output id="fPromoSliderVal" for="fPromoSlider">0%</output>
+          <div id="fPromoBody" hidden>
+            <div class="form-grid">
+              <div class="field full">
+                <label for="fPromoNilai">Potongan</label>
+                <div class="promo-input">
+                  <input type="text" id="fPromoNilai" inputmode="numeric" placeholder="5000">
+                  <div class="unit-switch" role="group" aria-label="Satuan potongan">
+                    <button type="button" data-promounit="rp" aria-pressed="true">Rp</button>
+                    <button type="button" data-promounit="persen" aria-pressed="false">%</button>
+                  </div>
+                </div>
+                <p class="promo-readout" id="fPromoReadout">Isi harga jual dulu supaya potongan bisa dihitung.</p>
+              </div>
+              <div class="field">
+                <label for="fPromoSelesai">Berlaku sampai (opsional)</label>
+                <input type="date" id="fPromoSelesai">
+              </div>
+              <div class="field">
+                <label for="fPromoImg">Gambar promo (opsional)</label>
+                <input type="file" id="fPromoImg" accept="image/*">
+                <div id="fPromoImgPreview" style="display:none;align-items:center;gap:10px;margin-top:8px">
+                  <img id="fPromoImgShow" alt="Pratinjau gambar promo" width="96" height="56" style="width:96px;height:56px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid var(--pink-200)">
+                  <button type="button" class="btn btn-danger btn-sm" id="fPromoImgHapus">Hapus gambar</button>
+                </div>
+              </div>
             </div>
-            <p class="hint-text" id="fPromoHint">Geser untuk mengatur persentase. Nominal dan harga akhir dihitung otomatis dari harga jual.</p>
+            <p class="hint-text">Kosongkan gambar untuk memakai tulisan diskon di kartu etalase.</p>
           </div>
-          <div class="field">
-            <label for="fPromoLabel">Label</label>
-            <input type="text" id="fPromoLabel" placeholder="Diskon 15%">
-          </div>
-          <div class="field">
-            <label for="fPromoEvent">Event</label>
-            <input type="text" id="fPromoEvent" placeholder="Hari Ibu">
-          </div>
-          <div class="field">
-            <label for="fPromoMulai">Mulai</label>
-            <input type="date" id="fPromoMulai">
-          </div>
-          <div class="field">
-            <label for="fPromoSelesai">Selesai</label>
-            <input type="date" id="fPromoSelesai">
-          </div>
-        </div>
-        <div class="field full" style="margin-top:12px">
-          <label for="fPromoImg">Gambar promo (menggantikan tulisan diskon)</label>
-          <input type="file" id="fPromoImg" accept="image/*">
-          <div id="fPromoImgPreview" style="display:none;align-items:center;gap:10px;margin-top:8px">
-            <img id="fPromoImgShow" alt="Pratinjau gambar promo" width="96" height="56" style="width:96px;height:56px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid var(--pink-200)">
-            <button type="button" class="btn btn-danger btn-sm" id="fPromoImgHapus">Hapus gambar</button>
-          </div>
-          <p class="hint-text">Jika diisi, gambar ini tampil di kartu produk menggantikan tulisan persen diskon. Kosongkan untuk memakai tulisan.</p>
         </div>
       </div>
       <div class="field full" id="fWarnaSection">
@@ -775,6 +750,8 @@ let warnaTemp = [];
 let sizeTemp = [];
 let promoImgTemp = "";
 let eventImgTemp = "";
+let promoUnit = "rp";
+let evUnit = "rp";
 let katEditingId = null;
 let katFotoTemp = "";
 let auth = null, db = null, unsub = null, unsubKat = null, seedKategori = false;
@@ -1227,7 +1204,7 @@ function renderProduk(){
               <div class="prod-info-box"><div class="lbl">Kategori</div><div class="val" style="font-size:12px">${escapeHtml(p.kategori)}</div></div>
             </div>
             ${p.desc ? `<div class="prod-desc-box"><b>Deskripsi:</b> ${escapeHtml(p.desc)}</div>` : ""}
-            ${p.promo && p.promo.tipe ? `<div class="prod-desc-box"><b>Promo:</b> ${escapeHtml(p.promo.event || p.promo.tipe)} - ${escapeHtml(p.promo.label || p.promo.tipe)} (${escapeHtml(String(p.promo.nilai || ""))})${p.promo.mulai ? " mulai " + escapeHtml(p.promo.mulai) : ""}${p.promo.selesai ? " s/d " + escapeHtml(p.promo.selesai) : ""}</div>` : ""}
+            ${p.promo && p.promo.tipe ? `<div class="prod-desc-box"><b>Promo:</b> ${escapeHtml(ringkasPromo(p.promo))}</div>` : ""}
             <div class="prod-edit-grid">
               <div class="mini-field">
                 <label for="qe-harga-${i}">Harga jual</label>
@@ -1387,54 +1364,54 @@ function render(){
   renderKategoriAdmin();
   renderPromoEventProduk();
   renderPromoRingkasan();
+  perbaruiEv();
 }
 
 function renderPromoEventProduk(){
   const el = document.getElementById("evProdukList");
   if (!el) return;
   el.innerHTML = produk.map((p,i)=>{
-    const aktif = p.promo && p.promo.tipe ? " active" : "";
-    return `<button type="button" class="ev-prod-chip${aktif}" data-evprod="${i}" title="${escapeHtml(p.nama)}" aria-pressed="${aktif ? "true" : "false"}">${escapeHtml(p.nama)}</button>`;
+    return `<button type="button" class="ev-prod-chip" data-evprod="${i}" title="${escapeHtml(p.nama)}" aria-pressed="false">${escapeHtml(p.nama)}</button>`;
   }).join("");
 }
 
 function renderPromoRingkasan(){
   const el = document.getElementById("evRingkasan");
   if (!el) return;
-  const events = {};
-  produk.forEach(p=>{
-    if (p.promo && p.promo.event){
-      events[p.promo.event] = (events[p.promo.event] || 0) + 1;
-    }
-  });
-  const daftar = Object.keys(events);
-  if (!daftar.length){
-    el.textContent = "Belum ada produk dengan promo.";
+  const aktif = produk.filter(p => p.promo && p.promo.tipe && (p.promo.tipe === "promo" || parseNum(p.promo.nilai) > 0));
+  if (!aktif.length){
+    el.textContent = "Belum ada produk yang mendapat promo.";
     return;
   }
-  el.innerHTML = "Event aktif: " + daftar.map(e => `${escapeHtml(e)} (${events[e]} produk)`).join(", ");
+  const nama = aktif.slice(0, 4).map(p => escapeHtml(p.nama)).join(", ");
+  el.innerHTML = "Promo aktif di <b>" + aktif.length + "</b> produk: " + nama +
+    (aktif.length > 4 ? ", dan " + (aktif.length - 4) + " lainnya" : "") + ".";
 }
 
 document.getElementById("evProdukList").addEventListener("click", e=>{
   const btn = e.target.closest("[data-evprod]");
   if (!btn) return;
   btn.classList.toggle("active");
-  perbaruiEvSlider();
+  btn.setAttribute("aria-pressed", String(btn.classList.contains("active")));
+  perbaruiEv();
 });
 
 document.getElementById("evTerapkan").addEventListener("click", async ()=>{
-  const tipe = document.getElementById("evTipe").value;
-  const nilaiRaw = document.getElementById("evNilai").value.trim();
-  const nilai = isNaN(Number(nilaiRaw)) ? nilaiRaw : Number(nilaiRaw);
-  const label = document.getElementById("evLabel").value.trim();
-  const event = document.getElementById("evNama").value.trim();
-  const mulai = document.getElementById("evMulai").value;
+  const nilai = parseNum(document.getElementById("evNilai").value);
   const selesai = document.getElementById("evSelesai").value;
   const dipilih = [...document.querySelectorAll("#evProdukList [data-evprod].active")].map(b => parseInt(b.dataset.evprod,10));
   if (!dipilih.length){ toast("Pilih minimal satu produk"); return; }
-  if (!event){ toast("Nama event belum diisi"); return; }
+  if (nilai <= 0){ toast("Isi potongan dulu"); return; }
 
-  const promoObj = { tipe, nilai, label: label || (tipe === "diskon" ? `Diskon ${nilai}%` : tipe.toUpperCase()), event, mulai, selesai, img: eventImgTemp || "" };
+  const promoObj = {
+    tipe: evUnit === "persen" ? "diskon" : "diskon_fixed",
+    nilai: evUnit === "persen" ? Math.min(100, nilai) : nilai,
+    label: "",
+    event: "",
+    mulai: "",
+    selesai,
+    img: eventImgTemp || ""
+  };
 
   if (modeAktif === "lokal"){
     dipilih.forEach(i => { if (produk[i]) produk[i].promo = { ...promoObj }; });
@@ -1448,7 +1425,11 @@ document.getElementById("evTerapkan").addEventListener("click", async ()=>{
       const p = produk[i];
       if (!p || !p._id) continue;
       await db.collection("produk").doc(p._id).update({ promo: promoObj });
+      p.promo = { ...promoObj };
     }
+    renderPromoEventProduk();
+    renderPromoRingkasan();
+    perbaruiEv();
     toast("Promo diterapkan ke " + dipilih.length + " produk");
   }catch(err){
     toast("Gagal menerapkan promo: " + (err.message || "kesalahan tidak dikenal"));
@@ -1468,7 +1449,9 @@ document.getElementById("evHapusSemua").addEventListener("click", async ()=>{
     for (const p of produk){
       if (!p._id) continue;
       await db.collection("produk").doc(p._id).update({ promo: null });
+      p.promo = null;
     }
+    render();
     toast("Promo dihapus dari semua produk");
   }catch(err){
     toast("Gagal menghapus promo: " + (err.message || "kesalahan tidak dikenal"));
@@ -1816,16 +1799,16 @@ function openModal(i){
   document.getElementById("cmResult").textContent = "Rp 0";
 
   // promo
-  const pr = p.promo || {};
-  document.getElementById("fPromoTipe").value = pr.tipe || "";
-  document.getElementById("fPromoNilai").value = pr.nilai != null ? pr.nilai : "";
-  document.getElementById("fPromoLabel").value = pr.label || "";
-  document.getElementById("fPromoEvent").value = pr.event || "";
-  document.getElementById("fPromoMulai").value = pr.mulai || "";
-  document.getElementById("fPromoSelesai").value = pr.selesai || "";
+  const pr = (p.promo && p.promo.tipe) ? p.promo : null;
+  const adaNilai = !!(pr && parseNum(pr.nilai) > 0);
+  promoUnit = (pr && pr.tipe === "diskon") ? "persen" : "rp";
+  document.getElementById("fPromoAktif").checked = adaNilai;
+  document.getElementById("fPromoNilai").value = adaNilai ? nilaiKeTeks(parseNum(pr.nilai), promoUnit) : "";
+  document.querySelectorAll("[data-promounit]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.promounit === promoUnit)));
+  document.getElementById("fPromoSelesai").value = (pr && pr.selesai) || "";
   document.getElementById("fPromoImg").value = "";
-  setPromoPreview(pr.img || "");
-  perbaruiPromoSlider();
+  setPromoPreview((pr && pr.img) || "");
+  perbaruiPromoProduk();
 
   bukaModal(modalBack);
 }
@@ -2120,96 +2103,145 @@ function hargaProdukEvent(){
   return p ? parseNum(p.harga) : 0;
 }
 
-function perbaruiPromoSlider(){
-  const tipe = document.getElementById("fPromoTipe").value;
-  const slider = document.getElementById("fPromoSlider");
-  const out = document.getElementById("fPromoSliderVal");
-  const hint = document.getElementById("fPromoHint");
-  const nilaiRaw = document.getElementById("fPromoNilai").value.trim();
-  const harga = hargaProdukAdmin();
-  const bisaGeser = tipe === "diskon" || tipe === "diskon_fixed" || tipe === "cashback";
-  slider.disabled = !bisaGeser;
+function nilaiKeTeks(nilai, unit){
+  const n = Math.max(0, Number(nilai) || 0);
+  if (!n) return "";
+  return unit === "persen" ? String(n) : fmtNum(n);
+}
+
+function hitungDiskon(harga, nilai, unit){
+  const h = Math.max(0, Number(harga) || 0);
+  const n = Math.max(0, Number(nilai) || 0);
+  let potong = 0;
   let persen = 0;
-  if (tipe === "diskon"){
-    persen = Math.min(100, Math.max(0, Number(nilaiRaw) || 0));
-  } else if (bisaGeser && harga > 0){
-    const nominal = parseNum(nilaiRaw);
-    persen = nominal > 0 ? Math.min(100, Math.round(nominal / harga * 100)) : 0;
-  }
-  slider.value = persen;
-  out.textContent = persen + "%";
-  if (!tipe){
-    hint.textContent = "Pilih tipe promo dulu untuk mengaktifkan penggeser.";
-  } else if (tipe === "promo"){
-    hint.textContent = "Tipe label promo tidak mengubah harga. Isi label sesuai keinginan.";
-  } else if (harga <= 0){
-    hint.textContent = "Isi harga jual dulu supaya potongan bisa dihitung.";
+  if (unit === "persen"){
+    persen = Math.min(100, n);
+    potong = Math.round(h * persen / 100);
   } else {
-    const potong = Math.round(harga * persen / 100);
-    hint.textContent = "Potongan " + persen + "% = Rp " + fmtNum(potong) + ". Harga akhir Rp " + fmtNum(Math.max(0, harga - potong)) + ".";
+    potong = Math.min(h, n);
+    persen = h > 0 ? Math.round(potong / h * 100) : 0;
+  }
+  return { potong, persen, akhir: Math.max(0, h - potong) };
+}
+
+function labelDiskon(nilai, unit){
+  const n = Math.max(0, Number(nilai) || 0);
+  return unit === "persen" ? "Diskon " + Math.min(100, n) + "%" : "Diskon Rp " + fmtNum(n);
+}
+
+function ringkasPromo(pr){
+  if (!pr || !pr.tipe) return "";
+  const nilai = parseNum(pr.nilai);
+  let teks;
+  if (pr.tipe === "diskon") teks = "Diskon " + Math.min(100, nilai) + "%";
+  else if (pr.tipe === "diskon_fixed") teks = "Diskon Rp " + fmtNum(nilai);
+  else if (pr.tipe === "cashback") teks = "Cashback Rp " + fmtNum(nilai);
+  else teks = pr.label || "Label promo";
+  if (pr.selesai) teks += " s/d " + pr.selesai;
+  return teks;
+}
+
+function perbaruiPromoProduk(){
+  const aktifEl = document.getElementById("fPromoAktif");
+  if (!aktifEl) return;
+  const aktif = aktifEl.checked;
+  document.getElementById("fPromoBody").hidden = !aktif;
+  const preview = document.getElementById("fPromoBadgePreview");
+  const baca = document.getElementById("fPromoReadout");
+  const nilai = parseNum(document.getElementById("fPromoNilai").value);
+  if (!aktif){ preview.hidden = true; return; }
+  if (nilai > 0){
+    preview.hidden = false;
+    preview.textContent = labelDiskon(nilai, promoUnit);
+  } else {
+    preview.hidden = true;
+  }
+  const harga = hargaProdukAdmin();
+  if (harga <= 0){
+    baca.textContent = "Isi harga jual dulu supaya potongan bisa dihitung.";
+    return;
+  }
+  if (nilai <= 0){
+    baca.textContent = promoUnit === "persen" ? "Masukkan persen potongan, misalnya 15." : "Masukkan nominal potongan, misalnya 5000.";
+    return;
+  }
+  const { potong, persen, akhir } = hitungDiskon(harga, nilai, promoUnit);
+  if (promoUnit === "persen"){
+    baca.innerHTML = "Potongan <b>" + persen + "%</b> = Rp " + fmtNum(potong) + "." +
+      "<span>Harga akhir Rp " + fmtNum(akhir) + ".</span>";
+  } else {
+    baca.innerHTML = "Potongan <b>Rp " + fmtNum(potong) + "</b> = " + persen + "% dari harga." +
+      "<span>Harga akhir Rp " + fmtNum(akhir) + ".</span>";
   }
 }
 
-function perbaruiEvSlider(){
-  const tipe = document.getElementById("evTipe").value;
-  const slider = document.getElementById("evSlider");
-  const out = document.getElementById("evSliderVal");
+function perbaruiEv(){
   const hint = document.getElementById("evHint");
-  const nilaiRaw = document.getElementById("evNilai").value.trim();
-  const harga = hargaProdukEvent();
-  const bisaGeser = tipe === "diskon" || tipe === "diskon_fixed" || tipe === "cashback";
-  slider.disabled = !bisaGeser;
-  let persen = 0;
-  if (tipe === "diskon"){
-    persen = Math.min(100, Math.max(0, Number(nilaiRaw) || 0));
-  } else if (bisaGeser && harga > 0){
-    const nominal = parseNum(nilaiRaw);
-    persen = nominal > 0 ? Math.min(100, Math.round(nominal / harga * 100)) : 0;
+  if (!hint) return;
+  const nilai = parseNum(document.getElementById("evNilai").value);
+  const dipilih = [...document.querySelectorAll("#evProdukList [data-evprod].active")]
+    .map(b => produk[parseInt(b.dataset.evprod, 10)])
+    .filter(Boolean);
+  if (!dipilih.length){
+    hint.textContent = "Pilih produk dulu untuk melihat perhitungan.";
+    return;
   }
-  slider.value = persen;
-  out.textContent = persen + "%";
-  if (tipe === "promo"){
-    hint.textContent = "Tipe label promo tidak mengubah harga. Isi label bebas.";
-  } else if (harga <= 0){
-    hint.textContent = "Pilih satu produk dulu supaya potongan bisa dihitung dari harganya.";
-  } else {
-    const potong = Math.round(harga * persen / 100);
-    hint.textContent = "Acuan harga Rp " + fmtNum(harga) + ". Potongan " + persen + "% = Rp " + fmtNum(potong) + ", harga akhir Rp " + fmtNum(Math.max(0, harga - potong)) + ".";
+  if (nilai <= 0){
+    hint.textContent = evUnit === "persen" ? "Masukkan persen potongan, misalnya 15." : "Masukkan nominal potongan, misalnya 5000.";
+    return;
   }
+  const baris = dipilih.slice(0, 3).map(p => {
+    const harga = parseNum(p.harga);
+    const { persen, akhir } = hitungDiskon(harga, nilai, evUnit);
+    return "<span>" + escapeHtml(p.nama) + ": Rp " + fmtNum(harga) + " jadi Rp " + fmtNum(akhir) + " (" + persen + "%)</span>";
+  });
+  const judul = evUnit === "persen"
+    ? "Diskon <b>" + Math.min(100, nilai) + "%</b> untuk <b>" + dipilih.length + "</b> produk."
+    : "Potongan <b>Rp " + fmtNum(nilai) + "</b> untuk <b>" + dipilih.length + "</b> produk.";
+  hint.innerHTML = judul + baris.join("") +
+    (dipilih.length > 3 ? "<span>dan " + (dipilih.length - 3) + " produk lain.</span>" : "");
 }
 
-const promoSliderEl = document.getElementById("fPromoSlider");
-promoSliderEl.addEventListener("input", ()=>{
-  const tipe = document.getElementById("fPromoTipe").value;
-  const persen = Number(promoSliderEl.value) || 0;
-  const harga = hargaProdukAdmin();
-  const nilaiEl = document.getElementById("fPromoNilai");
-  if (tipe === "diskon"){
-    nilaiEl.value = String(persen);
-  } else if ((tipe === "diskon_fixed" || tipe === "cashback") && harga > 0){
-    nilaiEl.value = fmtNum(Math.round(harga * persen / 100));
-  }
-  perbaruiPromoSlider();
-});
-document.getElementById("fPromoTipe").addEventListener("change", perbaruiPromoSlider);
-document.getElementById("fPromoNilai").addEventListener("input", perbaruiPromoSlider);
-document.getElementById("fHarga").addEventListener("input", ()=>{ if (document.getElementById("fPromoTipe").value) perbaruiPromoSlider(); });
+function bindPotonganInput(input, getUnit, onChange){
+  if (!input) return;
+  input.addEventListener("input", ()=>{
+    const unit = getUnit();
+    const digit = input.value.replace(/[^\d]/g, "");
+    let n = parseInt(digit, 10) || 0;
+    if (unit === "persen" && n > 100) n = 100;
+    input.value = digit ? nilaiKeTeks(n, unit) : "";
+    onChange();
+  });
+}
+bindPotonganInput(document.getElementById("fPromoNilai"), ()=>promoUnit, perbaruiPromoProduk);
+bindPotonganInput(document.getElementById("evNilai"), ()=>evUnit, perbaruiEv);
 
-const evSliderEl = document.getElementById("evSlider");
-evSliderEl.addEventListener("input", ()=>{
-  const tipe = document.getElementById("evTipe").value;
-  const persen = Number(evSliderEl.value) || 0;
-  const harga = hargaProdukEvent();
-  const nilaiEl = document.getElementById("evNilai");
-  if (tipe === "diskon"){
-    nilaiEl.value = String(persen);
-  } else if ((tipe === "diskon_fixed" || tipe === "cashback") && harga > 0){
-    nilaiEl.value = fmtNum(Math.round(harga * persen / 100));
-  }
-  perbaruiEvSlider();
+function bindUnitSwitch(selector, datasetKey, setUnit, getUnit, getHarga, input, onChange){
+  document.querySelectorAll(selector).forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const unit = btn.dataset[datasetKey];
+      if (!unit || unit === getUnit()) return;
+      const harga = getHarga();
+      const nilai = parseNum(input.value);
+      if (nilai > 0 && harga > 0){
+        const { potong, persen } = hitungDiskon(harga, nilai, getUnit());
+        input.value = nilaiKeTeks(unit === "persen" ? persen : potong, unit);
+      } else if (unit === "persen" && nilai > 100){
+        input.value = "100";
+      }
+      setUnit(unit);
+      document.querySelectorAll(selector).forEach(b => b.setAttribute("aria-pressed", String(b.dataset[datasetKey] === unit)));
+      onChange();
+    });
+  });
+}
+bindUnitSwitch("[data-promounit]", "promounit", u=>{ promoUnit = u; }, ()=>promoUnit, hargaProdukAdmin, document.getElementById("fPromoNilai"), perbaruiPromoProduk);
+bindUnitSwitch("[data-evunit]", "evunit", u=>{ evUnit = u; }, ()=>evUnit, hargaProdukEvent, document.getElementById("evNilai"), perbaruiEv);
+
+document.getElementById("fPromoAktif").addEventListener("change", perbaruiPromoProduk);
+document.getElementById("fHarga").addEventListener("input", ()=>{
+  if (document.getElementById("fPromoAktif").checked) perbaruiPromoProduk();
 });
-document.getElementById("evTipe").addEventListener("change", perbaruiEvSlider);
-document.getElementById("evNilai").addEventListener("input", perbaruiEvSlider);
 
 document.getElementById("fPromoImg").addEventListener("change", e=>{
   const file = e.target.files && e.target.files[0];
@@ -2260,18 +2292,15 @@ document.getElementById("prodForm").addEventListener("submit", async e=>{
     warna: warnaTemp.map(w => ({ nama: w.nama, hex: w.hex || "", img: w.img || "", tersedia: w.tersedia !== false })),
     size: sizeTemp.map(s => ({ nama: s.nama, tersedia: s.tersedia !== false })),
     promo: (function(){
-      const tipe = document.getElementById("fPromoTipe").value;
-      if (!tipe) return null;
-      const nilaiRaw = document.getElementById("fPromoNilai").value.trim();
-      const nilai = (tipe === "diskon" || tipe === "cashback" || tipe === "promo") && !isNaN(Number(nilaiRaw)) && Number(nilaiRaw) <= 100 && (tipe === "diskon")
-        ? Number(nilaiRaw)
-        : (isNaN(Number(nilaiRaw)) ? nilaiRaw : Number(nilaiRaw));
+      if (!document.getElementById("fPromoAktif").checked) return null;
+      const nilai = parseNum(document.getElementById("fPromoNilai").value);
+      if (nilai <= 0) return null;
       return {
-        tipe: tipe,
-        nilai: nilai,
-        label: document.getElementById("fPromoLabel").value.trim(),
-        event: document.getElementById("fPromoEvent").value.trim(),
-        mulai: document.getElementById("fPromoMulai").value,
+        tipe: promoUnit === "persen" ? "diskon" : "diskon_fixed",
+        nilai: promoUnit === "persen" ? Math.min(100, nilai) : nilai,
+        label: "",
+        event: "",
+        mulai: "",
         selesai: document.getElementById("fPromoSelesai").value,
         img: promoImgTemp || ""
       };

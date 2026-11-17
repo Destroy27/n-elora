@@ -1055,6 +1055,12 @@ function bolehPilihUkuran(kategori) {
   const k = KATEGORI.find(x => x.slug === kategori);
   return !!(k && k.ukuranAktif === true);
 }
+function ukuranKategoriStore(slug){
+  const k = KATEGORI.find(x => x && x.slug === slug);
+  if (!k || !k.ukuranAktif) return [];
+  const base = (k.ukuranPilihan && k.ukuranPilihan.length) ? k.ukuranPilihan : ["S","M","L"];
+  return base.map(n => ({ nama: String(n).trim(), tersedia: true })).filter(x => x.nama);
+}
 function warnaWajibGambar(kategori) {
   const k = KATEGORI.find(x => x.slug === kategori);
   return !k || k.warnaWajibGambar !== false;
@@ -2234,7 +2240,15 @@ function openProductModal(idx) {
   // size
   const sizeSection = document.getElementById("pmSizeSection");
   const sizeStrip = document.getElementById("pmSizeStrip");
-  const sizes = bolehPilihUkuran(p.kategori) ? (Array.isArray(p.size) ? p.size : []).filter(s => s.tersedia !== false) : [];
+   const sizes = bolehPilihUkuran(p.kategori) ? (function(){
+     const byName = new Map();
+     ukuranKategoriStore(p.kategori).forEach(u => byName.set(u.nama, { nama: u.nama, tersedia: true }));
+     (Array.isArray(p.size) ? p.size : []).forEach(u => {
+       const o = (typeof u === "string") ? { nama: u, tersedia: true } : u;
+       if (o && o.nama) byName.set(o.nama, { nama: o.nama, tersedia: o.tersedia !== false });
+     });
+     return [...byName.values()].filter(u => u.tersedia !== false);
+   })() : [];
   if (sizes.length) {
     sizeSection.style.display = "";
     sizeStrip.innerHTML = sizes.map(s => `<button type="button" class="color-dot" data-size="${esc(s.nama)}" title="${esc(s.nama)}" style="width:auto;height:28px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--blush);color:var(--rose-ink)">${esc(s.nama)}</button>`).join("");

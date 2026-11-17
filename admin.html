@@ -469,6 +469,22 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
         <label for="wMarquee">Teks berjalan (pisahkan dengan |)</label>
         <textarea id="wMarquee" rows="2" placeholder="Handmade with love|Buket Kawat Bulu"></textarea>
       </div>
+      <div class="field">
+        <label for="wIg">Instagram (URL)</label>
+        <input type="url" id="wIg" placeholder="https://instagram.com/...">
+      </div>
+      <div class="field">
+        <label for="wTiktok">TikTok (URL)</label>
+        <input type="url" id="wTiktok" placeholder="https://tiktok.com/@...">
+      </div>
+      <div class="field">
+        <label for="wFb">Facebook (URL)</label>
+        <input type="url" id="wFb" placeholder="https://facebook.com/...">
+      </div>
+      <div class="field">
+        <label for="wYt">YouTube (URL)</label>
+        <input type="url" id="wYt" placeholder="https://youtube.com/...">
+      </div>
     </div>
     <div class="head-actions" style="margin-top:12px">
       <button type="button" class="btn btn-primary btn-sm" id="wSimpan">Simpan pengaturan</button>
@@ -2552,7 +2568,11 @@ const DEFAULT_WEB_ADMIN = {
   jamHari: "Senin - Sabtu",
   jamWaktu: "09.00 - 20.00 WIB",
   waPesan: "Halo N.Elora 🌸, saya mau tanya-tanya.",
-  marquee: "Handmade with love|Buket Kawat Bulu|Custom Request|Tahan Lama"
+  marquee: "Handmade with love|Buket Kawat Bulu|Custom Request|Tahan Lama",
+  ig: "",
+  tiktok: "",
+  facebook: "",
+  youtube: ""
 };
 
 function normalDigitsAdmin(s){ return String(s||"").replace(/\D/g,""); }
@@ -2573,6 +2593,10 @@ async function muatWebAdmin(){
   if (jamEl) jamEl.value = (cfg.jamHari || "") + (cfg.jamWaktu ? ", " + cfg.jamWaktu : "");
   set("wWaPesan", cfg.waPesan || "");
   set("wMarquee", cfg.marquee || "");
+  set("wIg", cfg.ig || "");
+  set("wTiktok", cfg.tiktok || "");
+  set("wFb", cfg.facebook || "");
+  set("wYt", cfg.youtube || "");
   return cfg;
 }
 
@@ -2587,7 +2611,11 @@ document.getElementById("wSimpan").addEventListener("click", async ()=>{
     jamHari: jamHari || DEFAULT_WEB_ADMIN.jamHari,
     jamWaktu: jamWaktu || DEFAULT_WEB_ADMIN.jamWaktu,
     waPesan: document.getElementById("wWaPesan").value.trim() || DEFAULT_WEB_ADMIN.waPesan,
-    marquee: document.getElementById("wMarquee").value.trim() || DEFAULT_WEB_ADMIN.marquee
+    marquee: document.getElementById("wMarquee").value.trim() || DEFAULT_WEB_ADMIN.marquee,
+    ig: document.getElementById("wIg").value.trim(),
+    tiktok: document.getElementById("wTiktok").value.trim(),
+    facebook: document.getElementById("wFb").value.trim(),
+    youtube: document.getElementById("wYt").value.trim()
   };
   if (modeAktif === "lokal"){
     localStorage.setItem("nelora_web", JSON.stringify(cfg));

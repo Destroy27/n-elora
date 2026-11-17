@@ -187,12 +187,10 @@ section{padding:clamp(20px, 3.5vw, 56px) 0;position:relative}
 .grid-kosong{text-align:center;color:var(--text-muted);font-size:12px;padding:24px 0;}
 .etalase-note a{color:var(--soft-pink);font-weight:700;border-bottom:1.5px solid var(--soft-pink)}
 
-.card-promo-badge {position:absolute;bottom:8px;right:8px;z-index:3;background:linear-gradient(135deg,#FF4D8F 0%,#F4A3C0 100%);color:#fff;font-size:9px;font-weight:800;padding:5px 10px 5px 8px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 4px 12px rgba(255,77,143,.5),0 0 0 1.5px rgba(255,255,255,.85);display:flex;align-items:center;gap:3px;animation:promoWobble 2.4s ease-in-out infinite;}
-.card-promo-badge::before {content:"🎉";font-size:11px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2));}
+.card-promo-badge {position:absolute;bottom:8px;right:8px;z-index:3;background:linear-gradient(135deg,#FF4D8F 0%,#F4A3C0 100%);color:#fff;font-size:9px;font-weight:800;padding:5px 10px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 4px 12px rgba(255,77,143,.5),0 0 0 1.5px rgba(255,255,255,.85);display:flex;align-items:center;gap:3px;animation:promoWobble 2.4s ease-in-out infinite;}
 .card-promo-badge.cashback {background:linear-gradient(135deg,#5FBC9A 0%,#8FD1B5 100%);box-shadow:0 4px 12px rgba(95,188,154,.5),0 0 0 1.5px rgba(255,255,255,.85);}
-.card-promo-badge.cashback::before {content:"💰";}
 .card-promo-badge.promo {background:linear-gradient(135deg,#FFB84D 0%,#FFD98A 100%);color:#4A2A3A;box-shadow:0 4px 12px rgba(255,184,77,.5),0 0 0 1.5px rgba(255,255,255,.85);}
-.card-promo-badge.promo::before {content:"✨";}
+.card-promo-img {position:absolute;top:8px;right:8px;z-index:5;max-width:86px;max-height:46px;object-fit:contain;pointer-events:none;filter:drop-shadow(0 3px 8px rgba(0,0,0,.18));}
 @keyframes promoWobble {0%,100%{transform:rotate(-3deg) scale(1);}50%{transform:rotate(3deg) scale(1.06);}}
 
 .price-block {display:flex;flex-direction:column;gap:1px;line-height:1.15;}
@@ -524,7 +522,6 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
 .discount-ribbon-inner .ribbon-label { font-size: 8px; font-weight: 800; letter-spacing: 1.2px; opacity: .95; position: relative; z-index: 1; }
 @keyframes ribbonShine { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.1); } }
 .price-savings { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; background: linear-gradient(135deg, rgba(95,188,154,.18) 0%, rgba(143,209,181,.28) 100%); border: 1px dashed rgba(95,188,154,.7); color: #3A8B6E; font-size: 10px; font-weight: 800; margin-top: 4px; width: max-content; letter-spacing: .2px; box-shadow: 0 1px 3px rgba(95,188,154,.15); }
-.price-savings::before { content: "💸"; font-size: 10px; line-height: 1; }
 .card.discounted { border-color: rgba(232,74,127,.28); background: linear-gradient(180deg, #fff 0%, #FFFAFC 100%); }
 .card.discounted:hover { box-shadow: 0 12px 32px rgba(74,42,58,.1), 0 0 28px rgba(232,74,127,.22), inset 0 0 0 1px rgba(232,74,127,.15); }
 .card.discounted .price.promo { font-size: 15px; font-weight: 800; color: #E84A7F; }
@@ -700,6 +697,7 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
       <div>
         <h3 id="pmTitle">Nama Produk</h3>
         <span id="pmPrice">Rp 0</span>
+        <img id="pmPromoImg" alt="" style="display:none;max-width:120px;max-height:56px;object-fit:contain;margin-top:6px">
       </div>
     </div>
     <p id="pmDesc" style="font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.5"></p>
@@ -871,33 +869,51 @@ const FEE_NAMA = 5000;
 const pilihanWarna = {};
 const pilihanWrap  = {};
 
-const DEMO_PROMO = { tipe: "diskon", nilai: 15, label: "Hemat 15%", event: "Demo Promo", mulai: "2024-01-01", selesai: "2030-12-31" };
+const DEMO_PROMO = { tipe: "diskon", nilai: 15, label: "Diskon 15%", event: "Demo Promo", mulai: "2024-01-01", selesai: "2030-12-31" };
 
 const DEFAULT_PRODUK = [
   { nama:"Buket Bunga Pink",    harga:"55.000", kategori:"buket",    img:IMG.bouquetPink,  desc:"Buket bunga kawat bulu warna pink pastel, sangat gemas!", badge:"Best Seller", cost:"30.000", sold:0, promo: { ...DEMO_PROMO } },
   { nama:"Buket Bunga Pelangi", harga:"65.000", kategori:"buket",    img:IMG.bouquetWild,  desc:"Rangkaian bunga warna-warni ceria untuk hadiah spesial.", badge:"Favorit", cost:"35.000", sold:0 },
   { nama:"Buket Bunga Putih",   harga:"50.000", kategori:"buket",    img:IMG.bouquetBlush, desc:"Elegan dan bersih, cocok untuk ucapan selamat.", badge:"", cost:"28.000", sold:0 },
   { nama:"Bunga Tunggal Mini",  harga:"15.000", kategori:"tunggal",  img:IMG.branch,       desc:"Satu tangkai bunga mungil untuk hiasan meja.", badge:"", cost:"7.000", sold:0 },
-  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:IMG.photoPeony,   desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Hemat", cost:"7.000", sold:0 },
+  { nama:"Tulip Pastel",        harga:"15.000", kategori:"tunggal",  img:IMG.photoPeony,   desc:"Tulip lembut warna pastel, mungil dan manis.", badge:"Favorit", cost:"7.000", sold:0 },
   { nama:"Custom Bunga + Nama", harga:"85.000", kategori:"custom",   img:IMG.bouquetLush,  desc:"Bunga pilihan + nama/quote sesuai request.", badge:"Custom", cost:"45.000", sold:0 },
 ];
 
 const DEFAULT_KATEGORI = [
-  { slug:"buket",   nama:"Buket Bunga",   desc:"Rangkaian buket kawat bulu premium warna pastel, cocok untuk hadiah ulang tahun atau anniversary." },
-  { slug:"tunggal", nama:"Bunga Tunggal", desc:"Satu tangkai bunga pilihan untuk hiasan meja, vas kecil, atau pelengkap kado." },
-  { slug:"custom",  nama:"Custom Design", desc:"Bebas pilih warna, jenis bunga, dan tambahan nama atau quote sesuai keinginanmu." }
+  { slug:"buket",   nama:"Buket Bunga",   desc:"Rangkaian buket kawat bulu premium warna pastel, cocok untuk hadiah ulang tahun atau anniversary.", warnaAktif:false, warnaWajibGambar:true, ukuranAktif:false, ukuranPilihan:[] },
+  { slug:"tunggal", nama:"Bunga Tunggal", desc:"Satu tangkai bunga pilihan untuk hiasan meja, vas kecil, atau pelengkap kado.", warnaAktif:true, warnaWajibGambar:true, ukuranAktif:false, ukuranPilihan:[] },
+  { slug:"custom",  nama:"Custom Design", desc:"Bebas pilih warna, jenis bunga, dan tambahan nama atau quote sesuai keinginanmu.", warnaAktif:false, warnaWajibGambar:true, ukuranAktif:false, ukuranPilihan:[] }
 ];
 
 const IMG_KAT = { buket: IMG.bouquetPink, tunggal: IMG.branch, custom: IMG.bouquetLush };
 
+function normalUkuranIndex(nilai){
+  let arr = [];
+  if (Array.isArray(nilai)) arr = nilai;
+  else if (typeof nilai === "string") arr = nilai.split(",");
+  const hasil = [];
+  arr.forEach(v=>{
+    const t = String(v == null ? "" : v).trim();
+    if (t && !hasil.includes(t) && hasil.length < 12) hasil.push(t);
+  });
+  return hasil;
+}
 function rapikanKategori(list){
-  return list.map((k,i)=>({
-    slug: String(k.slug || k.nama || ("kategori-" + i)).toLowerCase(),
-    nama: String(k.nama || k.slug || "Kategori"),
-    desc: String(k.desc || ""),
-    foto: k.foto || "",
-    urutan: Number(k.urutan) || i
-  })).sort((a,b)=>a.urutan - b.urutan);
+  return list.map((k,i)=>{
+    const slug = String(k.slug || k.nama || ("kategori-" + i)).toLowerCase();
+    return {
+      slug: slug,
+      nama: String(k.nama || k.slug || "Kategori"),
+      desc: String(k.desc || ""),
+      foto: k.foto || "",
+      urutan: Number(k.urutan) || i,
+      warnaAktif: typeof k.warnaAktif === "boolean" ? k.warnaAktif : (slug === "tunggal"),
+      warnaWajibGambar: k.warnaWajibGambar !== false,
+      ukuranAktif: k.ukuranAktif === true,
+      ukuranPilihan: normalUkuranIndex(k.ukuranPilihan)
+    };
+  }).sort((a,b)=>a.urutan - b.urutan);
 }
 function loadKategori(){
   try {
@@ -934,6 +950,7 @@ function rapikan(list){
     sold:  parseInt(p.sold,10) || 0,
     foto:  p.foto || "",
     img:   p.img  || p.foto || IMG.bouquetPink,
+    size:  (Array.isArray(p.size) ? p.size : []).map(s => typeof s === "string" ? { nama: s, tersedia: true } : { nama: s.nama || "", tersedia: s.tersedia !== false }).filter(s => s.nama),
     promo: p.promo || null
   }));
 }
@@ -1005,6 +1022,15 @@ function hitungPromo(hargaStr, promo) {
   return { original, akhir: original, cashback: 0 };
 }
 function rupiah(n) { return "Rp " + fmtNum(n); }
+function labelPromo(promo){
+  const label = String((promo && promo.label) || "").trim();
+  if (label) return label.replace(/hemat/gi, "Diskon");
+  if (!promo || !promo.tipe) return "";
+  if (promo.tipe === "diskon") return "Diskon " + promo.nilai + "%";
+  if (promo.tipe === "diskon_fixed") return "Diskon " + rupiah(promo.nilai);
+  if (promo.tipe === "cashback") return "Cashback " + rupiah(promo.nilai);
+  return "Promo";
+}
 function hexToRgba(hex, alpha) {
   const h = hex.replace("#","");
   const r = parseInt(h.substring(0,2),16);
@@ -1013,7 +1039,17 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 function bolehPilihWarna(kategori) {
-  return kategori === "tunggal";
+  const k = KATEGORI.find(x => x.slug === kategori);
+  if (!k) return kategori === "tunggal";
+  return k.warnaAktif === true;
+}
+function bolehPilihUkuran(kategori) {
+  const k = KATEGORI.find(x => x.slug === kategori);
+  return !!(k && k.ukuranAktif === true);
+}
+function warnaWajibGambar(kategori) {
+  const k = KATEGORI.find(x => x.slug === kategori);
+  return !k || k.warnaWajibGambar !== false;
 }
 
 function warnaList(p) {
@@ -1024,7 +1060,7 @@ function warnaList(p) {
       return { nama: w, hex: found ? found.hex : "#F4A3C0", img: "", tersedia: true };
     }
     const found = PALET_WARNA.find(x => x.nama === w.nama);
-    return { nama: w.nama, hex: (found ? found.hex : (w.hex || "#F4A3C0")), img: w.img || "", tersedia: w.tersedia !== false };
+    return { nama: w.nama, hex: (w.hex || (found ? found.hex : "#F4A3C0")), img: w.img || "", tersedia: w.tersedia !== false };
   });
 }
 
@@ -1052,11 +1088,7 @@ function renderProduk() {
     let promoBadge = "";
     if (promo) {
       const cls = promo.tipe === "cashback" ? "cashback" : (promo.tipe === "promo" ? "promo" : "");
-      const label = promo.label || (
-        promo.tipe === "diskon" ? `-${promo.nilai}%` :
-        promo.tipe === "diskon_fixed" ? `-${fmtNum(promo.nilai)}` :
-        promo.tipe === "cashback" ? "CASHBACK" : "PROMO"
-      );
+      const label = labelPromo(promo);
       promoBadge = `<span class="card-promo-badge ${cls}">${esc(label)}</span>`;
     }
     const isDiskon = !!(promo && akhir < original);
@@ -1064,7 +1096,7 @@ function renderProduk() {
     const cardClass = isDiskon ? "card discounted" : "card";
 
     let ribbonHTML = "";
-    if (isDiskon) {
+    if (isDiskon && !promo.img) {
       const pct = Math.round((1 - akhir / original) * 100);
       ribbonHTML = `
         <div class="discount-ribbon" aria-hidden="true">
@@ -1074,6 +1106,9 @@ function renderProduk() {
           </div>
         </div>`;
     }
+    const promoImgHTML = (promo && promo.img)
+      ? `<img class="card-promo-img" src="${promo.img}" alt="${esc(promo.label || 'Promo')}" loading="lazy">`
+      : "";
 
     let priceBlock, savingsHTML = "";
     if (isDiskon) {
@@ -1083,7 +1118,11 @@ function renderProduk() {
           <span class="price-original">${rupiah(original)}</span>
           <span class="price promo">${rupiah(akhir)}</span>
         </div>`;
-      savingsHTML = `<span class="price-savings">${rupiah(saved)}</span>`;
+      if (promo.img) {
+        savingsHTML = "";
+      } else {
+        savingsHTML = `<span class="price-savings">${rupiah(saved)}</span>`;
+      }
     } else if (promo && cashback > 0) {
       priceBlock = `<div class="price-block"><span class="price">${rupiah(original)}</span><span class="price-cashback-note">💰 Cashback ${rupiah(cashback)}</span></div>`;
     } else {
@@ -1093,6 +1132,7 @@ function renderProduk() {
       <article class="${cardClass}" data-kategori="${p.kategori}" data-idx="${idx}">
         <div class="card-img">
           ${ribbonHTML}
+          ${promoImgHTML}
           ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
           ${promoBadge}
           ${media}
@@ -1124,7 +1164,7 @@ function renderProduk() {
     PRODUK.forEach(p => {
       const pr = promoAktif(p);
       if (pr && pr.event) {
-        if (!events[pr.event]) events[pr.event] = { tipe: pr.tipe, nilai: pr.nilai, label: pr.label, mulai: pr.mulai, selesai: pr.selesai, count: 0 };
+        if (!events[pr.event]) events[pr.event] = { tipe: pr.tipe, nilai: pr.nilai, label: pr.label, mulai: pr.mulai, selesai: pr.selesai, img: pr.img, count: 0 };
         events[pr.event].count++;
       }
     });
@@ -1132,8 +1172,9 @@ function renderProduk() {
     if (daftar.length) {
       banner.innerHTML = daftar.map(e => {
         const ev = events[e];
-        const label = ev.label || (ev.tipe === "diskon" ? `Diskon ${ev.nilai}%` : ev.tipe === "cashback" ? `Cashback ${rupiah(ev.nilai)}` : "Promo");
-        return `<div style="background:linear-gradient(135deg,#FF4D8F,#F4A3C0);color:#fff;padding:10px 16px;border-radius:12px;margin-bottom:8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(255,77,143,.3)"><span>🎉</span><span>${esc(e)} - ${esc(label)} untuk ${ev.count} produk${ev.selesai ? " (s/d " + esc(ev.selesai) + ")" : ""}</span></div>`;
+        const label = labelPromo(ev) || "Promo";
+        const imgTag = ev.img ? `<img src="${ev.img}" alt="${esc(e)}" style="height:36px;width:auto;object-fit:contain;border-radius:6px">` : `<span aria-hidden="true" style="display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.22);font-size:13px;font-weight:800">%</span>`;
+        return `<div style="background:linear-gradient(135deg,#FF4D8F,#F4A3C0);color:#fff;padding:10px 16px;border-radius:12px;margin-bottom:8px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(255,77,143,.3)">${imgTag}<span>${esc(e)}  -  ${esc(label)} untuk ${ev.count} produk${ev.selesai ? " (s/d " + esc(ev.selesai) + ")" : ""}</span></div>`;
       }).join("");
     } else {
       banner.innerHTML = "";
@@ -1143,14 +1184,8 @@ function renderProduk() {
 
 let warnaBound = false;
 function bindWarnaEtalase() {
-  if (!grid || warnaBound) return;
-  warnaBound = true;
-  grid.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-buy[data-open-warna]");
-    if (!btn) return;
-    e.preventDefault();
-    openWarnaModal(parseInt(btn.dataset.openWarna, 10));
-  });
+  // dinonaktifkan: modal warna lama diganti modal detail produk
+  return;
 }
 
 const warnaModalEl         = document.getElementById("warnaModal");
@@ -2183,6 +2218,15 @@ function openProductModal(idx) {
   const priceEl = document.getElementById("pmPrice");
   if (promo && akhir < original) priceEl.innerHTML = '<s>' + rupiah(original) + '</s> ' + rupiah(akhir);
   else priceEl.textContent = "Rp " + p.harga;
+  const promoImgEl = document.getElementById("pmPromoImg");
+  if (promo && promo.img) {
+    promoImgEl.src = promo.img;
+    promoImgEl.alt = promo.label || "Promo";
+    promoImgEl.style.display = "block";
+  } else {
+    promoImgEl.style.display = "none";
+    promoImgEl.removeAttribute("src");
+  }
   document.getElementById("pmDesc").textContent = p.desc || "";
   document.getElementById("pmQty").textContent = "1";
   const strip = document.getElementById("pmWarnaStrip");
@@ -2206,7 +2250,7 @@ function openProductModal(idx) {
   // size
   const sizeSection = document.getElementById("pmSizeSection");
   const sizeStrip = document.getElementById("pmSizeStrip");
-  const sizes = (Array.isArray(p.size) ? p.size : []).filter(s => s.tersedia !== false);
+  const sizes = bolehPilihUkuran(p.kategori) ? (Array.isArray(p.size) ? p.size : []).filter(s => s.tersedia !== false) : [];
   if (sizes.length) {
     sizeSection.style.display = "";
     sizeStrip.innerHTML = sizes.map(s => `<button type="button" class="color-dot" data-size="${esc(s.nama)}" title="${esc(s.nama)}" style="width:auto;height:28px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--blush);color:var(--rose-ink)">${esc(s.nama)}</button>`).join("");

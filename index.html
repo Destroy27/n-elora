@@ -521,7 +521,7 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
 .discount-ribbon-inner .ribbon-pct { font-size: 15px; font-weight: 700; letter-spacing: -.5px; position: relative; z-index: 1; }
 .discount-ribbon-inner .ribbon-label { font-size: 8px; font-weight: 800; letter-spacing: 1.2px; opacity: .95; position: relative; z-index: 1; }
 @keyframes ribbonShine { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.1); } }
-.price-savings { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; background: linear-gradient(135deg, rgba(95,188,154,.18) 0%, rgba(143,209,181,.28) 100%); border: 1px dashed rgba(95,188,154,.7); color: #3A8B6E; font-size: 10px; font-weight: 800; margin-top: 4px; width: max-content; letter-spacing: .2px; box-shadow: 0 1px 3px rgba(95,188,154,.15); }
+.price-savings { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; background: rgba(27,38,59,.07); border: 1px solid rgba(27,38,59,.32); color: #1B263B; font-size: 10px; font-weight: 800; margin-top: 4px; width: max-content; max-width: 100%; letter-spacing: .2px; box-shadow: 0 1px 3px rgba(27,38,59,.12); }
 .card.discounted { border-color: rgba(232,74,127,.28); background: linear-gradient(180deg, #fff 0%, #FFFAFC 100%); }
 .card.discounted:hover { box-shadow: 0 12px 32px rgba(74,42,58,.1), 0 0 28px rgba(232,74,127,.22), inset 0 0 0 1px rgba(232,74,127,.15); }
 .card.discounted .price.promo { font-size: 15px; font-weight: 800; color: #E84A7F; }
@@ -1022,13 +1022,12 @@ function hitungPromo(hargaStr, promo) {
 }
 function rupiah(n) { return "Rp " + fmtNum(n); }
 function labelPromo(promo){
-  const label = String((promo && promo.label) || "").trim();
-  if (label) return label.replace(/hemat/gi, "Diskon");
   if (!promo || !promo.tipe) return "";
   if (promo.tipe === "diskon") return "Diskon " + promo.nilai + "%";
   if (promo.tipe === "diskon_fixed") return "Diskon " + rupiah(promo.nilai);
   if (promo.tipe === "cashback") return "Cashback " + rupiah(promo.nilai);
-  return "Promo";
+  const label = String(promo.label || "").trim();
+  return label ? label.replace(/hemat/gi, "Diskon") : "Promo";
 }
 function hexToRgba(hex, alpha) {
   const h = hex.replace("#","");
@@ -1106,22 +1105,18 @@ function renderProduk() {
         </div>`;
     }
     const promoImgHTML = (promo && promo.img)
-      ? `<img class="card-promo-img" src="${promo.img}" alt="${esc(promo.label || 'Promo')}" loading="lazy">`
+      ? `<img class="card-promo-img" src="${promo.img}" alt="${esc((promo.event || promo.label) || 'Promo')}" loading="lazy">`
       : "";
 
     let priceBlock, savingsHTML = "";
     if (isDiskon) {
-      const saved = original - akhir;
       priceBlock = `
         <div class="price-block">
           <span class="price-original">${rupiah(original)}</span>
           <span class="price promo">${rupiah(akhir)}</span>
         </div>`;
-      if (promo.img) {
-        savingsHTML = "";
-      } else {
-        savingsHTML = `<span class="price-savings">${rupiah(saved)}</span>`;
-      }
+      const namaEvent = String(promo.event || "").trim();
+      savingsHTML = namaEvent ? `<span class="price-savings">${esc(namaEvent)}</span>` : "";
     } else if (promo && cashback > 0) {
       priceBlock = `<div class="price-block"><span class="price">${rupiah(original)}</span><span class="price-cashback-note">💰 Cashback ${rupiah(cashback)}</span></div>`;
     } else {

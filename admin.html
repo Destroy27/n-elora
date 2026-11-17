@@ -405,6 +405,11 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
         <p class="promo-readout" id="evHint">Pilih produk dulu untuk melihat perhitungan.</p>
       </div>
       <div class="field">
+        <label for="evNama">Nama event (opsional)</label>
+        <input type="text" id="evNama" placeholder="Hari Guru">
+        <p class="hint-text">Tampil di kartu etalase.</p>
+      </div>
+      <div class="field">
         <label for="evSelesai">Berlaku sampai (opsional)</label>
         <input type="date" id="evSelesai">
       </div>
@@ -539,10 +544,15 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
                 <p class="promo-readout" id="fPromoReadout">Isi harga jual dulu supaya potongan bisa dihitung.</p>
               </div>
               <div class="field">
+                <label for="fPromoEvent">Nama event (opsional)</label>
+                <input type="text" id="fPromoEvent" placeholder="Hari Guru">
+                <p class="hint-text">Tampil di kartu etalase.</p>
+              </div>
+              <div class="field">
                 <label for="fPromoSelesai">Berlaku sampai (opsional)</label>
                 <input type="date" id="fPromoSelesai">
               </div>
-              <div class="field">
+              <div class="field full">
                 <label for="fPromoImg">Gambar promo (opsional)</label>
                 <input type="file" id="fPromoImg" accept="image/*">
                 <div id="fPromoImgPreview" style="display:none;align-items:center;gap:10px;margin-top:8px">
@@ -551,7 +561,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
                 </div>
               </div>
             </div>
-            <p class="hint-text">Kosongkan gambar untuk memakai tulisan diskon di kartu etalase.</p>
+            <p class="hint-text">Nama event tampil di bawah harga. Kosongkan gambar untuk memakai label diskon di foto produk.</p>
           </div>
         </div>
       </div>
@@ -1384,8 +1394,10 @@ function renderPromoRingkasan(){
     return;
   }
   const nama = aktif.slice(0, 4).map(p => escapeHtml(p.nama)).join(", ");
+  const eventUnik = [...new Set(aktif.map(p => String(p.promo.event || "").trim()).filter(Boolean))];
   el.innerHTML = "Promo aktif di <b>" + aktif.length + "</b> produk: " + nama +
-    (aktif.length > 4 ? ", dan " + (aktif.length - 4) + " lainnya" : "") + ".";
+    (aktif.length > 4 ? ", dan " + (aktif.length - 4) + " lainnya" : "") + "." +
+    (eventUnik.length ? " Event: " + eventUnik.map(escapeHtml).join(", ") + "." : "");
 }
 
 document.getElementById("evProdukList").addEventListener("click", e=>{
@@ -1398,6 +1410,7 @@ document.getElementById("evProdukList").addEventListener("click", e=>{
 
 document.getElementById("evTerapkan").addEventListener("click", async ()=>{
   const nilai = parseNum(document.getElementById("evNilai").value);
+  const namaEvent = document.getElementById("evNama").value.trim();
   const selesai = document.getElementById("evSelesai").value;
   const dipilih = [...document.querySelectorAll("#evProdukList [data-evprod].active")].map(b => parseInt(b.dataset.evprod,10));
   if (!dipilih.length){ toast("Pilih minimal satu produk"); return; }
@@ -1407,7 +1420,7 @@ document.getElementById("evTerapkan").addEventListener("click", async ()=>{
     tipe: evUnit === "persen" ? "diskon" : "diskon_fixed",
     nilai: evUnit === "persen" ? Math.min(100, nilai) : nilai,
     label: "",
-    event: "",
+    event: namaEvent,
     mulai: "",
     selesai,
     img: eventImgTemp || ""
@@ -1805,6 +1818,7 @@ function openModal(i){
   document.getElementById("fPromoAktif").checked = adaNilai;
   document.getElementById("fPromoNilai").value = adaNilai ? nilaiKeTeks(parseNum(pr.nilai), promoUnit) : "";
   document.querySelectorAll("[data-promounit]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.promounit === promoUnit)));
+  document.getElementById("fPromoEvent").value = (pr && pr.event) || "";
   document.getElementById("fPromoSelesai").value = (pr && pr.selesai) || "";
   document.getElementById("fPromoImg").value = "";
   setPromoPreview((pr && pr.img) || "");
@@ -2137,6 +2151,7 @@ function ringkasPromo(pr){
   else if (pr.tipe === "diskon_fixed") teks = "Diskon Rp " + fmtNum(nilai);
   else if (pr.tipe === "cashback") teks = "Cashback Rp " + fmtNum(nilai);
   else teks = pr.label || "Label promo";
+  if (pr.event) teks = pr.event + ", " + teks;
   if (pr.selesai) teks += " s/d " + pr.selesai;
   return teks;
 }
@@ -2299,7 +2314,7 @@ document.getElementById("prodForm").addEventListener("submit", async e=>{
         tipe: promoUnit === "persen" ? "diskon" : "diskon_fixed",
         nilai: promoUnit === "persen" ? Math.min(100, nilai) : nilai,
         label: "",
-        event: "",
+        event: document.getElementById("fPromoEvent").value.trim(),
         mulai: "",
         selesai: document.getElementById("fPromoSelesai").value,
         img: promoImgTemp || ""

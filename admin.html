@@ -167,6 +167,8 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
 .field input,.field select{width:100%;padding:11px 13px;border:1.5px solid var(--pink-200);border-radius:12px;font-family:inherit;font-size:14px;background:#fff;color:var(--plum);transition:border-color .2s,box-shadow .2s}
 .field input:focus,.field select:focus{outline:none;border-color:var(--rose-teks);box-shadow:0 0 0 3px rgba(166,58,94,.2)}
 .field input[type="file"]{padding:9px 11px;border-style:dashed;background:var(--pink-50);min-height:44px}
+.field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--pink-200);border-radius:12px;font-family:inherit;font-size:14px;background:#fff;color:var(--plum);resize:vertical;min-height:60px}
+.field textarea:focus{outline:none;border-color:var(--rose-teks);box-shadow:0 0 0 3px rgba(166,58,94,.2)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form-grid .full{grid-column:1/-1}
 .hint-text{font-size:11.5px;color:var(--muted);margin-top:6px}
@@ -433,6 +435,45 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
       <button type="button" class="btn btn-ghost btn-sm" id="evHapusSemua">Hapus semua promo</button>
     </div>
     <div id="evRingkasan" class="status-line" style="margin-top:12px"></div>
+  </section>
+
+  <section class="card" aria-labelledby="judulWeb" id="webSection">
+    <div class="card-head">
+      <div>
+        <h2 id="judulWeb">Pengaturan Web</h2>
+        <p class="sub">Ubah teks yang tampil di etalase: tagline hero, deskripsi footer, kontak, jam operasional, pesan WhatsApp, dan teks berjalan.</p>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field full">
+        <label for="wHeroSub">Tagline hero</label>
+        <textarea id="wHeroSub" rows="2" placeholder="Spesialis buket bunga kawat bulu..."></textarea>
+      </div>
+      <div class="field full">
+        <label for="wFooterDesc">Deskripsi footer</label>
+        <textarea id="wFooterDesc" rows="2" placeholder="Bunga kawat bulu handmade..."></textarea>
+      </div>
+      <div class="field">
+        <label for="wWa">Nomor WhatsApp</label>
+        <input type="text" id="wWa" placeholder="+62 821-4607-1595">
+      </div>
+      <div class="field">
+        <label for="wJam">Jam operasional</label>
+        <input type="text" id="wJam" placeholder="Senin - Sabtu, 09.00 - 20.00 WIB">
+      </div>
+      <div class="field full">
+        <label for="wWaPesan">Pesan default WhatsApp</label>
+        <textarea id="wWaPesan" rows="2" placeholder="Halo N.Elora ..."></textarea>
+      </div>
+      <div class="field full">
+        <label for="wMarquee">Teks berjalan (pisahkan dengan |)</label>
+        <textarea id="wMarquee" rows="2" placeholder="Handmade with love|Buket Kawat Bulu"></textarea>
+      </div>
+    </div>
+    <div class="head-actions" style="margin-top:12px">
+      <button type="button" class="btn btn-primary btn-sm" id="wSimpan">Simpan pengaturan</button>
+    </div>
+    <p class="status-line" id="wStatus" role="status" hidden></p>
   </section>
 
 </main>
@@ -1013,6 +1054,7 @@ const topbar = document.getElementById("topbar");
 const loginErr = document.getElementById("loginErr");
 
 function showDash(){
+  setTimeout(function(){ muatWebAdmin(); }, 100);
   loginView.style.display = "none";
   dashView.style.display = "block";
   topbar.style.display = "flex";
@@ -2503,6 +2545,61 @@ if (modeAktif === "cloud"){
   memuat.kategori = false;
   if (sessionStorage.getItem("nelora_admin") === "1") showDash(); else showLogin();
 }
+const DEFAULT_WEB_ADMIN = {
+  heroSub: "Spesialis buket bunga kawat bulu yang dirangkai dengan penuh cinta. Elegan, tahan lama, dan bisa custom.",
+  footerDesc: "Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket bunga elegan yang dibuat khusus untukmu.",
+  waNumber: "+62 821-4607-1595",
+  jamHari: "Senin - Sabtu",
+  jamWaktu: "09.00 - 20.00 WIB",
+  waPesan: "Halo N.Elora 🌸, saya mau tanya-tanya.",
+  marquee: "Handmade with love|Buket Kawat Bulu|Custom Request|Tahan Lama"
+};
+
+function normalDigitsAdmin(s){ return String(s||"").replace(/\D/g,""); }
+
+async function muatWebAdmin(){
+  let cfg = null;
+  if (modeAktif === "lokal"){
+    try { const raw = localStorage.getItem("nelora_web"); if (raw) cfg = JSON.parse(raw); } catch(e){}
+  } else {
+    try { const db = await siapkanFirestore(); const snap = await db.collection("pengaturan").doc("web").get(); if (snap.exists) cfg = snap.data(); } catch(e){}
+  }
+  cfg = { ...DEFAULT_WEB_ADMIN, ...(cfg||{}) };
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  set("wHeroSub", cfg.heroSub || "");
+  set("wFooterDesc", cfg.footerDesc || "");
+  set("wWa", cfg.waNumber || "");
+  const jamEl = document.getElementById("wJam");
+  if (jamEl) jamEl.value = (cfg.jamHari || "") + (cfg.jamWaktu ? ", " + cfg.jamWaktu : "");
+  set("wWaPesan", cfg.waPesan || "");
+  set("wMarquee", cfg.marquee || "");
+  return cfg;
+}
+
+document.getElementById("wSimpan").addEventListener("click", async ()=>{
+  const jamRaw = document.getElementById("wJam").value.trim();
+  let jamHari = jamRaw, jamWaktu = "";
+  if (jamRaw.includes(",")){ const parts = jamRaw.split(","); jamHari = parts[0].trim(); jamWaktu = parts.slice(1).join(",").trim(); }
+  const cfg = {
+    heroSub: document.getElementById("wHeroSub").value.trim() || DEFAULT_WEB_ADMIN.heroSub,
+    footerDesc: document.getElementById("wFooterDesc").value.trim() || DEFAULT_WEB_ADMIN.footerDesc,
+    waNumber: document.getElementById("wWa").value.trim() || DEFAULT_WEB_ADMIN.waNumber,
+    jamHari: jamHari || DEFAULT_WEB_ADMIN.jamHari,
+    jamWaktu: jamWaktu || DEFAULT_WEB_ADMIN.jamWaktu,
+    waPesan: document.getElementById("wWaPesan").value.trim() || DEFAULT_WEB_ADMIN.waPesan,
+    marquee: document.getElementById("wMarquee").value.trim() || DEFAULT_WEB_ADMIN.marquee
+  };
+  if (modeAktif === "lokal"){
+    localStorage.setItem("nelora_web", JSON.stringify(cfg));
+  } else {
+    try { const db = await siapkanFirestore(); await db.collection("pengaturan").doc("web").set(cfg); }
+    catch(err){ toast("Gagal menyimpan: " + (err.message||"")); return; }
+  }
+  const status = document.getElementById("wStatus");
+  if (status){ status.hidden = false; status.textContent = "Pengaturan web disimpan."; }
+  toast("Pengaturan web disimpan");
+});
+
 </script>
 </body>
 </html>

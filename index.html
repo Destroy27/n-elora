@@ -604,7 +604,7 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
             <span class="letter">a</span>
           </h1>
         </div>
-        <p class="hero-sub">Spesialis buket bunga kawat bulu yang dirangkai dengan penuh cinta. Elegan, tahan lama, dan bisa custom.</p>
+        <p class="hero-sub" id="heroSub">Spesialis buket bunga kawat bulu yang dirangkai dengan penuh cinta. Elegan, tahan lama, dan bisa custom.</p>
         <div class="hero-actions">
           <a href="#etalase" class="btn btn-primary magnetic">Lihat Koleksi</a>
         </div>
@@ -760,7 +760,7 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
           </div>
           <span class="brand-name">N.Elora</span>
         </div>
-        <p>Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket bunga elegan yang dibuat khusus untukmu.</p>
+        <p id="footerDesc">Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket bunga elegan yang dibuat khusus untukmu.</p>
       </div>
       <div class="foot-links-row">
         <div class="foot-col">
@@ -771,9 +771,9 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
         </div>
         <div class="foot-col">
           <h4>Hubungi Kami</h4>
-          <a href="#" class="js-wa" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya.">+62 821-4607-1595</a>
-          <span>Senin - Sabtu</span>
-          <span>09.00 - 20.00 WIB</span>
+          <a href="#" class="js-wa" id="waLink" data-pesan="Halo N.Elora 🌸, saya mau tanya-tanya.">+62 821-4607-1595</a>
+          <span id="jamHari">Senin - Sabtu</span>
+          <span id="jamWaktu">09.00 - 20.00 WIB</span>
         </div>
       </div>
     </div>
@@ -837,7 +837,43 @@ footer{padding:20px 0 16px;border-top:1px solid rgba(244,163,192,0.2);}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
 
 <script>
-const WA_NUMBER = "6282146071595";
+let WA_NUMBER = "6282146071595";
+
+const DEFAULT_WEB = {
+  heroSub: "Spesialis buket bunga kawat bulu yang dirangkai dengan penuh cinta. Elegan, tahan lama, dan bisa custom.",
+  footerDesc: "Bunga kawat bulu handmade yang dirangkai dengan sabar dan cinta. Spesialis buket bunga elegan yang dibuat khusus untukmu.",
+  waNumber: "+62 821-4607-1595",
+  jamHari: "Senin - Sabtu",
+  jamWaktu: "09.00 - 20.00 WIB",
+  waPesan: "Halo N.Elora \u{1F338}, saya mau tanya-tanya.",
+  marquee: "Handmade with love|Buket Kawat Bulu|Custom Request|Tahan Lama"
+};
+function normalDigits(s){ return String(s||"").replace(/\D/g,""); }
+function loadWeb(){
+  try { const raw = localStorage.getItem("nelora_web"); if (raw){ const p = JSON.parse(raw); if (p && typeof p === "object") return { ...DEFAULT_WEB, ...p }; } } catch(e){}
+  return { ...DEFAULT_WEB };
+}
+let WEB = loadWeb();
+function terapkanWeb(cfg){
+  const c = { ...DEFAULT_WEB, ...(cfg||{}) };
+  WEB = c;
+  WA_NUMBER = normalDigits(c.waNumber) || WA_NUMBER;
+  const heroSub = document.getElementById("heroSub"); if (heroSub) heroSub.textContent = c.heroSub;
+  const footerDesc = document.getElementById("footerDesc"); if (footerDesc) footerDesc.textContent = c.footerDesc;
+  const waLink = document.getElementById("waLink"); if (waLink){ waLink.textContent = c.waNumber; waLink.dataset.pesan = c.waPesan; waLink.setAttribute("href", "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(c.waPesan)); }
+  const jamHari = document.getElementById("jamHari"); if (jamHari) jamHari.textContent = c.jamHari;
+  const jamWaktu = document.getElementById("jamWaktu"); if (jamWaktu) jamWaktu.textContent = c.jamWaktu;
+  const track = document.querySelector(".marquee-track"); if (track && c.marquee){ track.innerHTML = String(c.marquee).split("|").map(t=>"<span>"+esc(t.trim())+"</span><span>\u2726</span>").join(""); }
+  document.querySelectorAll(".js-wa").forEach(el => {
+    const pesan = (el.id === "waLink") ? c.waPesan : (el.dataset.pesan || c.waPesan);
+    el.setAttribute("href", "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(pesan));
+  });
+}
+async function ambilWeb(){
+  const db = await siapkanFirestore();
+  const snap = await db.collection("pengaturan").doc("web").get();
+  return snap.exists ? snap.data() : null;
+}
 const CFG  = window.NELORA_FIREBASE_CONFIG || null;
 const MODE = (CFG && CFG.apiKey && CFG.projectId) ? "cloud" : "lokal";
 
@@ -2069,7 +2105,7 @@ async function mulai(){
   initMagnetic();
   if (MODE === "cloud"){
     try {
-      const [hasilProduk, hasilKategori] = await Promise.allSettled([ambilCloud(), ambilKategori()]);
+      const [hasilProduk, hasilKategori, hasilWeb] = await Promise.allSettled([ambilCloud(), ambilKategori(), ambilWeb()]);
       if (hasilProduk.status === "fulfilled" && hasilProduk.value.length){
         PRODUK = rapikan(hasilProduk.value);
         try { localStorage.setItem("nelora_products", JSON.stringify(PRODUK)); } catch(e){}
@@ -2081,6 +2117,12 @@ async function mulai(){
         try { localStorage.setItem("nelora_kategori", JSON.stringify(KATEGORI)); } catch(e){}
       } else if (hasilKategori.status === "rejected"){
         console.warn("Kategori gagal:", (hasilKategori.reason && hasilKategori.reason.message) || hasilKategori.reason);
+      }
+      if (hasilWeb && hasilWeb.status === "fulfilled" && hasilWeb.value){
+        try { localStorage.setItem("nelora_web", JSON.stringify(hasilWeb.value)); } catch(e){}
+        terapkanWeb(hasilWeb.value);
+      } else {
+        terapkanWeb(loadWeb());
       }
       renderFilter();
       renderKategori();
@@ -2096,6 +2138,7 @@ async function mulai(){
   }
 }
 document.getElementById("year").textContent = new Date().getFullYear();
+terapkanWeb(loadWeb());
 mulai();
 if (hasGsap){
   window.addEventListener("load", () => ScrollTrigger.refresh());

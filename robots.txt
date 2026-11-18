@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://destroy27.github.io/n-elora/sitemap.xml
+Sitemap: https://nelora.gt.tc/sitemap.xml

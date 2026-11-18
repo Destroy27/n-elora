@@ -487,7 +487,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,1.9rem);margi
       </div>
     </div>
     <div class="head-actions" style="margin-top:12px">
-      <button type="button" class="btn btn-primary btn-sm" id="wSimpan">Simpan pengaturan</button>
+      <button type="button" class="btn btn-primary btn-sm" id="wSimpan" onclick="if(window.simpanWebAdmin) window.simpanWebAdmin()">Simpan pengaturan</button>
     </div>
     <p class="status-line" id="wStatus" role="status" hidden></p>
   </section>
@@ -2594,7 +2594,7 @@ async function muatWebAdmin(){
   if (modeAktif === "lokal"){
     try { const raw = localStorage.getItem("nelora_web"); if (raw) cfg = JSON.parse(raw); } catch(e){}
   } else {
-    try { const db = await siapkanFirestore(); const snap = await db.collection("pengaturan").doc("web").get(); if (snap.exists) cfg = snap.data(); } catch(e){}
+    try { const snap = await db.collection("pengaturan").doc("web").get(); if (snap.exists) cfg = snap.data(); } catch(e){}
   }
   cfg = { ...DEFAULT_WEB_ADMIN, ...(cfg||{}) };
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
@@ -2612,7 +2612,8 @@ async function muatWebAdmin(){
   return cfg;
 }
 
-document.getElementById("wSimpan").addEventListener("click", async ()=>{
+window.simpanWebAdmin = async function(){
+  try {
   const jamRaw = document.getElementById("wJam").value.trim();
   let jamHari = jamRaw, jamWaktu = "";
   if (jamRaw.includes(",")){ const parts = jamRaw.split(","); jamHari = parts[0].trim(); jamWaktu = parts.slice(1).join(",").trim(); }
@@ -2632,13 +2633,14 @@ document.getElementById("wSimpan").addEventListener("click", async ()=>{
   if (modeAktif === "lokal"){
     localStorage.setItem("nelora_web", JSON.stringify(cfg));
   } else {
-    try { const db = await siapkanFirestore(); await db.collection("pengaturan").doc("web").set(cfg); }
+    try { await db.collection("pengaturan").doc("web").set(cfg); }
     catch(err){ toast("Gagal menyimpan: " + (err.message||"")); return; }
   }
   const status = document.getElementById("wStatus");
   if (status){ status.hidden = false; status.textContent = "Pengaturan web disimpan."; }
   toast("Pengaturan web disimpan");
-});
+  } catch(e){ console.error("WSIMPLAN ERR", e && e.message); toast("Gagal: " + (e && e.message)); }
+};
 
 </script>
 </body>
